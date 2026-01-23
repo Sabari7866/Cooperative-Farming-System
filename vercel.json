@@ -1,0 +1,42 @@
+{
+    "version": 2,
+    "buildCommand": "cd project && npm install && npm run build",
+    "outputDirectory": "project/dist",
+    "installCommand": "cd project && npm install",
+    "builds": [
+        {
+            "src": "project/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "project/dist"
+            }
+        },
+        {
+            "src": "project/api/index.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/project/api/index.js"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/project/dist/index.html"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "/project/api/index.js"
+        },
+        {
+            "source": "/:path*",
+            "destination": "/project/dist/index.html"
+        }
+    ]
+}
