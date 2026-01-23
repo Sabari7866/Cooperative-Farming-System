@@ -1,0 +1,758 @@
+# English (en) - Complete Translations
+# AgriSmart Platform - All Components
+
+# ===== COMMON =====
+brand_name: Cooperative Farming
+tagline: Smart Farming Solutions
+logout: Logout
+loading: Loading...
+save: Save
+cancel: Cancel
+submit: Submit
+delete: Delete
+edit: Edit
+view: View
+close: Close
+back: Back
+next: Next
+confirm: Confirm
+search: Search
+filter: Filter
+export: Export
+download: Download
+upload: Upload
+yes: Yes
+no: No
+ok: OK
+error: Error
+success: Success
+warning: Warning
+info: Information
+
+# ===== LANGUAGE =====
+choose_language: Choose your language
+label_language: Language
+language_english: English
+language_tamil: Tamil
+language_hindi: Hindi
+
+# ===== TIME & DATE =====
+label_date: Date
+label_time: Time
+label_today: Today
+label_yesterday: Yesterday
+label_tomorrow: Tomorrow
+label_this_week: This Week
+label_this_month: This Month
+label_this_year: This Year
+
+# ===== UNITS =====
+unit_acres: acres
+unit_kg: kg
+unit_quintal: quintal
+unit_ton: ton
+unit_liter: liter
+unit_dozen: dozen
+unit_km: km
+unit_rupees: ₹
+
+# ===== NAVIGATION =====
+nav_home: Home
+nav_dashboard: Dashboard
+nav_my_land: My Land
+nav_posted_jobs: Posted Jobs
+nav_ai: AI Advisor
+nav_find_workers: Find Workers
+nav_resource_sharing: Resource Sharing
+nav_marketplace: Marketplace
+nav_profile: Profile
+nav_settings: Settings
+nav_help: Help
+nav_crops: Crops
+nav_farm_docs: Farm Docs
+nav_support: Support
+nav_login: Login
+
+# ===== AUTHENTICATION =====
+welcome_to_agrismart: Welcome to AgriSmart
+connect_manage_grow: Connect. Manage. Grow with smart agriculture tools.
+create_account: Create account
+sign_in: Sign in
+new_user_create_account: New user? Create account
+welcome_back: Welcome back
+sign_in_to_access_dashboard: Sign in to access your dashboard
+login_subtitle_new: Fill in your details to get started
+login_subtitle_existing: Enter your credentials to continue
+
+# Form Labels
+full_name: Full name
+email_or_phone: Email or phone
+placeholder_email_phone: Email or +91 phone
+password_label: Password
+create_a_strong_password: Create a strong password
+enter_your_password: Enter your password
+confirm_password_label: Confirm password
+confirm_password_placeholder: Confirm your password
+remember_me: Remember me
+forgot: Forgot?
+
+# Password Strength
+password_strength_label: Password strength
+password_strength_weak: Weak
+password_strength_medium: Medium
+password_strength_strong: Strong
+
+# Roles
+choose_role: Choose your role
+role_farmer: Farmer
+role_worker: Worker
+role_buyer: Buyer
+role_renter: Renter
+
+# Errors
+error_full_name_required: Full name is required
+error_email_or_phone_required: Email or phone number is required
+error_invalid_email_or_phone: Please enter a valid email address or 10-digit phone number
+error_password_required: Password is required
+error_password_too_short: Password must be at least 8 characters long
+error_passwords_do_not_match: Passwords do not match
+error_enter_email_or_phone: Please enter email or phone
+error_enter_password: Please enter your password
+
+# Success Messages
+registration_success_redirect: Account created successfully! Redirecting...
+login_success_redirect: Login successful! Redirecting...
+registration_failed: Registration failed
+user_already_exists: User already exists. Please sign in with your credentials.
+invalid_credentials: Invalid credentials
+generic_error: Something went wrong. Please try again.
+password_reset_flow_placeholder: Password reset flow placeholder
+
+# Quick Login
+quick_login_title: Quick Login - Demo Accounts
+quick_login_subtitle: Click any account to auto-fill credentials
+quick_login_farmer: Farmer Dashboard
+quick_login_worker: Worker Dashboard
+quick_login_buyer: Buyer Dashboard
+quick_login_renter: Renter Dashboard
+quick_login_password_label: "Password:"
+quick_login_password_value: password
+
+# ===== FARMER DASHBOARD =====
+farm_owner_dashboard_subtitle: Farm Owner Dashboard
+loading_dashboard: Loading dashboard data...
+
+# Dashboard Cards
+card_total_land: Total Land
+card_plus_acres: +2 acres this season
+card_active_jobs: Active Jobs
+card_available_workers: Available Workers
+card_within_km: Within 5km
+card_this_month: This Month
+card_labor_costs: Labor costs
+
+# Quick Actions
+quick_actions: Quick Actions
+action_add_new_land: Add New Land
+action_post_work_request: Post Work Request
+action_post_new_job: Post New Job
+action_post_job: Post Job
+action_get_ai_advice: Get AI Advice
+
+# Alerts
+irrigation_alert: Irrigation Alert
+rice_fields_north_plot: Rice Fields - North Plot
+view_full_schedule: View full schedule
+weather_update: Weather Update
+weather_favorable: Favorable Conditions
+weather_summary: "Perfect weather for sowing operations. Temperature: 25°C, Humidity: 65%"
+view_7day_forecast: 7-day forecast
+
+# Recent Activity
+recent_activity: Recent Activity
+activity_rice_harvested: Rice harvesting job completed by Ravi Kumar
+activity_2_hours_ago: 2 hours ago
+activity_new_application: New worker application for cotton sowing
+activity_4_hours_ago: 4 hours ago
+activity_weather_alert: "Weather alert: Light rain expected tomorrow"
+activity_6_hours_ago: 6 hours ago
+
+# ===== MY LAND =====
+my_land_title: My Land
+loading_your_lands: Loading your lands...
+add_new_land_title: Add New Land
+
+# Land Form
+label_land_name: Land Name
+placeholder_enter_land_name: Enter land name
+label_location_description: Location Description
+label_coordinates: Farm Coordinates (Lat/Long)
+placeholder_latitude: Latitude
+placeholder_longitude: Longitude
+get_live_location: Use GPS for current location
+btn_live_location: Get Live Location
+coordinate_help: Click to get your current GPS location automatically, or enter coordinates manually.
+label_location: Location
+placeholder_enter_field_location: Enter field location
+label_soil: Soil
+label_crops_on_land: Crops on this land
+label_planted: Planted
+not_planted: Not planted
+label_expected_harvest: Expected Harvest
+label_last_updated: Last Updated
+view_details: View Details
+add_another_crop: Add another crop
+
+# Crops
+aria_select_crop: Select crop
+crop_rice: Rice
+crop_cotton: Cotton
+crop_wheat: Wheat
+crop_corn: Corn
+crop_sugarcane: Sugarcane
+crop_soybean: Soybean
+crop_vegetables: Vegetables
+crop_fruits: Fruits
+
+# Crop Stages
+aria_select_crop_stage: Select crop stage
+stage_sowing: Sowing
+stage_growing: Growing
+stage_flowering: Flowering
+stage_harvest: Harvest
+
+# ===== JOBS =====
+posted_jobs_title: Posted Jobs
+loading_your_jobs: Loading your jobs...
+available_jobs_near_you: Available Jobs Near You
+view_applications: View Applications
+workers_count: Workers
+pay_label: Pay
+apply: Apply
+contact: Contact
+
+# ===== WORKERS =====
+nav_find_workers: Find Workers
+nearby_workers: Nearby Workers
+label_name: Name
+label_skills: Skills
+label_about: About
+label_about_placeholder: Briefly describe your experience and skills
+
+# Skills
+skill_harvesting: Harvesting
+skill_irrigation: Irrigation
+skill_equipment_operation: Equipment Operation
+skill_sowing: Sowing/Planting
+skill_pest_control: Pest Control
+skill_fertilizer: Fertilizer Application
+skill_pruning: Pruning/Trimming
+skill_weeding: Weeding
+skill_land_prep: Land Preparation
+skill_post_harvest: Post-Harvest Processing
+
+# ===== MARKETPLACE =====
+marketplace_title: Marketplace
+marketplace_subtitle: Buy and sell agricultural products directly
+marketplace_buy_tab: Buy Products
+marketplace_sell_tab: My Products
+marketplace_sell_button: Sell Product
+marketplace_search_placeholder: Search products or sellers...
+marketplace_no_products: No products available
+marketplace_no_my_products: You haven't listed any products yet
+marketplace_add_first_product: Add Your First Product
+
+# Product Form
+product_name: Product Name
+product_name_placeholder: "e.g., Organic Tomatoes"
+product_category: Category
+product_unit: Unit
+product_price: Price per Unit (₹)
+product_price_placeholder: "e.g., 40"
+product_quantity: Available Quantity
+product_quantity_placeholder: "e.g., 500"
+product_phone: Contact Phone
+product_description: Description
+product_description_placeholder: Describe your product...
+product_list_button: List Product
+
+# Categories
+category_all: All Products
+category_vegetables: Vegetables
+category_fruits: Fruits
+category_grains: Grains
+category_dairy: Dairy
+category_seeds: Seeds
+
+# Product Card
+product_your_product: Your Product
+product_contact_seller: Contact
+product_edit: Edit
+product_location: Location
+product_distance: Distance
+
+# ===== RESOURCE SHARING =====
+resource_sharing_title: Resource Sharing
+resource_sharing_subtitle: Rent & share farming equipment
+tab_browse_resources: Browse Resources
+tab_my_requests: My Requests
+tab_incoming_requests: Incoming Requests
+tab_resource_alerts: Resource Alerts
+tab_analytics: Analytics
+
+# Resources
+no_resources: No resources
+no_resources_export: No resources to export.
+exported: Exported
+resources_exported_csv: Resources exported as CSV
+placeholder_search_resources: Search resources...
+aria_open_filters: Open filters
+filters: Filters
+aria_export_csv: Export resources as CSV
+export_csv: Export CSV
+all_categories: All Categories
+loading_resources: Loading resources...
+delivery_available: "Delivery available (₹{charge})"
+action_request: Request
+call: Call
+
+# ===== AI CROP ADVISOR =====
+ai_crop_advisor_title: AI Crop Advisor
+ai_crop_advisor_subtitle: Intelligent farming guidance
+download_report: Download Report
+select_crop: Select Your Crop
+select_stage: Select Growth Stage
+next_7_days_rain: Next 7 days rainfall considered
+fertilizer_application: Fertilizer Application
+optimal_timing: Optimal timing for application
+pest_control: Pest & Disease Control
+monitor_regularly: Monitor regularly for early detection
+best_practices: Best Practices
+follow_optimal_yield: Follow for optimal yield
+weather_recommendations: Weather-Based Recommendations
+ask_ai: Ask AI
+chat_placeholder: Ask about irrigation, fertilizer, pests or logistics...
+
+# ===== WORKER DASHBOARD =====
+worker_dashboard_title: Worker Dashboard
+worker_dashboard_subtitle: Find nearby jobs and manage your profile
+my_profile: My Profile
+
+# ===== BUYER DASHBOARD =====
+buyer_dashboard_title: Buyer Dashboard
+buyer_dashboard_subtitle: Browse and purchase agricultural products
+
+# ===== RENTER DASHBOARD =====
+renter_dashboard_title: Renter Dashboard
+renter_dashboard_subtitle: Manage your equipment rentals
+
+# ===== PROFILE COMPLETION =====
+profile_completion_title: Complete Your Profile
+profile_completion_worker_subtitle: Tell us about your skills and availability
+profile_completion_buyer_subtitle: Provide your contact and delivery details
+profile_completion_renter_subtitle: Tell us about your equipment for rent
+profile_completion_back: Back to Login
+profile_completion_submit: Complete Profile & Continue
+
+# Worker Profile
+worker_phone: Phone Number
+worker_phone_placeholder: Enter your phone number
+worker_alternate_phone: Alternate Phone Number (Optional)
+worker_alternate_phone_placeholder: Alternate contact number
+worker_max_travel: Maximum Travel Distance (in km)
+worker_max_travel_placeholder: How far can you travel for work?
+worker_max_travel_help: This helps farmers find workers in their area
+worker_skills_title: Select Your Farming Skills
+worker_skills_subtitle: (Choose all that apply)
+worker_skills_error: Please select at least one skill
+worker_skills_selected: "Selected: {count} skill(s)"
+
+# Buyer Profile
+buyer_name: Full Name
+buyer_name_placeholder: Enter your full name
+buyer_phone: Phone Number
+buyer_phone_placeholder: Enter your phone number
+buyer_address: Delivery Address
+buyer_address_placeholder: "House/Flat No., Street, Landmark"
+buyer_city: City
+buyer_city_placeholder: City
+buyer_state: State
+buyer_state_placeholder: State
+buyer_pincode: Pincode
+buyer_pincode_placeholder: Pincode
+
+# Renter Profile
+renter_phone: Phone Number
+renter_phone_placeholder: Enter your phone number
+renter_equipment_title: Equipment Available for Rent
+renter_equipment_subtitle: (Choose all that apply)
+renter_equipment_error: Please select at least one equipment
+renter_equipment_selected: "Selected: {count} equipment(s)"
+
+# Equipment Types
+equipment_tractor: Tractor
+equipment_harvester: Harvester
+equipment_plough: Plough
+equipment_seed_drill: Seed Drill
+equipment_sprayer: Sprayer
+equipment_cultivator: Cultivator
+equipment_rotavator: Rotavator
+equipment_thresher: Thresher
+equipment_water_pump: Water Pump
+equipment_trailer: Trailer
+
+# ===== LANDING PAGE =====
+hero_trusted: Trusted by 10,000+ farmers across India
+hero_title_1: Bridging the Gap Between
+hero_title_2: Farmers & Farmhands
+hero_desc: Connect with skilled agricultural workers, manage your farmland efficiently, and get AI-powered crop advice to maximize your harvest.
+cta_login: Login to Continue
+
+# Features
+features_why: Why Choose AgriSmart?
+features_why_desc: Experience the future of farming with our comprehensive platform designed for modern agriculture
+feature_verified_title: Verified Workers
+feature_verified_desc: All workers are background-verified with skill assessments and ratings from previous employers.
+feature_verified_badge: 100% Verified Profiles
+feature_match_title: Quick Matching
+feature_match_desc: Our smart algorithm matches you with the right workers based on location and skills.
+feature_match_badge: "Average Match Time: 15 mins"
+feature_ai_title: AI Crop Advisor
+feature_ai_desc: "Personalized recommendations for irrigation, fertilization, pest control, and harvesting."
+feature_ai_badge: 95% Accuracy Rate
+
+# How It Works
+how_title: How AgriSmart Works
+how_desc: Simple steps to connect with skilled workers and optimize your farming operations
+how_step1_title: Post Your Requirements
+how_step1_desc: "Describe your needs: crop, duration, workers, skills, budget, and timeline."
+how_step2_title: Get Matched Instantly
+how_step2_desc: Review best nearby workers and contact directly.
+how_step3_title: Work & Get Advice
+how_step3_desc: Coordinate work while getting real-time AI crop advice.
+
+# CTA
+cta_title: Ready to Transform Your Farming?
+cta_desc: Join thousands of farmers already improving productivity with AgriSmart.
+cta_get_started: Get Started
+cta_try_ai: Try AI Advisor
+
+# Why Bullets
+why_bullet_ai: AI crop advice tailored to your farm
+why_bullet_resources: Share resources with neighbors
+why_bullet_verified: Find verified workers fast
+
+# Future Farming
+future_farming_title: Welcome to the future of farming
+future_farming_p1: Harness real-time soil analytics, climate data, and precision recommendations to make smarter decisions every season. Agri Smart Cloud connects your fields, workforce, and buyers in a single digital platform.
+future_farming_p2: "From smart irrigation and labor planning to transparent farm-to-market commerce, this portal is your gateway to sustainable, data-driven agriculture."
+future_farming_point1: AI-assisted irrigation and weather-aware planning.
+future_farming_point2: Traceable farm-to-market supply for better pricing.
+
+# ===== HEADER =====
+header_logo_title: AGRI SMART CLOUD
+header_logo_subtitle_line1: Agriportal & Ecofarm
+header_logo_subtitle_line2: Platform
+
+# ===== WELCOME PAGE =====
+welcome_page_title: Welcome Page
+welcome_page_body: Access your Agri Smart Cloud services, monitor crops, manage ecofarm activities, and stay updated with insights – all in one secure platform for farmers, renters, buyers, and workers.
+welcome_point_1: Real-time crop and soil monitoring dashboard.
+welcome_point_2: "Unified access for farmers, workers, buyers, and renters."
+
+# ===== THEME =====
+video_theme_on: "Video Theme: On"
+video_theme_off: "Video Theme: Off"
+
+# ===== MISC =====
+please_wait: Please wait...
+or_continue_with: or continue with
+google: Google
+phone_otp: Phone OTP
+
+# ===== Login Page Features =====
+feature_smart_analytics_title: Smart Analytics
+feature_smart_analytics_desc: Track your farm performance with AI insights
+feature_weather_alerts_title: Weather Alerts
+feature_weather_alerts_desc: Real-time weather forecasts for your region
+feature_marketplace_title: Marketplace
+feature_marketplace_desc: Buy and sell products with ease
+feature_job_board_title: Job Board
+feature_job_board_desc: Find workers or post job opportunities
+
+# ===== Stats =====
+stats_platform_stats: Platform Stats
+stats_farmers: Farmers
+stats_products: Products
+stats_jobs: Jobs
+
+# ===== Promo / New Features =====
+promo_new_feature: New Feature
+promo_ai_doctor_live: AI Crop Doctor Now Live!
+
+# ===== Benefits =====
+benefit_secure_title: Secure
+benefit_secure_desc: Your data is protected with encryption
+benefit_fast_title: Fast
+benefit_fast_desc: Quick access to all farming tools
+benefit_ai_powered_title: AI Powered
+benefit_ai_powered_desc: Get intelligent farming recommendations
+benefit_mobile_ready_title: Mobile Ready
+benefit_mobile_ready_desc: Access from anywhere, anytime
+
+# ===== Testimonial =====
+testimonial_quote: "AgriSmart transformed how I manage my farm. The AI recommendations increased my yield by 30%!"
+testimonial_author: Happy Farmer
+
+# ===== Worker Dashboard Missing =====
+nav_my_shifts: My Shifts
+nav_community: Community
+status_label: "Status: "
+status_available: Available
+status_busy: Busy
+worker_welcome_msg_part1: Ready for another productive day? You have 
+worker_welcome_msg_part2: upcoming shifts
+stats_shifts_confirmed: Shifts confirmed
+stats_pending: pending
+stats_verified_skills: Verified skills
+stats_add_skill: Add skill
+stats_avg_rating: Avg rating
+stats_top_workers: Top 10%
+stats_earnings: Earnings
+stats_this_week: This week
+label_todays_focus: Today's Focus
+label_rhythm_board: Rhythm board
+label_daily_schedule: Daily Schedule
+action_view_all: View All
+label_ready: Ready
+label_busy: Busy
+filter_all_jobs: All Jobs
+label_urgent: Urgent
+label_payment: Payment
+badge_verified: Verified
+badge_top_rated: Top Rated
+action_add_skill: + Add Skill
+feature_coming_soon: Feature Coming Soon
+feature_coming_soon_desc: We are working hard to bring you the best experience for this feature. Stay tuned!
+status_applying: Applying...
+status_request_sent: Request sent
+
+# ===== Farm Owner Dashboard Missing =====
+nav_smart_farm: Smart Farm (IoT)
+badge_live: LIVE
+nav_crop_doctor: Crop Doctor
+badge_new: NEW
+status_active: Active
+welcome_back_owner: Welcome back!
+welcome_owner_desc_part1: Here's what's happening on your farm today. You have
+welcome_owner_desc_part2: pending alerts
+label_total: total
+label_active_positions: active positions
+label_nearby: Nearby
+label_get_started_quickly: Get started quickly
+
+# ===== Landing Page Extras =====
+hero_stat_workers: 15,000+ Workers
+hero_stat_workers_desc: Skilled & Verified
+hero_stat_villages: 500+ Villages
+hero_stat_villages_desc: Pan-India Coverage
+hero_stat_ai: AI-Powered
+hero_stat_ai_desc: Smart Recommendations
+footer_desc: Empowering farmers with technology to connect with skilled workers and optimize crop management through AI-powered insights.
+footer_rating: 4.9/5 Rating
+footer_reviews: From 5,000+ reviews
+footer_quick_links: Quick Links
+footer_about_us: About Us
+footer_success_stories: Success Stories
+footer_help_center: Help Center
+footer_contact_info: Contact Info
+footer_address: Rural Development Center, India
+footer_copyright: © 2024 AgriSmart. All rights reserved.
+footer_privacy: Privacy Policy
+footer_terms: Terms of Service
+footer_cookies: Cookie Policy
+
+# ===== Buyer Dashboard =====
+buyer_nav_products: Products
+buyer_nav_cart: Cart
+buyer_nav_orders: My Orders
+buyer_nav_wishlist: Wishlist
+cat_grains: 🌾 Grains
+cat_vegetables: 🥬 Vegetables
+cat_fruits: 🍎 Fruits
+cat_dairy: 🥛 Dairy
+cat_other: 🌿 Other
+msg_address_saved: Address saved successfully!
+msg_invoice_downloaded: Invoice downloaded successfully
+btn_checkout: Checkout
+title_order_history: Order History
+status_shipped: Shipped
+status_delivered: Delivered
+status_cancelled: Cancelled
+status_processing: Processing
+filter_all_categories: All Categories
+label_search_products: Search products...
+label_cart_empty: Your cart is empty
+label_total_amount: Total Amount
+label_payment_method: Payment Method
+label_delivery_address: Delivery Address
+
+# ===== Renter Dashboard =====
+renter_nav_dashboard: Dashboard
+renter_nav_listings: My Listings
+renter_nav_rentals: Active Rentals
+renter_nav_settings: Settings
+col_equipment: Equipment
+col_renter: Renter
+col_dates: Dates
+col_amount: Amount
+col_status: Status
+col_actions: Actions
+btn_invoice: Invoice
+status_maintenance: Maintenance
+status_rented: Rented
+chart_revenue: Revenue
+invoice_title: AGRI-RENT INVOICE
+invoice_thank_you: Thank you for your business!
+label_total_revenue: Total Revenue
+label_active_rentals: Active Rentals
+label_total_equipment: Total Equipment
+label_utilization: Utilization
+month_jan: Jan
+month_feb: Feb
+month_mar: Mar
+month_apr: Apr
+month_may: May
+month_jun: Jun
+verified_partner: Verified Partner
+label_pending_requests: Pending Requests
+label_last_30_days: Last 30 Days
+title_recent_activity: Recent Activity
+placeholder_search_equipment: Search equipment...
+btn_add_equipment: Add Equipment
+btn_view_all_history: View All History
+col_order_id: Order ID
+col_duration: Duration
+title_payment_settings: Payment Settings
+msg_auto_payments: We accept payments automatically
+msg_payouts_scheduled: Your payouts are scheduled every Wednesday.
+label_bank_account: Connected Bank Account
+label_upi_id: UPI ID for Instant Settlement
+btn_save_changes: Save Changes
+label_days: Days
+label_day: day
+rented_verb: rented
+title_setup_delivery: Setup Delivery
+msg_add_address: Add your address to start ordering.
+btn_add_address: + Add Address
+title_market_trends: Market Trends
+label_market_price: Market Price
+btn_add_to_cart: Add to Cart
+btn_make_offer: Make an Offer
+btn_move_to_cart: Move to Cart
+btn_remove: Remove
+msg_no_products: No products found
+msg_adjust_search: Try adjusting your search or filters
+title_shopping_cart: Shopping Cart
+title_order_summary: Order Summary
+label_subtotal: Subtotal
+label_tax: Tax (5%)
+label_delivery_fee: Delivery Fee
+label_total: TOTAL
+label_deliver_to: Deliver to:
+btn_proceed_checkout: Proceed to Checkout
+btn_start_shopping: Start Shopping
+msg_no_orders: No orders yet
+label_order_sharp: Order #
+label_items: Items
+payment_cod: COD
+payment_upi: UPI
+payment_card: Card
+status_paid: PAID
+status_failed: FAILED
+receipt_title: AgriSmart
+receipt_subtitle: Your Agricultural Marketplace
+receipt_invoice: INVOICE
+receipt_bill_to: Bill To:
+title_payment_details: Payment Details
+label_upi_payment: UPI Payment
+label_card_payment: Debit/Credit Card
+label_cod_payment: Cash on Delivery
+label_card_number: Card Number
+label_cardholder_name: Cardholder Name
+label_month: Month
+label_year: Year
+label_cvv: CVV
+btn_cancel: Cancel
+btn_confirm_order: Confirm Order
+btn_pay_now: Pay Now
+title_add_address: Add Delivery Address
+label_phone_number: Phone Number
+label_city: City
+label_pincode: Pincode
+label_state: State
+label_full_address: Full Address
+btn_save_address: Save Address
+title_make_offer: Make an Offer
+label_your_price: Your Price (₹/kg)
+btn_send_offer: Send Offer
+msg_proposed_price: Proposed price for
+label_order_history: Order History
+btn_download_receipt: Download Receipt
+invoice_no: Invoice No:
+invoice_date: Date:
+invoice_from: From:
+invoice_to: To:
+invoice_grand_total: Grand Total:
+table_item: Item
+table_duration: Duration
+table_rate_day: Rate/Day
+table_total: Total
+status_maintenance: Maintenance
+status_rented: Rented
+label_bookings: Bookings
+skill_all: All
+skill_harvesting: Harvesting
+skill_irrigation: Irrigation
+skill_pest_control: Pest Control
+skill_equipment: Equipment
+block_sunrise_title: Sunrise harvest
+block_sunrise_task: Rice field block A
+block_sunrise_mood: High demand
+block_irrigation_title: Irrigation tune
+block_irrigation_task: Canal maintenance
+block_irrigation_mood: Steady
+block_skill_title: Skill booster
+block_skill_task: Organic pest drills
+block_skill_mood: Learning
+label_crop_type: Crop Type
+label_acreage: Acreage
+label_soil_type: Soil Type
+label_irrigation_type: Irrigation Type
+label_land_preparation: Land Preparation
+label_notes: Notes
+placeholder_land_notes: Additional notes about this land...
+btn_add_land: Add Land
+btn_edit_job: Edit Job
+title_post_work_request: Post Work Request
+label_job_title: Job Title
+label_job_date: Date
+label_num_workers: Number of Workers
+label_duration: Duration
+label_payment_per_day: Payment (per day)
+label_time: Time
+placeholder_job_title: e.g., Rice Harvesting
+placeholder_job_location: Field location
+placeholder_num_workers: 5
+placeholder_duration: 8 hours
+placeholder_payment: ₹500
+placeholder_time: 6:00 AM - 2:00 PM
+soil_clay: Clay
+soil_loam: Loam
+soil_sandy: Sandy
+soil_clay_loam: Clay Loam
+soil_sandy_loam: Sandy Loam
+irrigation_flood: Flood Irrigation
+irrigation_drip: Drip Irrigation
+irrigation_sprinkler: Sprinkler
+irrigation_furrow: Furrow

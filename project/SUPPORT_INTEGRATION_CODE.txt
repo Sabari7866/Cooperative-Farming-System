@@ -1,0 +1,36 @@
+// ============================================
+// COPY THIS CODE TO LoginModern.tsx
+// ============================================
+
+// 1. ADD THIS IMPORT AT THE TOP (after other imports):
+import SupportModal from './SupportModal';
+
+// 2. ADD THIS STATE (with other useState declarations):
+const [showSupport, setShowSupport] = useState(false);
+
+// 3. ADD THIS BUTTON (at the end, before closing </div>):
+
+{/* Support Button - Fixed Bottom Right */}
+<button
+  onClick={() => setShowSupport(true)}
+  className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-200 flex items-center space-x-2 group"
+  title="Contact Support - 23ad044@drngpit.ac.in"
+>
+  <Icon name="Mail" className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+  <span className="font-semibold">Support</span>
+  <div className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full animate-pulse" />
+</button>
+
+{/* Support Modal */}
+<SupportModal 
+  isOpen={showSupport} 
+  onClose={() => setShowSupport(false)} 
+/>
+
+// ============================================
+// THAT'S IT! The support system is ready!
+// ============================================
+
+// Email will be sent to: 23ad044@drngpit.ac.in
+// Backend endpoint: http://localhost:3001/api/send-support-email
+// Backend is already configured and running!

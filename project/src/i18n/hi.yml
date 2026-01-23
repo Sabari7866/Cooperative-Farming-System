@@ -1,0 +1,748 @@
+# Hindi (hi) - पूर्ण अनुवाद
+# AgriSmart Platform - सभी घटक
+
+# ===== सामान्य =====
+brand_name: AgriSmart
+tagline: स्मार्ट खेती समाधान
+logout: लॉगआउट
+loading: लोड हो रहा है...
+save: सहेजें
+cancel: रद्द करें
+submit: जमा करें
+delete: हटाएं
+edit: संपादित करें
+view: देखें
+close: बंद करें
+back: वापस
+next: अगला
+confirm: पुष्टि करें
+search: खोजें
+filter: फ़िल्टर
+export: निर्यात
+download: डाउनलोड
+upload: अपलोड
+yes: हाँ
+no: नहीं
+ok: ठीक है
+error: त्रुटि
+success: सफलता
+warning: चेतावनी
+info: जानकारी
+
+# ===== भाषा =====
+choose_language: अपनी भाषा चुनें
+label_language: भाषा
+language_english: अंग्रेज़ी
+language_tamil: तमिल
+language_hindi: हिंदी
+
+# ===== समय और तारीख =====
+label_date: तारीख
+label_time: समय
+label_today: आज
+label_yesterday: कल
+label_tomorrow: आने वाला कल
+label_this_week: इस सप्ताह
+label_this_month: इस महीने
+label_this_year: इस साल
+
+# ===== इकाइयाँ =====
+unit_acres: एकड़
+unit_kg: किलो
+unit_quintal: क्विंटल
+unit_ton: टन
+unit_liter: लीटर
+unit_dozen: दर्जन
+unit_km: किमी
+unit_rupees: ₹
+
+# ===== नेविगेशन =====
+nav_home: होम
+nav_dashboard: डैशबोर्ड
+nav_my_land: मेरी जमीन
+nav_posted_jobs: पोस्ट की गई नौकरियां
+nav_ai: AI सलाहकार
+nav_find_workers: मजदूर खोजें
+nav_resource_sharing: संसाधन साझाकरण
+nav_marketplace: बाज़ार
+nav_profile: प्रोफ़ाइल
+nav_settings: सेटिंग्स
+nav_help: मदद
+nav_crops: फसलें
+nav_farm_docs: फार्म दस्तावेज़
+nav_support: सहायता
+nav_login: लॉगिन
+
+# ===== प्रमाणीकरण =====
+welcome_to_agrismart: AgriSmart में आपका स्वागत है
+connect_manage_grow: कनेक्ट करें। प्रबंधित करें। स्मार्ट कृषि उपकरणों के साथ बढ़ें।
+create_account: खाता बनाएं
+sign_in: साइन इन करें
+new_user_create_account: नए उपयोगकर्ता? खाता बनाएं
+welcome_back: वापसी पर स्वागत है
+sign_in_to_access_dashboard: अपने डैशबोर्ड तक पहुंचने के लिए साइन इन करें
+login_subtitle_new: शुरू करने के लिए अपना विवरण भरें
+login_subtitle_existing: जारी रखने के लिए अपनी साख दर्ज करें
+
+# फॉर्म लेबल
+full_name: पूरा नाम
+email_or_phone: ईमेल या फोन
+placeholder_email_phone: ईमेल या +91 फोन
+password_label: पासवर्ड
+create_a_strong_password: एक मजबूत पासवर्ड बनाएं
+enter_your_password: अपना पासवर्ड दर्ज करें
+confirm_password_label: पासवर्ड की पुष्टि करें
+confirm_password_placeholder: अपने पासवर्ड की पुष्टि करें
+remember_me: मुझे याद रखें
+forgot: भूल गए?
+
+# पासवर्ड शक्ति
+password_strength_label: पासवर्ड शक्ति
+password_strength_weak: कमजोर
+password_strength_medium: मध्यम
+password_strength_strong: मजबूत
+
+# भूमिकाएं
+choose_role: अपनी भूमिका चुनें
+role_farmer: किसान
+role_worker: मजदूर
+role_buyer: खरीदार
+role_renter: किराएदार
+
+# त्रुटियाँ
+error_full_name_required: पूरा नाम आवश्यक है
+error_email_or_phone_required: ईमेल या फोन नंबर आवश्यक है
+error_invalid_email_or_phone: कृपया एक वैध ईमेल पता या 10 अंकों का फोन नंबर दर्ज करें
+error_password_required: पासवर्ड आवश्यक है
+error_password_too_short: पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए
+error_passwords_do_not_match: पासवर्ड मेल नहीं खाते
+error_enter_email_or_phone: ईमेल या फोन दर्ज करें
+error_enter_password: अपना पासवर्ड दर्ज करें
+
+# सफलता संदेश
+registration_success_redirect: खाता सफलतापूर्वक बनाया गया! पुनर्निर्देशित किया जा रहा है...
+login_success_redirect: लॉगिन सफल! पुनर्निर्देशित किया जा रहा है...
+registration_failed: पंजीकरण विफल
+user_already_exists: उपयोगकर्ता पहले से मौजूद है। कृपया अपनी साख के साथ साइन इन करें।
+invalid_credentials: अमान्य साख
+generic_error: कुछ गलत हो गया। कृपया पुन: प्रयास करें।
+password_reset_flow_placeholder: पासवर्ड रीसेट प्रवाह प्लेसहोल्डर
+
+# त्वरित लॉगिन
+quick_login_title: त्वरित लॉगिन - डेमो खाते
+quick_login_subtitle: साख को स्वतः भरने के लिए किसी भी खाते पर क्लिक करें
+quick_login_farmer: किसान डैशबोर्ड
+quick_login_worker: मजदूर डैशबोर्ड
+quick_login_buyer: खरीदार डैशबोर्ड
+quick_login_renter: किराएदार डैशबोर्ड
+quick_login_password_label: "पासवर्ड:"
+quick_login_password_value: password
+
+# ===== किसान डैशबोर्ड =====
+farm_owner_dashboard_subtitle: फार्म मालिक डैशबोर्ड
+loading_dashboard: डैशबोर्ड डेटा लोड हो रहा है...
+
+# डैशबोर्ड कार्ड
+card_total_land: कुल जमीन
+card_plus_acres: इस सीजन में +2 एकड़
+card_active_jobs: सक्रिय नौकरियां
+card_available_workers: उपलब्ध मजदूर
+card_within_km: 5 किमी के भीतर
+card_this_month: इस महीने
+card_labor_costs: श्रम लागत
+
+# त्वरित कार्य
+quick_actions: त्वरित कार्य
+action_add_new_land: नई जमीन जोड़ें
+action_post_work_request: कार्य अनुरोध पोस्ट करें
+action_post_new_job: नई नौकरी पोस्ट करें
+action_get_ai_advice: AI सलाह प्राप्त करें
+
+# अलर्ट
+irrigation_alert: सिंचाई अलर्ट
+rice_fields_north_plot: धान के खेत - उत्तरी भूखंड
+view_full_schedule: पूर्ण अनुसूची देखें
+weather_update: मौसम अपडेट
+weather_favorable: अनुकूल स्थितियां
+weather_summary: "बुवाई कार्यों के लिए सही मौसम। तापमान: 25°C, आर्द्रता: 65%"
+view_7day_forecast: 7 दिन का पूर्वानुमान
+
+# हाल की गतिविधि
+recent_activity: हाल की गतिविधि
+activity_rice_harvested: रवि कुमार ने धान की कटाई का काम पूरा किया
+activity_2_hours_ago: 2 घंटे पहले
+activity_new_application: कपास की बुवाई के लिए नया मजदूर आवेदन
+activity_4_hours_ago: 4 घंटे पहले
+activity_weather_alert: "मौसम अलर्ट: कल हल्की बारिश की उम्मीद"
+activity_6_hours_ago: 6 घंटे पहले
+
+# ===== मेरी जमीन =====
+my_land_title: मेरी जमीन
+loading_your_lands: आपकी जमीनें लोड हो रही हैं...
+add_new_land_title: नई जमीन जोड़ें
+
+# भूमि फॉर्म
+label_location: स्थान
+placeholder_enter_field_location: खेत का स्थान दर्ज करें
+label_soil: मिट्टी
+label_crops_on_land: इस जमीन पर फसलें
+label_planted: लगाया गया
+not_planted: नहीं लगाया गया
+label_expected_harvest: अपेक्षित फसल
+label_last_updated: अंतिम अपडेट
+view_details: विवरण देखें
+add_another_crop: एक और फसल जोड़ें
+
+# फसलें
+aria_select_crop: फसल चुनें
+crop_rice: धान
+crop_cotton: कपास
+crop_wheat: गेहूं
+crop_corn: मक्का
+crop_sugarcane: गन्ना
+crop_soybean: सोयाबीन
+crop_vegetables: सब्जियां
+crop_fruits: फल
+
+# फसल चरण
+aria_select_crop_stage: वृद्धि चरण चुनें
+stage_sowing: बुवाई
+stage_growing: बढ़ना
+stage_flowering: फूलना
+stage_harvest: कटाई
+
+# ===== नौकरियां =====
+posted_jobs_title: पोस्ट की गई नौकरियां
+loading_your_jobs: आपकी नौकरियां लोड हो रही हैं...
+available_jobs_near_you: आपके पास उपलब्ध नौकरियां
+view_applications: आवेदन देखें
+workers_count: मजदूर
+pay_label: वेतन
+apply: आवेदन करें
+contact: संपर्क करें
+
+# ===== मजदूर =====
+nav_find_workers: मजदूर खोजें
+nearby_workers: पास के मजदूर
+label_name: नाम
+label_skills: कौशल
+label_about: के बारे में
+label_about_placeholder: अपने अनुभव और कौशल का संक्षेप में वर्णन करें
+
+# कौशल
+skill_harvesting: कटाई
+skill_irrigation: सिंचाई
+skill_equipment_operation: उपकरण संचालन
+skill_sowing: बुवाई/रोपण
+skill_pest_control: कीट नियंत्रण
+skill_fertilizer: उर्वरक अनुप्रयोग
+skill_pruning: छंटाई/ट्रिमिंग
+skill_weeding: निराई
+skill_land_prep: भूमि तैयारी
+skill_post_harvest: फसल कटाई के बाद प्रसंस्करण
+
+# ===== बाज़ार =====
+marketplace_title: बाज़ार
+marketplace_subtitle: कृषि उत्पादों को सीधे खरीदें और बेचें
+marketplace_buy_tab: उत्पाद खरीदें
+marketplace_sell_tab: मेरे उत्पाद
+marketplace_sell_button: उत्पाद बेचें
+marketplace_search_placeholder: उत्पाद या विक्रेता खोजें...
+marketplace_no_products: कोई उत्पाद उपलब्ध नहीं
+marketplace_no_my_products: आपने अभी तक कोई उत्पाद सूचीबद्ध नहीं किया है
+marketplace_add_first_product: अपना पहला उत्पाद जोड़ें
+
+# उत्पाद फॉर्म
+product_name: उत्पाद का नाम
+product_name_placeholder: "जैसे, जैविक टमाटर"
+product_category: श्रेणी
+product_unit: इकाई
+product_price: प्रति इकाई मूल्य (₹)
+product_price_placeholder: "जैसे, 40"
+product_quantity: उपलब्ध मात्रा
+product_quantity_placeholder: "जैसे, 500"
+product_phone: संपर्क फोन
+product_description: विवरण
+product_description_placeholder: अपने उत्पाद का वर्णन करें...
+product_list_button: उत्पाद सूचीबद्ध करें
+
+# श्रेणियां
+category_all: सभी उत्पाद
+category_vegetables: सब्जियां
+category_fruits: फल
+category_grains: अनाज
+category_dairy: डेयरी
+category_seeds: बीज
+
+# उत्पाद कार्ड
+product_your_product: आपका उत्पाद
+product_contact_seller: संपर्क करें
+product_edit: संपादित करें
+product_location: स्थान
+product_distance: दूरी
+
+# ===== संसाधन साझाकरण =====
+resource_sharing_title: संसाधन साझाकरण
+resource_sharing_subtitle: कृषि उपकरण किराए पर लें और साझा करें
+tab_browse_resources: संसाधन ब्राउज़ करें
+tab_my_requests: मेरे अनुरोध
+tab_incoming_requests: आने वाले अनुरोध
+tab_resource_alerts: संसाधन अलर्ट
+tab_analytics: विश्लेषण
+
+# संसाधन
+no_resources: कोई संसाधन नहीं
+no_resources_export: निर्यात करने के लिए कोई संसाधन नहीं।
+exported: निर्यात किया गया
+resources_exported_csv: संसाधन CSV के रूप में निर्यात किए गए
+placeholder_search_resources: संसाधन खोजें...
+aria_open_filters: फ़िल्टर खोलें
+filters: फ़िल्टर
+aria_export_csv: संसाधनों को CSV के रूप में निर्यात करें
+export_csv: CSV निर्यात
+all_categories: सभी श्रेणियां
+loading_resources: संसाधन लोड हो रहे हैं...
+delivery_available: "डिलीवरी उपलब्ध (₹{charge})"
+action_request: अनुरोध
+call: कॉल करें
+
+# ===== AI फसल सलाहकार =====
+ai_crop_advisor_title: AI फसल सलाहकार
+ai_crop_advisor_subtitle: बुद्धिमान खेती मार्गदर्शन
+download_report: रिपोर्ट डाउनलोड करें
+select_crop: अपनी फसल चुनें
+select_stage: वृद्धि चरण चुनें
+next_7_days_rain: अगले 7 दिनों की बारिश पर विचार किया गया
+fertilizer_application: उर्वरक अनुप्रयोग
+optimal_timing: अनुप्रयोग के लिए इष्टतम समय
+pest_control: कीट और रोग नियंत्रण
+monitor_regularly: शीघ्र पता लगाने के लिए नियमित रूप से निगरानी करें
+best_practices: सर्वोत्तम प्रथाएं
+follow_optimal_yield: इष्टतम उपज के लिए पालन करें
+weather_recommendations: मौसम-आधारित सिफारिशें
+ask_ai: AI से पूछें
+chat_placeholder: सिंचाई, उर्वरक, कीट या रसद के बारे में पूछें...
+
+# ===== मजदूर डैशबोर्ड =====
+worker_dashboard_title: मजदूर डैशबोर्ड
+worker_dashboard_subtitle: पास की नौकरियां खोजें और अपनी प्रोफ़ाइल प्रबंधित करें
+my_profile: मेरी प्रोफ़ाइल
+
+# ===== खरीदार डैशबोर्ड =====
+buyer_dashboard_title: खरीदार डैशबोर्ड
+buyer_dashboard_subtitle: कृषि उत्पादों को ब्राउज़ करें और खरीदें
+
+# ===== किराएदार डैशबोर्ड =====
+renter_dashboard_title: किराएदार डैशबोर्ड
+renter_dashboard_subtitle: अपने उपकरण किराए का प्रबंधन करें
+
+# ===== प्रोफ़ाइल पूर्णता =====
+profile_completion_title: अपनी प्रोफ़ाइल पूरी करें
+profile_completion_worker_subtitle: हमें अपने कौशल और उपलब्धता के बारे में बताएं
+profile_completion_buyer_subtitle: अपना संपर्क और डिलीवरी विवरण प्रदान करें
+profile_completion_renter_subtitle: किराए के लिए अपने उपकरणों के बारे में हमें बताएं
+profile_completion_back: लॉगिन पर वापस जाएं
+profile_completion_submit: प्रोफ़ाइल पूर्ण करें और जारी रखें
+
+# मजदूर प्रोफ़ाइल
+worker_phone: फोन नंबर
+worker_phone_placeholder: अपना फोन नंबर दर्ज करें
+worker_alternate_phone: वैकल्पिक फोन नंबर (वैकल्पिक)
+worker_alternate_phone_placeholder: वैकल्पिक संपर्क नंबर
+worker_max_travel: अधिकतम यात्रा दूरी (किमी में)
+worker_max_travel_placeholder: आप काम के लिए कितनी दूर यात्रा कर सकते हैं?
+worker_max_travel_help: यह किसानों को अपने क्षेत्र में मजदूर खोजने में मदद करता है
+worker_skills_title: अपने खेती कौशल चुनें
+worker_skills_subtitle: (लागू सभी चुनें)
+worker_skills_error: कृपया कम से कम एक कौशल चुनें
+worker_skills_selected: "चयनित: {count} कौशल"
+
+# खरीदार प्रोफ़ाइल
+buyer_name: पूरा नाम
+buyer_name_placeholder: अपना पूरा नाम दर्ज करें
+buyer_phone: फोन नंबर
+buyer_phone_placeholder: अपना फोन नंबर दर्ज करें
+buyer_address: डिलीवरी पता
+buyer_address_placeholder: "घर/फ्लैट नंबर, गली, लैंडमार्क"
+buyer_city: शहर
+buyer_city_placeholder: शहर
+buyer_state: राज्य
+buyer_state_placeholder: राज्य
+buyer_pincode: पिनकोड
+buyer_pincode_placeholder: पिनकोड
+
+# किराएदार प्रोफ़ाइल
+renter_phone: फोन नंबर
+renter_phone_placeholder: अपना फोन नंबर दर्ज करें
+renter_equipment_title: किराए के लिए उपलब्ध उपकरण
+renter_equipment_subtitle: (लागू सभी चुनें)
+renter_equipment_error: कृपया कम से कम एक उपकरण चुनें
+renter_equipment_selected: "चयनित: {count} उपकरण"
+
+# उपकरण प्रकार
+equipment_tractor: ट्रैक्टर
+equipment_harvester: हार्वेस्टर
+equipment_plough: हल
+equipment_seed_drill: बीज ड्रिल
+equipment_sprayer: स्प्रेयर
+equipment_cultivator: कल्टीवेटर
+equipment_rotavator: रोटावेटर
+equipment_thresher: थ्रेशर
+equipment_water_pump: पानी का पंप
+equipment_trailer: ट्रेलर
+
+# ===== लैंडिंग पेज =====
+hero_trusted: भारत भर में 10,000+ किसानों द्वारा विश्वसनीय
+hero_title_1: अंतर को पाटना
+hero_title_2: किसान और खेत मजदूर
+hero_desc: कुशल कृषि मजदूरों के साथ जुड़ें, अपनी खेती की जमीन को कुशलता से प्रबंधित करें, और अपनी फसल को अधिकतम करने के लिए AI-संचालित फसल सलाह प्राप्त करें।
+cta_login: जारी रखने के लिए लॉगिन करें
+
+# विशेषताएं
+features_why: AgriSmart क्यों चुनें?
+features_why_desc: आधुनिक कृषि के लिए डिज़ाइन किए गए हमारे व्यापक मंच के साथ खेती के भविष्य का अनुभव करें
+feature_verified_title: सत्यापित मजदूर
+feature_verified_desc: सभी मजदूर कौशल मूल्यांकन और पिछले नियोक्ताओं से रेटिंग के साथ पृष्ठभूमि-सत्यापित हैं।
+feature_verified_badge: 100% सत्यापित प्रोफाइल
+feature_match_title: त्वरित मिलान
+feature_match_desc: हमारा स्मार्ट एल्गोरिथम स्थान और कौशल के आधार पर आपको सही मजदूरों से मिलाता है।
+feature_match_badge: "औसत मिलान समय: 15 मिनट"
+feature_ai_title: AI फसल सलाहकार
+feature_ai_desc: "सिंचाई, उर्वरक, कीट नियंत्रण और कटाई के लिए व्यक्तिगत सिफारिशें।"
+feature_ai_badge: 95% सटीकता दर
+
+# यह कैसे काम करता है
+how_title: AgriSmart कैसे काम करता है
+how_desc: कुशल मजदूरों से जुड़ने और अपने खेती के संचालन को अनुकूलित करने के लिए सरल कदम
+how_step1_title: अपनी आवश्यकताएं पोस्ट करें
+how_step1_desc: "अपनी जरूरतों का वर्णन करें: फसल, अवधि, मजदूर, कौशल, बजट और समयरेखा।"
+how_step2_title: तुरंत मिलान प्राप्त करें
+how_step2_desc: सर्वश्रेष्ठ पास के मजदूरों की समीक्षा करें और सीधे संपर्क करें।
+how_step3_title: काम करें और सलाह प्राप्त करें
+how_step3_desc: वास्तविक समय AI फसल सलाह प्राप्त करते हुए काम का समन्वय करें।
+
+# CTA
+cta_title: अपनी खेती को बदलने के लिए तैयार हैं?
+cta_desc: AgriSmart के साथ पहले से ही उत्पादकता में सुधार कर रहे हजारों किसानों के साथ जुड़ें।
+cta_get_started: शुरू करें
+cta_try_ai: AI सलाहकार आज़माएं
+
+# क्यों बुलेट
+why_bullet_ai: आपके फार्म के अनुरूप AI फसल सलाह
+why_bullet_resources: पड़ोसियों के साथ संसाधन साझा करें
+why_bullet_verified: सत्यापित मजदूरों को तेजी से खोजें
+
+# भविष्य की खेती
+future_farming_title: खेती के भविष्य में आपका स्वागत है
+future_farming_p1: हर सीजन में स्मार्ट निर्णय लेने के लिए वास्तविक समय मिट्टी विश्लेषण, जलवायु डेटा और सटीक सिफारिशों का उपयोग करें। Agri Smart Cloud आपके खेतों, कार्यबल और खरीदारों को एक ही डिजिटल मंच में जोड़ता है।
+future_farming_p2: "स्मार्ट सिंचाई और श्रम योजना से लेकर पारदर्शी फार्म-टू-मार्केट वाणिज्य तक, यह पोर्टल टिकाऊ, डेटा-संचालित कृषि के लिए आपका प्रवेश द्वार है।"
+future_farming_point1: AI-सहायता प्राप्त सिंचाई और मौसम-जागरूक योजना।
+future_farming_point2: बेहतर मूल्य निर्धारण के लिए ट्रेसेबल फार्म-टू-मार्केट आपूर्ति।
+
+# ===== हेडर =====
+header_logo_title: AGRI SMART CLOUD
+header_logo_subtitle_line1: Agriportal & Ecofarm
+header_logo_subtitle_line2: Platform
+
+# ===== स्वागत पृष्ठ =====
+welcome_page_title: स्वागत पृष्ठ
+welcome_page_body: अपनी Agri Smart Cloud सेवाओं तक पहुंचें, फसलों की निगरानी करें, ecofarm गतिविधियों का प्रबंधन करें, और अंतर्दृष्टि के साथ अपडेट रहें – किसानों, किराएदारों, खरीदारों और मजदूरों के लिए एक सुरक्षित मंच में।
+welcome_point_1: वास्तविक समय फसल और मिट्टी निगरानी डैशबोर्ड।
+welcome_point_2: "किसानों, मजदूरों, खरीदारों और किराएदारों के लिए एकीकृत पहुंच।"
+
+# ===== थीम =====
+video_theme_on: "वीडियो थीम: चालू"
+video_theme_off: "वीडियो थीम: बंद"
+
+# ===== विविध =====
+please_wait: कृपया प्रतीक्षा करें...
+or_continue_with: या जारी रखें
+google: Google
+phone_otp: फोन OTP
+
+# ===== लॉगिन पेज विशेषताएं =====
+feature_smart_analytics_title: स्मार्ट एनालिटिक्स
+feature_smart_analytics_desc: AI अंतर्दृष्टि के साथ अपने खेत के प्रदर्शन को ट्रैक करें
+feature_weather_alerts_title: मौसम अलर्ट
+feature_weather_alerts_desc: आपके क्षेत्र के लिए वास्तविक समय मौसम पूर्वानुमान
+feature_marketplace_title: बाज़ार
+feature_marketplace_desc: आसानी से उत्पाद खरीदें और बेचें
+feature_job_board_title: जॉब बोर्ड
+feature_job_board_desc: मजदूर खोजें या नौकरी के अवसर पोस्ट करें
+
+# ===== सांख्यिकी =====
+stats_platform_stats: प्लेटफ़ॉर्म सांख्यिकी
+stats_farmers: किसान
+stats_products: उत्पाद
+stats_jobs: नौकरियां
+
+# ===== प्रचार / नई विशेषताएं =====
+promo_new_feature: नई सुविधा
+promo_ai_doctor_live: AI फसल डॉक्टर अब लाइव है!
+
+# ===== लाभ =====
+benefit_secure_title: सुरक्षित
+benefit_secure_desc: आपका डेटा एन्क्रिप्शन के साथ सुरक्षित है
+benefit_fast_title: तेज़
+benefit_fast_desc: सभी कृषि उपकरणों तक त्वरित पहुँच
+benefit_ai_powered_title: AI संचालित
+benefit_ai_powered_desc: बुद्धिमान खेती की सिफारिशें प्राप्त करें
+benefit_mobile_ready_title: मोबाइल तैयार
+benefit_mobile_ready_desc: कहीं से भी, कभी भी एक्सेस करें
+
+# ===== प्रशंसापत्र =====
+testimonial_quote: "AgriSmart ने मेरे खेत को प्रबंधित करने के तरीके को बदल दिया। AI सिफारिशों ने मेरी उपज में 30% की वृद्धि की!"
+testimonial_author: खुश किसान
+
+# ===== मजदूर डैशबोर्ड विடுபटिंग =====
+nav_my_shifts: मेरी शिफ्ट्स
+nav_community: समुदाय
+status_label: "स्थिति: "
+status_available: उपलब्ध
+status_busy: व्यस्त
+worker_welcome_msg_part1: एक और उत्पादक दिन के लिए तैयार हैं? आपके पास 
+worker_welcome_msg_part2: आगामी शिफ्ट्स हैं
+stats_shifts_confirmed: शिफ्ट्स की पुष्टि
+stats_pending: लंबित
+stats_verified_skills: सत्यापित कौशल
+stats_add_skill: कौशल जोड़ें
+stats_avg_rating: औसत रेटिंग
+stats_top_workers: शीर्ष 10%
+stats_earnings: कमाई
+stats_this_week: इस हफ्ते
+label_todays_focus: आज का फोकस
+label_rhythm_board: रिदम बोर्ड
+label_daily_schedule: दैनिक कार्यक्रम
+action_view_all: सभी देखें
+label_ready: तैयार
+label_busy: व्यस्त
+filter_all_jobs: सभी नौकरियां
+label_urgent: अभी ज़रुरत है
+label_payment: भुगतान
+badge_verified: सत्यापित
+badge_top_rated: टॉप रेटेड
+action_add_skill: + कौशल जोड़ें
+feature_coming_soon: सुविधा जल्द आ रही है
+feature_coming_soon_desc: हम आपको इस सुविधा के लिए सबसे अच्छा अनुभव लाने के लिए कड़ी मेहनत कर रहे हैं। बने रहें!
+status_applying: आवेदन किया जा रहा है...
+status_request_sent: अनुरोध भेजा गया
+
+# ===== फार्म मालिक डैशबोर्ड विடுபटिंग =====
+nav_smart_farm: स्मार्ट फार्म (IoT)
+badge_live: लाइव
+nav_crop_doctor: फसल डॉक्टर
+badge_new: नया
+status_active: सक्रिय
+welcome_back_owner: वापसी पर स्वागत है!
+welcome_owner_desc_part1: आज आपके खेत में क्या हो रहा है, इसकी जानकारी यहाँ दी गई है। आपके पास
+welcome_owner_desc_part2: लंबित अलर्ट हैं
+label_total: कुल
+label_active_positions: सक्रिय पद
+label_nearby: आस-पास
+label_get_started_quickly: जल्दी शुरू करें
+
+# ===== लैंडिंग पेज अतिरिक्त =====
+hero_stat_workers: 15,000+ मजदूर
+hero_stat_workers_desc: कुशल और सत्यापित
+hero_stat_villages: 500+ गांव
+hero_stat_villages_desc: पूरे भारत में कवरेज
+hero_stat_ai: AI-संचालित
+hero_stat_ai_desc: स्मार्ट सिफारिशें
+footer_desc: कुशल मजदूरों से जुड़ने और AI-संचालित अंतर्दृष्टि के माध्यम से फसल प्रबंधन को अनुकूलित करने के लिए प्रौद्योगिकी के साथ किसानों को सशक्त बनाना।
+footer_rating: 4.9/5 रेटिंग
+footer_reviews: 5,000+ समीक्षाओं से
+footer_quick_links: त्वरित लिंक
+footer_about_us: हमारे बारे में
+footer_success_stories: सफलता की कहानियां
+footer_help_center: सहायता केंद्र
+footer_contact_info: संपर्क जानकारी
+footer_address: ग्रामीण विकास केंद्र, भारत
+footer_copyright: © 2024 AgriSmart. सर्वाधिकार सुरक्षित।
+footer_privacy: गोपनीयता नीति
+footer_terms: सेवा की शर्तें
+footer_cookies: कुकी नीति
+
+# ===== खरीदार डैशबोर्ड =====
+buyer_nav_products: उत्पाद
+buyer_nav_cart: कार्ट
+buyer_nav_orders: मेरे ऑर्डर
+buyer_nav_wishlist: इच्छासूची
+cat_grains: 🌾 अनाज
+cat_vegetables: 🥬 सब्जियां
+cat_fruits: 🍎 फल
+cat_dairy: 🥛 डेयरी
+cat_other: 🌿 अन्य
+msg_address_saved: पता सफलतापूर्वक सहेजा गया!
+msg_invoice_downloaded: चालान सफलतापूर्वक डाउनलोड किया गया
+btn_checkout: चेकआउट
+title_order_history: ऑर्डर इतिहास
+status_shipped: भेजा गया
+status_delivered: वितरित
+status_cancelled: रद्द किया गया
+status_processing: प्रसंस्करण में
+filter_all_categories: सभी श्रेणियां
+label_search_products: उत्पाद खोजें...
+label_cart_empty: आपकी कार्ट खाली है
+label_total_amount: कुल राशि
+label_payment_method: भुगतान विधि
+label_delivery_address: डिलीवरी पता
+
+# ===== रेंटर डैशबोर्ड =====
+renter_nav_dashboard: डैशबोर्ड
+renter_nav_listings: मेरी लिस्टिंग
+renter_nav_rentals: सक्रिय किराये
+renter_nav_settings: सेटिंग्स
+col_equipment: उपकरण
+col_renter: किरायेदार
+col_dates: तिथियां
+col_amount: राशि
+col_status: स्थिति
+col_actions: कार्रवाई
+btn_invoice: चालान
+status_maintenance: रखरखाव
+status_rented: किराये पर
+chart_revenue: राजस्व
+invoice_title: एग्री-रेंट चालान
+invoice_thank_you: आपके व्यवसाय के लिए धन्यवाद!
+label_total_revenue: कुल राजस्व
+label_active_rentals: सक्रिय किराये
+label_total_equipment: कुल उपकरण
+label_utilization: उपयोग
+month_jan: जन
+month_feb: फर
+month_mar: मार्च
+month_apr: अप्रैल
+month_may: मई
+month_jun: जून
+verified_partner: सत्यापित भागीदार
+label_pending_requests: लंबित अनुरोध
+label_last_30_days: पिछले 30 दिन
+title_recent_activity: हालिया गतिविधि
+placeholder_search_equipment: उपकरण खोजें...
+btn_add_equipment: उपकरण जोड़ें
+btn_view_all_history: सभी इतिहास देखें
+col_order_id: ऑर्डर आईडी
+col_duration: अवधि
+title_payment_settings: भुगतान सेटिंग्स
+msg_auto_payments: हम स्वचालित रूप से भुगतान स्वीकार करते हैं
+msg_payouts_scheduled: आपका भुगतान हर बुधवार को निर्धारित है।
+label_bank_account: कनेक्टेड बैंक खाता
+label_upi_id: तत्काल निपटान के लिए यूपीआई आईडी
+btn_save_changes: परिवर्तन सहेजें
+label_days: दिन
+label_day: दिन
+rented_verb: किराए पर लिया
+title_setup_delivery: डिलीवरी सेटअप
+msg_add_address: ऑर्डर करने के लिए अपना पता जोड़ें।
+btn_add_address: + पता जोड़ें
+title_market_trends: बाजार रुझान
+label_market_price: बाजार मूल्य
+btn_add_to_cart: कार्ट में जोड़ें
+btn_make_offer: प्रस्ताव दें
+btn_move_to_cart: कार्ट में ले जाएं
+btn_remove: हटाएं
+msg_no_products: कोई उत्पाद नहीं मिला
+msg_adjust_search: अपनी खोज या फ़िल्टर समायोजित करने का प्रयास करें
+title_shopping_cart: शॉपिंग कार्ट
+title_order_summary: ऑर्डर सारांश
+label_subtotal: उपयोग
+label_tax: कर (5%)
+label_delivery_fee: डिलीवरी शुल्क
+label_total: कुल
+label_deliver_to: डिलीवरी का स्थान:
+btn_proceed_checkout: चेकआउट के लिए आगे बढ़ें
+btn_start_shopping: खरीदारी शुरू करें
+msg_no_orders: कोई ऑर्डर नहीं
+label_order_sharp: ऑर्डर #
+label_items: आइटम
+payment_cod: सीओडी
+payment_upi: यूपीआई
+payment_card: कार्ड
+status_paid: भुगतान किया गया
+status_failed: विफल
+receipt_title: एग्रीस्मार्ट
+receipt_subtitle: आपका कृषि बाज़ार
+receipt_invoice: चालान
+receipt_bill_to: बिल प्रति:
+title_payment_details: भुगतान विवरण
+label_upi_payment: यूपीआई भुगतान
+label_card_payment: डेबिट/क्रेडिट कार्ड
+label_cod_payment: कैश ऑन डिलीवरी
+label_card_number: कार्ड नंबर
+label_cardholder_name: कार्डधारक का नाम
+label_month: महीना
+label_year: वर्ष
+label_cvv: सीवीवी
+btn_cancel: रद्द करें
+btn_confirm_order: ऑर्डर की पुष्टि करें
+btn_pay_now: अभी भुगतान करें
+title_add_address: डिलीवरी पता जोड़ें
+label_phone_number: फ़ोन नंबर
+label_city: शहर
+label_pincode: पिनकोड
+label_state: राज्य
+label_full_address: पूरा पता
+btn_save_address: पता सहेजें
+title_make_offer: प्रस्ताव दें
+label_your_price: आपकी कीमत (₹/किग्रा)
+btn_send_offer: प्रस्ताव भेजें
+msg_proposed_price: प्रस्तावित कीमत:
+label_order_history: ऑर्डर इतिहास
+btn_download_receipt: रसीद डाउनलोड करें
+invoice_no: चालान संख्या:
+invoice_date: दिनांक:
+invoice_from: से:
+invoice_to: प्रति:
+invoice_grand_total: कुल योग:
+table_item: वस्तु
+table_duration: अवधि
+table_rate_day: दर/दिन
+table_total: कुल
+status_maintenance: रखरखाव
+status_rented: किराए पर
+label_bookings: बुकिंग
+skill_all: सब
+skill_harvesting: कटाई
+skill_irrigation: सिंचाई
+skill_pest_control: कीट नियंत्रण
+skill_equipment: उपकरण
+block_sunrise_title: सूर्योदय फसल
+block_sunrise_task: चावल खेत ब्लॉक ए
+block_sunrise_mood: उच्च मांग
+block_irrigation_title: सिंचाई ट्यून
+block_irrigation_task: नहर रखरखाव
+block_irrigation_mood: स्थिर
+block_skill_title: कौशल बूस्टर
+block_skill_task: जैविक कीट अभ्यास
+block_skill_mood: सीखना
+label_crop_type: फसल का प्रकार
+label_acreage: रकबा (एकड़)
+label_soil_type: मिट्टी का प्रकार
+label_irrigation_type: सिंचाई का प्रकार
+label_land_preparation: भूमि की तैयारी
+label_notes: टिप्पणियाँ
+placeholder_land_notes: इस भूमि के बारे में अतिरिक्त टिप्पणियाँ...
+btn_add_land: भूमि जोड़ें
+btn_edit_job: नौकरी संपादित करें
+title_post_work_request: कार्य अनुरोध पोस्ट करें
+label_job_title: नौकरी का शीर्षक
+label_job_date: दिनांक
+label_num_workers: श्रमिकों की संख्या
+label_duration: अवधि
+label_payment_per_day: भुगतान (प्रति दिन)
+label_time: समय
+placeholder_job_title: जैसे, चावल की कटाई
+placeholder_job_location: खेत का स्थान
+placeholder_num_workers: 5
+placeholder_duration: 8 घंटे
+placeholder_payment: ₹500
+placeholder_time: सुबह 6:00 - दोपहर 2:00
+soil_clay: चिकनी मिट्टी
+soil_loam: दोमट मिट्टी
+soil_sandy: रेतीली मिट्टी
+soil_clay_loam: चिकनी-दोमट मिट्टी
+soil_sandy_loam: रेतीली-दोमट मिट्टी
+irrigation_flood: बाढ़ सिंचाई
+irrigation_drip: ड्रिप सिंचाई
+irrigation_sprinkler: फव्वारा सिंचाई
+irrigation_furrow: कुंड सिंचाई
