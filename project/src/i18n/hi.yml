@@ -63,6 +63,8 @@ nav_my_land: मेरी जमीन
 nav_posted_jobs: पोस्ट की गई नौकरियां
 nav_ai: AI सलाहकार
 nav_find_workers: मजदूर खोजें
+nav_find_jobs: नौकरी खोजें
+nav_job_offers: इनकमिंग जॉब अनुरोध
 nav_resource_sharing: संसाधन साझाकरण
 nav_marketplace: बाज़ार
 nav_profile: प्रोफ़ाइल
@@ -148,8 +150,8 @@ card_plus_acres: इस सीजन में +2 एकड़
 card_active_jobs: सक्रिय नौकरियां
 card_available_workers: उपलब्ध मजदूर
 card_within_km: 5 किमी के भीतर
-card_this_month: इस महीने
-card_labor_costs: श्रम लागत
+card_this_month: फसल स्वास्थ्य
+card_labor_costs: स्वास्थ्य सूचकांक
 
 # त्वरित कार्य
 quick_actions: त्वरित कार्य
@@ -169,6 +171,7 @@ view_7day_forecast: 7 दिन का पूर्वानुमान
 
 # हाल की गतिविधि
 recent_activity: हाल की गतिविधि
+msg_no_job_offers: फिलहाल कोई इनकमिंग जॉब अनुरोध नहीं है।
 activity_rice_harvested: रवि कुमार ने धान की कटाई का काम पूरा किया
 activity_2_hours_ago: 2 घंटे पहले
 activity_new_application: कपास की बुवाई के लिए नया मजदूर आवेदन
@@ -286,7 +289,7 @@ resource_sharing_title: संसाधन साझाकरण
 resource_sharing_subtitle: कृषि उपकरण किराए पर लें और साझा करें
 tab_browse_resources: संसाधन ब्राउज़ करें
 tab_my_requests: मेरे अनुरोध
-tab_incoming_requests: आने वाले अनुरोध
+tab_incoming_requests: इनकमिंग जॉब अनुरोध
 tab_resource_alerts: संसाधन अलर्ट
 tab_analytics: विश्लेषण
 
@@ -616,6 +619,7 @@ month_may: मई
 month_jun: जून
 verified_partner: सत्यापित भागीदार
 label_pending_requests: लंबित अनुरोध
+label_requester: अनुरोधकर्ता
 label_last_30_days: पिछले 30 दिन
 title_recent_activity: हालिया गतिविधि
 placeholder_search_equipment: उपकरण खोजें...
@@ -730,6 +734,8 @@ label_job_date: दिनांक
 label_num_workers: श्रमिकों की संख्या
 label_duration: अवधि
 label_payment_per_day: भुगतान (प्रति दिन)
+label_posted_by: द्वारा पोस्ट किया गया
+label_phone: फोन
 label_time: समय
 placeholder_job_title: जैसे, चावल की कटाई
 placeholder_job_location: खेत का स्थान

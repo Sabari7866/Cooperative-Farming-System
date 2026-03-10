@@ -18,6 +18,8 @@ const LazySupportPage = React.lazy(() => import('./components/SupportPage'));
 const LazyCropsPage = React.lazy(() => import('./components/CropsPage'));
 const LazyFarmDocsPage = React.lazy(() => import('./components/FarmDocsPage'));
 const LazyFeaturesDashboard = React.lazy(() => import('./components/FeaturesDashboard'));
+const LazyAdminDashboard = React.lazy(() => import('./components/AdminDashboard'));
+const LazyAdminLogin = React.lazy(() => import('./components/AdminLogin'));
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<LazyLogin />} />
+            <Route path="/admin-login" element={<LazyAdminLogin />} />
             <Route path="/support" element={<LazySupportPage />} />
             <Route path="/crops" element={<LazyCropsPage />} />
             <Route path="/farm-docs" element={<LazyFarmDocsPage />} />
@@ -108,6 +111,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <LazyFeaturesDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute roles={['admin']}>
+                  <LazyAdminDashboard />
                 </ProtectedRoute>
               }
             />

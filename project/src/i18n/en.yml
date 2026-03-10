@@ -2,8 +2,8 @@
 # AgriSmart Platform - All Components
 
 # ===== COMMON =====
-brand_name: Cooperative Farming
-tagline: Smart Farming Solutions
+brand_name: AgriSmart
+tagline: "The best local harvest for your family."
 logout: Logout
 loading: Loading...
 save: Save
@@ -63,6 +63,8 @@ nav_my_land: My Land
 nav_posted_jobs: Posted Jobs
 nav_ai: AI Advisor
 nav_find_workers: Find Workers
+nav_find_jobs: Find Jobs
+nav_job_offers: Incoming Job Req
 nav_resource_sharing: Resource Sharing
 nav_marketplace: Marketplace
 nav_profile: Profile
@@ -75,7 +77,7 @@ nav_login: Login
 
 # ===== AUTHENTICATION =====
 welcome_to_agrismart: Welcome to AgriSmart
-connect_manage_grow: Connect. Manage. Grow with smart agriculture tools.
+connect_manage_grow: "Cultivating Innovation, Feeding the Future."
 create_account: Create account
 sign_in: Sign in
 new_user_create_account: New user? Create account
@@ -148,8 +150,8 @@ card_plus_acres: +2 acres this season
 card_active_jobs: Active Jobs
 card_available_workers: Available Workers
 card_within_km: Within 5km
-card_this_month: This Month
-card_labor_costs: Labor costs
+card_this_month: Crop Health
+card_labor_costs: Health Index
 
 # Quick Actions
 quick_actions: Quick Actions
@@ -170,6 +172,7 @@ view_7day_forecast: 7-day forecast
 
 # Recent Activity
 recent_activity: Recent Activity
+msg_no_job_offers: No incoming job requests at the moment.
 activity_rice_harvested: Rice harvesting job completed by Ravi Kumar
 activity_2_hours_ago: 2 hours ago
 activity_new_application: New worker application for cotton sowing
@@ -296,7 +299,7 @@ resource_sharing_title: Resource Sharing
 resource_sharing_subtitle: Rent & share farming equipment
 tab_browse_resources: Browse Resources
 tab_my_requests: My Requests
-tab_incoming_requests: Incoming Requests
+tab_incoming_requests: Incoming Job Req
 tab_resource_alerts: Resource Alerts
 tab_analytics: Analytics
 
@@ -339,6 +342,7 @@ worker_dashboard_subtitle: Find nearby jobs and manage your profile
 my_profile: My Profile
 
 # ===== BUYER DASHBOARD =====
+title_buyer_dashboard: Buyer Dashboard
 buyer_dashboard_title: Buyer Dashboard
 buyer_dashboard_subtitle: Browse and purchase agricultural products
 
@@ -567,7 +571,7 @@ footer_success_stories: Success Stories
 footer_help_center: Help Center
 footer_contact_info: Contact Info
 footer_address: Rural Development Center, India
-footer_copyright: © 2024 AgriSmart. All rights reserved.
+footer_copyright: © 2024 AgriSmart. "The farmer is the only man in our economy who buys everything at retail, sells everything at wholesale, and pays the freight both ways."
 footer_privacy: Privacy Policy
 footer_terms: Terms of Service
 footer_cookies: Cookie Policy
@@ -625,7 +629,8 @@ month_apr: Apr
 month_may: May
 month_jun: Jun
 verified_partner: Verified Partner
-label_pending_requests: Pending Requests
+label_pending_requests: Pending requests
+label_requester: Requester
 label_last_30_days: Last 30 Days
 title_recent_activity: Recent Activity
 placeholder_search_equipment: Search equipment...
@@ -697,6 +702,11 @@ title_make_offer: Make an Offer
 label_your_price: Your Price (₹/kg)
 btn_send_offer: Send Offer
 msg_proposed_price: Proposed price for
+label_wishlist_empty: Your wishlist is empty.
+btn_start_shopping: Browse Products
+status_pending: Pending
+status_confirmed: Confirmed
+msg_pay_when_receive: Pay when you receive
 label_order_history: Order History
 btn_download_receipt: Download Receipt
 invoice_no: Invoice No:
@@ -740,6 +750,8 @@ label_job_date: Date
 label_num_workers: Number of Workers
 label_duration: Duration
 label_payment_per_day: Payment (per day)
+label_posted_by: Posted by
+label_phone: Phone
 label_time: Time
 placeholder_job_title: e.g., Rice Harvesting
 placeholder_job_location: Field location

@@ -32,6 +32,7 @@ export function useWorkers(filters?: {
   skills?: string[];
   maxDistance?: number;
   available?: boolean;
+  gender?: string;
 }) {
   return useApi(() => api.getWorkers(filters), [filters]);
 }
@@ -135,4 +136,8 @@ export function useLandActions() {
   };
 
   return { createLand, updateLand, deleteLand, loading, error };
+}
+
+export function useAgroShops(filters?: { open?: boolean }) {
+  return useApi(() => api.getAgroShops(filters), [filters]);
 }

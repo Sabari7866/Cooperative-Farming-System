@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const WorkerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     phone: { type: String, required: true },
+    gender: { type: String, enum: ['Male', 'Female', 'Other'], default: 'Male' },
     skills: [String],
     location: { type: String, required: true },
     distance: { type: String }, // In a real app, calculate with geospatial queries

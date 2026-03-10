@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect } from 'react';
-import { useJobs } from '../hooks/useApi';
 import { logoutAndRedirect, getSession, updateSession } from '../utils/auth';
 import FloatingChatbot from './FloatingChatbot';
 import LanguageSelector from './LanguageSelector';
@@ -63,25 +62,229 @@ interface CartItem {
   unit: string;
 }
 
-function categoryFromTitle(title: string) {
-  const t = title.toLowerCase();
-  if (t.includes('rice') || t.includes('wheat') || t.includes('grain')) return 'cat_grains';
-  if (
-    t.includes('tomato') ||
-    t.includes('potato') ||
-    t.includes('onion') ||
-    t.includes('vegetable')
-  )
-    return 'cat_vegetables';
-  if (t.includes('mango') || t.includes('banana') || t.includes('fruit')) return 'cat_fruits';
-  if (t.includes('milk') || t.includes('dairy')) return 'cat_dairy';
-  return 'cat_other';
+// Marketplace product type (matches what Marketplace.tsx stores)
+interface MarketplaceProduct {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  unit: string;
+  quantity: number;
+  seller: string;
+  sellerPhone: string;
+  location: string;
+  distance: string;
+  image?: string;
+  description: string;
+  isOwnProduct?: boolean;
+  availability?: 'in-stock' | 'out-of-stock';
 }
+
+// Default demo products (same as Marketplace defaults)
+const DEFAULT_MARKETPLACE_PRODUCTS: MarketplaceProduct[] = [
+  { id: '1', name: 'Fresh Organic Tomatoes', category: 'vegetables', price: 45, unit: 'kg', quantity: 500, seller: 'Ravi Farms', sellerPhone: '+91 98765 43210', location: 'Coimbatore', distance: '5 km', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=300&fit=crop', description: 'Farm fresh organic tomatoes, harvested just today. No pesticides used.', availability: 'in-stock' },
+  { id: '2', name: 'Green Chillies', category: 'vegetables', price: 80, unit: 'kg', quantity: 200, seller: 'Krishna Vegetables', sellerPhone: '+91 98765 43220', location: 'Pollachi', distance: '8 km', image: 'https://images.unsplash.com/photo-1583488177-e22e79eecd87?w=400&h=300&fit=crop', description: 'Fresh green chillies with perfect spice. Daily harvest.', availability: 'in-stock' },
+  { id: '3', name: 'Onions (Bangalore)', category: 'vegetables', price: 35, unit: 'kg', quantity: 1000, seller: 'Ganesh Traders', sellerPhone: '+91 98765 43221', location: 'Erode', distance: '12 km', image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&h=300&fit=crop', description: 'High quality Bangalore onions. Bulk orders available.', availability: 'in-stock' },
+  { id: '4', name: 'Potatoes', category: 'vegetables', price: 28, unit: 'kg', quantity: 800, seller: 'Farmers Hub', sellerPhone: '+91 98765 43222', location: 'Salem', distance: '15 km', image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&h=300&fit=crop', description: 'Fresh potatoes ideal for cooking. Grade A quality.', availability: 'in-stock' },
+  { id: '5', name: 'Shimla Apples', category: 'fruits', price: 180, unit: 'kg', quantity: 200, seller: 'Mountain Fresh', sellerPhone: '+91 98765 43213', location: 'Ooty', distance: '80 km', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop', description: 'Crisp and sweet apples directly from orchards.', availability: 'in-stock' },
+  { id: '6', name: 'Alphonso Mangoes', category: 'fruits', price: 250, unit: 'kg', quantity: 150, seller: 'Coastal Fruits', sellerPhone: '+91 98765 43223', location: 'Ratnagiri', distance: '120 km', image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&h=300&fit=crop', description: 'Premium Alphonso mangoes. King of fruits.', availability: 'in-stock' },
+  { id: '7', name: 'Bananas (Robusta)', category: 'fruits', price: 45, unit: 'dozen', quantity: 500, seller: 'Banana Growers Coop', sellerPhone: '+91 98765 43224', location: 'Theni', distance: '35 km', image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop', description: 'Fresh robusta bananas. Rich in nutrients.', availability: 'in-stock' },
+  { id: '8', name: 'Premium Basmati Rice', category: 'grains', price: 4500, unit: 'quintal', quantity: 30, seller: 'Lakshmi Agro', sellerPhone: '+91 98765 43211', location: 'Pollachi', distance: '12 km', image: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?w=400&h=300&fit=crop', description: 'Premium quality basmati rice with extra long grains.', availability: 'in-stock' },
+  { id: '9', name: 'Wheat (Sona Moti)', category: 'grains', price: 3200, unit: 'quintal', quantity: 50, seller: 'Grain Masters', sellerPhone: '+91 98765 43225', location: 'Coimbatore', distance: '6 km', image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=300&fit=crop', description: 'High quality wheat suitable for milling.', availability: 'in-stock' },
+  { id: '10', name: 'Red Lentils (Masoor Dal)', category: 'grains', price: 120, unit: 'kg', quantity: 300, seller: 'Pulses Paradise', sellerPhone: '+91 98765 43226', location: 'Erode', distance: '18 km', image: 'https://images.unsplash.com/photo-1596040033229-a0b39f1a8157?w=400&h=300&fit=crop', description: 'Premium red lentils. Clean and sorted.', availability: 'in-stock' },
+  { id: '11', name: 'Jersey Cow Milk', category: 'dairy', price: 60, unit: 'liter', quantity: 100, seller: 'Krishna Dairy Farm', sellerPhone: '+91 98765 43212', location: 'Erode', distance: '25 km', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=300&fit=crop', description: 'Pure, unadulterated raw milk from grass-fed Jersey cows.', availability: 'in-stock' },
+  { id: '12', name: 'Fresh Curd (Dahi)', category: 'dairy', price: 50, unit: 'kg', quantity: 80, seller: 'Amul Dairy', sellerPhone: '+91 98765 43227', location: 'Pollachi', distance: '10 km', image: 'https://images.unsplash.com/photo-1571212515935-f8da95a087a7?w=400&h=300&fit=crop', description: 'Thick and creamy fresh curd. Daily morning batch.', availability: 'in-stock' },
+  { id: '13', name: 'Hybrid Cotton Seeds', category: 'seeds', price: 850, unit: 'kg', quantity: 1000, seller: 'AgriInputs Ltd', sellerPhone: '+91 98765 43214', location: 'Salem', distance: '40 km', image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=300&fit=crop', description: 'High yield potential hybrid cotton seeds.', availability: 'in-stock' },
+  { id: '14', name: 'Tomato Seeds (Hybrid)', category: 'seeds', price: 2800, unit: 'kg', quantity: 50, seller: 'Seed World', sellerPhone: '+91 98765 43228', location: 'Coimbatore', distance: '7 km', image: 'https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=400&h=300&fit=crop', description: 'High yielding hybrid tomato seeds.', availability: 'in-stock' },
+  { id: '15', name: 'Fresh Carrots', category: 'vegetables', price: 55, unit: 'kg', quantity: 400, seller: 'Vegetable Mart', sellerPhone: '+91 98765 43229', location: 'Ooty', distance: '75 km', image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&h=300&fit=crop', description: 'Sweet and crunchy fresh carrots. Rich in vitamins.', availability: 'in-stock' },
+];
+
+const CATEGORY_ICONS: Record<string, string> = {
+  vegetables: '🥬', fruits: '🍎', grains: '🌾', dairy: '🥛', seeds: '🌱', other: '🌿',
+};
+
+function categoryFromName(name: string, category?: string): string {
+  if (category) return category;
+  const n = name.toLowerCase();
+  if (n.includes('rice') || n.includes('wheat') || n.includes('grain') || n.includes('dal') || n.includes('lentil')) return 'grains';
+  if (n.includes('tomato') || n.includes('potato') || n.includes('onion') || n.includes('carrot') || n.includes('chilli') || n.includes('vegetable')) return 'vegetables';
+  if (n.includes('mango') || n.includes('banana') || n.includes('apple') || n.includes('fruit')) return 'fruits';
+  if (n.includes('milk') || n.includes('curd') || n.includes('dairy')) return 'dairy';
+  if (n.includes('seed')) return 'seeds';
+  return 'other';
+}
+
+// ─── Uzhavar Sandhai (Farmers' Market) Price Board ────────────────────────────
+
+const SANDHAI_MARKETS = [
+  { id: 'coimbatore', name: 'Coimbatore', short: 'CBE' },
+  { id: 'chennai', name: 'Chennai', short: 'MAS' },
+  { id: 'salem', name: 'Salem', short: 'SLM' },
+  { id: 'madurai', name: 'Madurai', short: 'MDU' },
+  { id: 'erode', name: 'Erode', short: 'ERD' },
+];
+
+const SANDHAI_COMMODITIES = [
+  { name: 'Tomato', icon: '🍅', basePrice: 45, unit: 'kg', seeds: [1, 3, -2, 4, -1] },
+  { name: 'Onion', icon: '🧅', basePrice: 35, unit: 'kg', seeds: [0, 2, -3, 1, 4] },
+  { name: 'Potato', icon: '🥔', basePrice: 28, unit: 'kg', seeds: [2, -1, 0, 3, -2] },
+  { name: 'Brinjal', icon: '🍆', basePrice: 30, unit: 'kg', seeds: [-1, 4, 2, -3, 0] },
+  { name: 'Banana', icon: '🍌', basePrice: 40, unit: 'doz', seeds: [3, -2, 1, 0, 2] },
+  { name: 'Carrot', icon: '🥕', basePrice: 55, unit: 'kg', seeds: [-2, 1, 3, 4, -1] },
+  { name: 'Drumstick', icon: '🌿', basePrice: 80, unit: 'kg', seeds: [4, -3, 2, 1, 0] },
+  { name: 'Rice (Raw)', icon: '🌾', basePrice: 52, unit: 'kg', seeds: [1, 0, -1, 2, 3] },
+  { name: 'Coconut', icon: '🥥', basePrice: 22, unit: 'pc', seeds: [-2, 3, 0, 1, -1] },
+  { name: 'Green Chilli', icon: '🌶️', basePrice: 80, unit: 'kg', seeds: [5, -4, 3, -2, 6] },
+  { name: 'Milk', icon: '🥛', basePrice: 60, unit: 'L', seeds: [0, 0, 0, 0, 0] },
+  { name: 'Wheat', icon: '🌾', basePrice: 3200, unit: 'qt', seeds: [50, -100, 30, -50, 80] },
+];
+
+// Deterministic per-market price variation (no random on each render)
+function getMarketPrice(basePrice: number, seed: number, marketIdx: number): number {
+  const variation = seed * (1 + marketIdx * 0.1);
+  return Math.max(1, Math.round(basePrice + variation));
+}
+
+function UzhavarSandhaiWidget() {
+  const [selectedMarket, setSelectedMarket] = useState(0);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+
+  // Tick every 60s to simulate live refresh
+  useEffect(() => {
+    const interval = setInterval(() => setLastUpdated(new Date()), 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const market = SANDHAI_MARKETS[selectedMarket];
+
+  return (
+    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-green-700 to-emerald-600 px-4 py-3">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="font-black text-white text-sm flex items-center gap-2">
+            🛖 உழவர் சந்தை விலை
+          </h3>
+          <span className="text-[10px] text-green-200 font-medium">
+            🔴 LIVE · {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
+        <p className="text-[10px] text-green-100 font-medium">Uzhavar Sandhai Market Prices</p>
+
+        {/* Market selector tabs */}
+        <div className="flex gap-1 mt-2 flex-wrap">
+          {SANDHAI_MARKETS.map((m, i) => (
+            <button
+              key={m.id}
+              onClick={() => setSelectedMarket(i)}
+              className={`px-2 py-0.5 rounded text-[10px] font-black transition-all ${i === selectedMarket
+                  ? 'bg-white text-green-700 shadow'
+                  : 'bg-green-800/40 text-green-100 hover:bg-green-800/60'
+                }`}
+            >
+              {m.short}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Market title */}
+      <div className="px-4 py-2 bg-green-50 border-b border-green-100 flex justify-between items-center">
+        <span className="text-xs font-black text-green-800">📍 {market.name} Main Market</span>
+        <span className="text-[9px] text-gray-400">Today's Rate  |  ₹/unit</span>
+      </div>
+
+      {/* Column headers */}
+      <div className="grid grid-cols-3 px-4 py-1 bg-gray-50 border-b border-gray-100">
+        <span className="text-[9px] font-bold text-gray-400 uppercase">Commodity</span>
+        <span className="text-[9px] font-bold text-gray-400 uppercase text-right">Price</span>
+        <span className="text-[9px] font-bold text-gray-400 uppercase text-right">Change</span>
+      </div>
+
+      {/* Price rows */}
+      <div className="divide-y divide-gray-50 max-h-72 overflow-y-auto custom-scrollbar">
+        {SANDHAI_COMMODITIES.map((commodity, idx) => {
+          const price = getMarketPrice(commodity.basePrice, commodity.seeds[selectedMarket], selectedMarket);
+          const seed = commodity.seeds[selectedMarket];
+          const pct = ((seed / commodity.basePrice) * 100).toFixed(1);
+          const isUp = seed >= 0;
+          const isFlat = seed === 0;
+
+          return (
+            <div key={idx} className="grid grid-cols-3 px-4 py-2 hover:bg-green-50/50 transition-colors items-center">
+              <div className="flex items-center gap-1.5">
+                <span className="text-base leading-none">{commodity.icon}</span>
+                <div>
+                  <p className="text-xs font-semibold text-gray-800 leading-tight">{commodity.name}</p>
+                  <p className="text-[9px] text-gray-400">per {commodity.unit}</p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-sm font-black text-gray-800">
+                  ₹{price.toLocaleString('en-IN')}
+                </span>
+              </div>
+
+              <div className="text-right">
+                {isFlat ? (
+                  <span className="text-[10px] font-bold text-gray-400">— Stable</span>
+                ) : (
+                  <span className={`inline-flex items-center gap-0.5 text-[10px] font-black px-1.5 py-0.5 rounded ${isUp ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+                    }`}>
+                    {isUp ? '▲' : '▼'} {Math.abs(Number(pct))}%
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
+        <p className="text-[9px] text-gray-400 text-center">
+          Prices indicative · Actual rates may vary at market · Updated daily
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
 
 export default function BuyerDashboard() {
   const session = getSession();
   const { t } = useI18n();
-  const { data: products, loading: isLoading } = useJobs();
+
+  // Load marketplace products from localStorage (same source as Marketplace tab)
+  const [marketplaceProducts, setMarketplaceProducts] = useState<MarketplaceProduct[]>(() => {
+    try {
+      const saved = localStorage.getItem('products');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) { /* ignore */ }
+    return DEFAULT_MARKETPLACE_PRODUCTS;
+  });
+
+  // Refresh products from localStorage whenever this component renders
+  useEffect(() => {
+    const onStorage = () => {
+      try {
+        const saved = localStorage.getItem('products');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) setMarketplaceProducts(parsed);
+        }
+      } catch (e) { /* ignore */ }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  const isLoading = false; // products come from localStorage instantly
   const [activeView, setActiveView] = useState<'products' | 'cart' | 'orders' | 'wishlist'>('products');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -149,6 +352,11 @@ export default function BuyerDashboard() {
 
   // Add to cart
   const addToCart = (product: any) => {
+    const productName = product.name || product.title || 'Product';
+    const productPrice = product.price ?? 0;
+    const productUnit = product.unit || 'kg';
+    const productCategory = categoryFromName(productName, product.category);
+
     const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
       setCart(
@@ -156,18 +364,18 @@ export default function BuyerDashboard() {
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
         ),
       );
-      toast.success(`Added more ${product.title} to cart!`);
+      toast.success(`Added more ${productName} to cart!`);
     } else {
       const newItem: CartItem = {
         id: product.id,
-        name: product.title,
-        category: categoryFromTitle(product.title),
-        price: 100 + Math.floor(Math.random() * 400), // Demo pricing
+        name: productName,
+        category: productCategory,
+        price: productPrice,
         quantity: 1,
-        unit: 'kg',
+        unit: productUnit,
       };
       setCart([...cart, newItem]);
-      toast.success(`${product.title} added to cart!`);
+      toast.success(`${productName} added to cart! 🛒`);
     }
   };
 
@@ -420,19 +628,21 @@ export default function BuyerDashboard() {
     }, 1000);
   };
 
-  // Filter Logic
+  // Filter Logic — only show products NOT marked as own (i.e., listed by farmers for others to buy)
   const filteredProducts = useMemo(() => {
-    if (!products) return [];
-
-    return products.filter((p: any) => {
-      const matchesSearch = p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const category = categoryFromTitle(p.title);
-      const matchesCategory = selectedCategoryFilter === 'All' || category === selectedCategoryFilter;
-
-      return matchesSearch && matchesCategory;
-    });
-  }, [products, searchTerm, selectedCategoryFilter]);
+    return marketplaceProducts
+      .filter((p) => !p.isOwnProduct) // exclude farmer's own listings from buyer view
+      .filter((p) => {
+        const matchesSearch =
+          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.seller.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.description.toLowerCase().includes(searchTerm.toLowerCase());
+        const cat = categoryFromName(p.name, p.category);
+        const matchesCategory =
+          selectedCategoryFilter === 'All' || cat === selectedCategoryFilter;
+        return matchesSearch && matchesCategory;
+      });
+  }, [marketplaceProducts, searchTerm, selectedCategoryFilter]);
 
   // Market Trends Mock Data
   const marketData = [
@@ -456,7 +666,7 @@ export default function BuyerDashboard() {
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-blue-600">🛒 {t('title_buyer_dashboard') || 'Buyer Dashboard'}</h1>
+            <h1 className="text-2xl font-bold text-blue-600">{t('title_buyer_dashboard') || 'Buyer Dashboard'}</h1>
             <span className="text-sm text-gray-600">{t('welcome_back_owner')}, {session.name}!</span>
           </div>
 
@@ -562,11 +772,12 @@ export default function BuyerDashboard() {
                         className="w-full p-2 border border-gray-200 rounded-lg text-sm"
                       >
                         <option value="All">{t('filter_all_categories')}</option>
-                        <option value="cat_grains">{t('cat_grains')}</option>
-                        <option value="cat_vegetables">{t('cat_vegetables')}</option>
-                        <option value="cat_fruits">{t('cat_fruits')}</option>
-                        <option value="cat_dairy">{t('cat_dairy')}</option>
-                        <option value="cat_other">{t('cat_other')}</option>
+                        <option value="vegetables">🥬 Vegetables</option>
+                        <option value="fruits">🍎 Fruits</option>
+                        <option value="grains">🌾 Grains</option>
+                        <option value="dairy">🥛 Dairy</option>
+                        <option value="seeds">🌱 Seeds</option>
+                        <option value="other">🌿 Other</option>
                       </select>
                     </div>
                   </div>
@@ -606,6 +817,9 @@ export default function BuyerDashboard() {
                   </div>
                 </div>
 
+                {/* 🌾 Uzhavar Sandhai Market Price List */}
+                <UzhavarSandhaiWidget />
+
                 {!session.buyerAddress && (
                   <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
                     <h4 className="font-bold text-yellow-800 mb-2">{t('title_setup_delivery')}</h4>
@@ -635,49 +849,84 @@ export default function BuyerDashboard() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredProducts.map((product: any) => {
-                      const price = 100 + Math.floor(Math.random() * 400); // Ideally this should be consistent per product ID
+                    {filteredProducts.map((product: MarketplaceProduct) => {
+                      const cat = categoryFromName(product.name, product.category);
+                      const catIcon = CATEGORY_ICONS[cat] || '🌾';
                       const isInWishlist = wishlist.includes(product.id);
+                      const inStock = (product.availability ?? 'in-stock') === 'in-stock';
 
                       return (
                         <div
                           key={product.id}
                           className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group"
                         >
-                          <div className="p-4">
-                            <div className="flex justify-between items-start mb-2">
-                              <span className="px-2 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-md uppercase tracking-wide">
-                                {t(categoryFromTitle(product.title))}
-                              </span>
-                              <button
-                                onClick={() => toggleWishlist(product.id)}
-                                className={`p-2 rounded-full transition-colors ${isInWishlist ? 'text-red-500 bg-red-50' : 'text-gray-300 hover:text-red-400 hover:bg-gray-50'}`}
-                              >
-                                <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`} />
-                              </button>
-                            </div>
+                          {/* Product Image */}
+                          <div className="relative h-44 bg-gradient-to-br from-green-50 to-emerald-100 overflow-hidden">
+                            {product.image ? (
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-6xl">{catIcon}</div>
+                            )}
+                            {/* Availability badge */}
+                            <span className={`absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold shadow-sm ${inStock ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                              }`}>
+                              {inStock ? '● In Stock' : '○ Out of Stock'}
+                            </span>
+                            {/* Wishlist */}
+                            <button
+                              onClick={() => toggleWishlist(product.id)}
+                              className={`absolute top-2 right-2 p-1.5 rounded-full shadow transition-colors ${isInWishlist ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-400 hover:text-red-400'
+                                }`}
+                            >
+                              <Heart className={`w-4 h-4 ${isInWishlist ? 'fill-current' : ''}`} />
+                            </button>
+                          </div>
 
-                            <h4 className="font-bold text-gray-800 text-lg mb-1 group-hover:text-blue-600 transition-colors">{product.title}</h4>
-                            <p className="text-sm text-gray-500 line-clamp-2 h-10 mb-4">
-                              {product.description || 'Fresh, organic produce directly from local farmers.'}
+                          <div className="p-4">
+                            {/* Category badge */}
+                            <span className="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-bold rounded-md uppercase tracking-wide">
+                              {catIcon} {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            </span>
+
+                            <h4 className="font-bold text-gray-800 text-base mt-2 mb-0.5 group-hover:text-blue-600 transition-colors line-clamp-1">
+                              {product.name}
+                            </h4>
+                            <p className="text-xs text-gray-500 mb-1">🏪 {product.seller} · 📍 {product.location}</p>
+                            <p className="text-xs text-gray-400 line-clamp-2 h-8 mb-3">
+                              {product.description}
                             </p>
 
-                            <div className="flex items-end justify-between mb-4">
+                            <div className="flex items-end justify-between mb-3">
                               <div>
-                                <p className="text-xs text-gray-400">{t('label_market_price')}</p>
-                                <p className="text-2xl font-black text-gray-800">₹{price}<span className="text-sm font-normal text-gray-400">/kg</span></p>
+                                <p className="text-xs text-gray-400">Price</p>
+                                <p className="text-xl font-black text-gray-800">
+                                  ₹{product.price.toLocaleString()}
+                                  <span className="text-sm font-normal text-gray-400">/{product.unit}</span>
+                                </p>
                               </div>
+                              <p className="text-xs text-gray-400">{product.quantity} {product.unit} avail.</p>
                             </div>
 
                             <div className="flex gap-2">
                               <button
-                                onClick={() => addToCart({ ...product, price })}
-                                className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-sm shadow-blue-200 shadow-lg transition-all active:scale-95"
+                                disabled={!inStock}
+                                onClick={() => addToCart({
+                                  id: product.id,
+                                  name: product.name,
+                                  price: product.price,
+                                  title: product.name,
+                                })}
+                                className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-sm shadow-blue-200 shadow-lg transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
                               >
                                 {t('btn_add_to_cart')}
                               </button>
                               <button
-                                onClick={() => requestNegotiation({ ...product, price })}
+                                onClick={() => requestNegotiation({ ...product, title: product.name })}
                                 className="px-3 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 font-bold text-sm transition-colors border border-purple-200"
                                 title="Make an Offer"
                               >
@@ -710,32 +959,36 @@ export default function BuyerDashboard() {
               <Heart className="w-6 h-6 text-red-500 fill-current" /> {t('buyer_nav_wishlist')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Filter products to show only wishlist items */}
-              {products && products
-                .filter((p: any) => wishlist.includes(p.id))
-                .map((product: any) => {
-                  const price = 100 + Math.floor(Math.random() * 400); // Consistency issue note from before applies
-                  return (
-                    <div key={product.id} className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                      <h4 className="font-bold text-gray-800 text-lg mb-1">{product.title}</h4>
-                      <p className="text-2xl font-bold text-gray-800 mb-4">₹{price}<span className="text-sm font-normal text-gray-400">/kg</span></p>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => addToCart({ ...product, price })}
-                          className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-sm"
-                        >
-                          {t('btn_move_to_cart')}
-                        </button>
-                        <button
-                          onClick={() => toggleWishlist(product.id)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                        >
-                          <X className="w-5 h-5" />
-                        </button>
-                      </div>
+              {/* Filter marketplace products to show only wishlist items */}
+              {marketplaceProducts
+                .filter((p) => wishlist.includes(p.id))
+                .map((product) => (
+                  <div key={product.id} className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+                    {product.image && (
+                      <img src={product.image} alt={product.name} className="w-full h-32 object-cover rounded-lg mb-3" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                    )}
+                    <h4 className="font-bold text-gray-800 text-base mb-0.5 line-clamp-1">{product.name}</h4>
+                    <p className="text-xs text-gray-500 mb-2">🏪 {product.seller}</p>
+                    <p className="text-xl font-bold text-gray-800 mb-3">
+                      ₹{product.price.toLocaleString()}
+                      <span className="text-sm font-normal text-gray-400">/{product.unit}</span>
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold text-sm"
+                      >
+                        {t('btn_move_to_cart')}
+                      </button>
+                      <button
+                        onClick={() => toggleWishlist(product.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
-                  )
-                })
+                  </div>
+                ))
               }
               {wishlist.length === 0 && (
                 <div className="col-span-full text-center py-20">

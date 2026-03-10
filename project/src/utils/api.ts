@@ -1,5 +1,5 @@
 // API Utility connected to Backend
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'http://localhost:3000/api';
 
 export interface Worker {
   id: string;
@@ -10,6 +10,7 @@ export interface Worker {
   distance: string;
   rating: number;
   available: boolean;
+  gender: string;
   experience: number;
   completedJobs: number;
   profileImage?: string;
@@ -70,6 +71,32 @@ export interface Land {
   notes: string;
 }
 
+export interface Order {
+  id: string;
+  orderNumber: string;
+  product: string;
+  buyer: string;
+  seller: string;
+  amount: number;
+  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
+  orderDate: string;
+  deliveryDate: string;
+  trackingId?: string;
+  quantity: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  joinedDate: string;
+  lastActive: string;
+  phone?: string;
+  location?: string;
+}
+
 export const api = {
   // --- Helper to handle fetch errors ---
   async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -91,9 +118,10 @@ export const api = {
   },
 
   // --- Worker APIs ---
-  async getWorkers(filters?: { skills?: string[]; maxDistance?: number; available?: boolean }): Promise<Worker[]> {
+  async getWorkers(filters?: { skills?: string[]; maxDistance?: number; available?: boolean; gender?: string }): Promise<Worker[]> {
     const params = new URLSearchParams();
     if (filters?.available !== undefined) params.append('available', String(filters.available));
+    if (filters?.gender && filters.gender !== 'all') params.append('gender', filters.gender);
     // Note: skills and distance filtering would ideally happen on backend. 
     // Here we just fetch all suitable ones or pass params if backend supports.
 
@@ -125,6 +153,11 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(jobData),
     });
+  },
+
+  async deleteJob(id: string): Promise<boolean> {
+    await this.request(`/jobs/${id}`, { method: 'DELETE' });
+    return true;
   },
 
   async applyForJob(
@@ -179,10 +212,17 @@ export const api = {
 
   // --- Notification APIs (Local State for now) ---
   async getNotifications(): Promise<Array<{ id: string; message: string; type: string; timestamp: string; read: boolean }>> {
-    // Backend doesn't utilize DB for notifications yet, keep mock
-    return [
-      { id: '1', message: 'Backend connected successfully', type: 'system', timestamp: 'Just now', read: false }
-    ];
+    try {
+      // Fetch notifications (optionally pass userId if available in context)
+      const data = await this.request<any[]>('/notifications');
+      return data.map(n => ({
+        ...n,
+        timestamp: n.createdAt ? new Date(n.createdAt).toLocaleString() : 'Just now'
+      }));
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+      return [];
+    }
   },
 
   async markNotificationRead(id: string): Promise<boolean> {
@@ -194,7 +234,73 @@ export const api = {
   },
 
   // --- Analytics APIs ---
-  async getAnalytics(): Promise<{ totalJobs: number; activeJobs: number; completedJobs: number; totalWorkers: number; averageRating: number; totalEarnings: number }> {
+  async getAnalytics(): Promise<{ totalJobs: number; activeJobs: number; completedJobs: number; totalWorkers: number; totalOrders: number; revenue: number; averageRating: number; totalEarnings: number }> {
     return this.request('/analytics');
   },
+
+  // --- Order APIs ---
+  async getOrders(): Promise<Order[]> {
+    return this.request<Order[]>('/orders');
+  },
+
+  async deleteOrder(id: string): Promise<boolean> {
+    await this.request(`/orders/${id}`, { method: 'DELETE' });
+    return true;
+  },
+
+  // --- User APIs ---
+  async getUsers(): Promise<User[]> {
+    return this.request<User[]>('/users');
+  },
+
+  async deleteUser(id: string): Promise<boolean> {
+    await this.request(`/users/${id}`, { method: 'DELETE' });
+    return true;
+  },
+
+  // --- Agro Shop APIs ---
+  async getAgroShops(filters?: { open?: boolean }): Promise<AgroShop[]> {
+    const params = new URLSearchParams();
+    if (filters?.open !== undefined) params.append('open', String(filters.open));
+    return this.request<AgroShop[]>(`/agroshops?${params.toString()}`);
+  },
+
+  async getAgroShopById(id: string): Promise<AgroShop | null> {
+    return this.request<AgroShop>(`/agroshops/${id}`);
+  },
+
+  async updateShopPrices(
+    shopId: string,
+    productPrices: Array<{ name: string; price: number; unit: string }>
+  ): Promise<{ success: boolean; message: string; shop: AgroShop }> {
+    return this.request(`/agroshops/${shopId}/prices`, {
+      method: 'PATCH',
+      body: JSON.stringify({ productPrices }),
+    });
+  },
 };
+
+export interface AgroShop {
+  id: string;
+  name: string;
+  location: string;
+  distance: string;
+  phone: string;
+  email?: string;
+  products: string[];
+  productPrices: {
+    name: string;
+    price: number;
+    unit: string;
+    lastUpdated: string;
+  }[];
+  rating: number;
+  reviewCount?: number;
+  open: boolean;
+  openingHours?: { open: string; close: string };
+  address?: string;
+  coordinates?: { lat: number; lng: number };
+  verified: boolean;
+  image?: string;
+  description?: string;
+}

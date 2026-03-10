@@ -7,7 +7,7 @@ const ProtectedRoute = ({
   roles,
 }: {
   children: React.ReactNode;
-  roles?: Array<'farmer' | 'worker' | 'buyer' | 'renter'>;
+  roles?: Array<'farmer' | 'worker' | 'buyer' | 'renter' | 'admin'>;
 }) => {
   const session = getSession();
 

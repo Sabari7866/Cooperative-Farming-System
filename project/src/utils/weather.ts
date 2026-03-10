@@ -19,7 +19,7 @@ export interface LiveWeather {
   daily: DailyForecastSummary[];
 }
 
-const OWM_BASE = 'https://api.openweathermap.org/data/3.0/onecall';
+const OWM_BASE = 'https://api.openweathermap.org/data/2.5/onecall';
 
 function kelvinToCelsius(k: number) {
   return Math.round((k - 273.15) * 10) / 10;
@@ -38,26 +38,42 @@ export async function fetchLiveWeather(lat: number, lon: number): Promise<LiveWe
   let daily: DailyForecastSummary[] = [];
 
   if (owmKey) {
-    const params = new URLSearchParams({
-      lat: String(lat),
-      lon: String(lon),
-      appid: owmKey,
-      exclude: 'minutely,hourly,alerts',
-    });
-    const res = await fetch(`${OWM_BASE}?${params.toString()}`);
-    if (!res.ok) throw new Error('Failed to fetch weather');
-    const data = await res.json();
-    temperatureC = kelvinToCelsius(data.current.temp);
-    humidity = data.current.humidity;
-    windKph = Math.round((data.current.wind_speed || 0) * 3.6 * 10) / 10; // m/s -> km/h
-    daily = (data.daily || []).slice(0, 7).map((d: any) => ({
-      date: new Date(d.dt * 1000).toISOString().slice(0, 10),
-      tempMinC: kelvinToCelsius(d.temp.min),
-      tempMaxC: kelvinToCelsius(d.temp.max),
-      rainfallMm: Math.round(((d.rain || 0) + (d.snow || 0)) * 10) / 10,
-      pop: Math.round(((d.pop || 0) as number) * 100) / 100,
-    }));
-  } else {
+    try {
+      const params = new URLSearchParams({
+        lat: String(lat),
+        lon: String(lon),
+        appid: owmKey,
+        exclude: 'minutely,hourly,alerts',
+      });
+      const res = await fetch(`${OWM_BASE}?${params.toString()}`);
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('OpenWeatherMap API Error:', res.status, errorText);
+        throw new Error(`Weather API failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+      console.log('Weather API Response:', data); // Debug log
+
+      temperatureC = kelvinToCelsius(data.current.temp);
+      humidity = data.current.humidity;
+      windKph = Math.round((data.current.wind_speed || 0) * 3.6 * 10) / 10; // m/s -> km/h
+      daily = (data.daily || []).slice(0, 7).map((d: any) => ({
+        date: new Date(d.dt * 1000).toISOString().slice(0, 10),
+        tempMinC: kelvinToCelsius(d.temp.min),
+        tempMaxC: kelvinToCelsius(d.temp.max),
+        rainfallMm: Math.round(((d.rain || 0) + (d.snow || 0)) * 10) / 10,
+        pop: Math.round(((d.pop || 0) as number) * 100) / 100,
+      }));
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      // Fall through to use fallback data
+    }
+  }
+
+  // Fallback data if API key not set or API call failed
+  if (!owmKey || temperatureC === 0) {
     // Fallback dummy data when no key
     temperatureC = 28;
     humidity = 60;

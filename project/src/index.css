@@ -14,6 +14,66 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================
+   AGRI ELITE DESIGN TOKENS
+   ============================================ */
+:root {
+  --elite-emerald: #065f46;
+  --elite-gold: #d4af37;
+  --elite-slate: #1e293b;
+  --elite-glass: rgba(255, 255, 255, 0.7);
+  --elite-glow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.font-elite-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.text-elite-gradient {
+  background: linear-gradient(135deg, var(--elite-emerald) 0%, #059669 50%, var(--elite-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-elite-glass {
+  background: var(--elite-glass);
+  backdrop-filter: blur(20px);
+  border: 1px border-white/30;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.elite-border-glow {
+  position: relative;
+}
+
+.elite-border-glow::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(90deg, transparent, var(--elite-emerald), var(--elite-gold), transparent);
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0.3;
+  animation: eliteGlow 4s linear infinite;
+}
+
+@keyframes eliteGlow {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1.02);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
+
 body {
   font-family:
     'Inter',
@@ -224,6 +284,7 @@ input.success {
 
 /* Shake animation */
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
@@ -247,6 +308,7 @@ input.success {
 
 /* Bounce animation */
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -259,6 +321,7 @@ input.success {
 
 /* Pulse animation */
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
@@ -282,6 +345,7 @@ input.success {
 
 /* Blob animation */
 @keyframes blob {
+
   0%,
   100% {
     transform: translate(0px, 0px) scale(1);
@@ -298,6 +362,7 @@ input.success {
 
 /* Gradient shift */
 @keyframes gradientShift {
+
   0%,
   100% {
     background-position: 0% 50%;
@@ -501,12 +566,10 @@ input.success {
 
 .logo-rgb {
   padding: 8px 14px;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 0, 128, 0.15),
-    rgba(0, 255, 200, 0.12),
-    rgba(120, 100, 255, 0.1)
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 0, 128, 0.15),
+      rgba(0, 255, 200, 0.12),
+      rgba(120, 100, 255, 0.1));
   border-radius: 999px;
   box-shadow:
     0 8px 32px rgba(16, 185, 129, 0.12),
@@ -597,6 +660,7 @@ input.success {
    RESPONSIVE UTILITIES
    ============================================ */
 @media (max-width: 768px) {
+
   .btn-primary,
   .btn-secondary,
   .btn-success,
@@ -654,6 +718,26 @@ input.success {
   .no-print {
     display: none !important;
   }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR UTILITY
+   ============================================ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* ============================================

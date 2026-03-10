@@ -112,6 +112,12 @@ export default function AIChat({ initialContext = '', onClose }: AIChatProps) {
       if (r.ok) {
         const j = await r.json();
         const reply = j?.reply || (typeof j === 'string' ? j : JSON.stringify(j));
+
+        // Safety check: if backend returns error message as text (e.g. from older server instance)
+        if (typeof reply === 'string' && (reply.includes('API Key not found') || reply.includes('AI service error'))) {
+          throw new Error('Backend API Key missing or invalid');
+        }
+
         setMessages((prev) => [...prev, { role: 'assistant', text: reply }] as any);
         setLoading(false);
         return;
@@ -154,11 +160,43 @@ export default function AIChat({ initialContext = '', onClose }: AIChatProps) {
         }
 
         const data = await res.json();
-        const reply = data?.choices?.[0]?.message?.content || 'Sorry, no reply.';
+
+        // Try multiple ways to extract the reply
+        let reply = '';
+
+        // Method 1: Standard OpenAI format
+        if (data?.choices?.[0]?.message?.content) {
+          reply = data.choices[0].message.content;
+        }
+        // Method 2: Direct content field
+        else if (data?.content) {
+          reply = data.content;
+        }
+        // Method 3: Text field
+        else if (data?.text) {
+          reply = data.text;
+        }
+        // Method 4: Reply field (from proxy)
+        else if (data?.reply) {
+          reply = data.reply;
+        }
+        // Method 5: If data is a string
+        else if (typeof data === 'string') {
+          reply = data;
+        }
+
+        // If still no reply, log the response and use local responder
+        if (!reply || reply.trim() === '') {
+          console.warn('OpenAI API returned unexpected format:', JSON.stringify(data).substring(0, 200));
+          reply = localResponder(textToSend, locale);
+        }
+
         setMessages((prev) => [...prev, { role: 'assistant', text: reply }] as any);
       } catch (e: any) {
-        const fallback = `Failed to reach LLM: ${e?.message || 'unknown error'}. Using local responder.`;
+        console.error('OpenAI API Error:', e);
+        const fallback = `AI service temporarily unavailable. Using local knowledge base.`;
         setMessages((prev) => [...prev, { role: 'assistant', text: fallback }] as any);
+        // Use local responder as fallback
         const reply = localResponder(textToSend, locale);
         setMessages((prev) => [...prev, { role: 'assistant', text: reply }] as any);
       } finally {
@@ -195,8 +233,8 @@ export default function AIChat({ initialContext = '', onClose }: AIChatProps) {
           >
             <span className={`text-[10px] text-gray-400 mb-1 px-1`}>{m.role === 'assistant' ? 'AI Assistant' : 'You'}</span>
             <div className={`p-3 rounded-2xl max-w-[90%] text-sm leading-relaxed shadow-sm ${m.role === 'assistant'
-                ? 'bg-white text-gray-700 border border-gray-200 rounded-tl-none'
-                : 'bg-green-600 text-white rounded-tr-none'
+              ? 'bg-white text-gray-700 border border-gray-200 rounded-tl-none'
+              : 'bg-green-600 text-white rounded-tr-none'
               }`}>
               {m.text}
             </div>
@@ -230,8 +268,8 @@ export default function AIChat({ initialContext = '', onClose }: AIChatProps) {
         <button
           onClick={handleVoiceStart}
           className={`p-2 rounded-lg transition-all duration-200 ${isListening
-              ? 'bg-red-100 text-red-600 animate-pulse'
-              : 'text-gray-400 hover:bg-gray-100'
+            ? 'bg-red-100 text-red-600 animate-pulse'
+            : 'text-gray-400 hover:bg-gray-100'
             }`}
           title="Speak"
         >

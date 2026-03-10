@@ -400,53 +400,19 @@ export default function LoginModern() {
           >
             {/* Enhanced Logo with Glow */}
             <motion.div
-              className="relative h-14 w-14 rounded-xl bg-gradient-to-br from-emerald-500 via-green-600 to-emerald-700 flex items-center justify-center shadow-lg"
+              className="relative h-14 w-14 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-400 to-amber-400 flex items-center justify-center shadow-lg elite-border-glow"
               whileHover={{ scale: 1.05, rotate: 5 }}
-              animate={{
-                boxShadow: [
-                  '0 0 20px rgba(16, 185, 129, 0.3)',
-                  '0 0 40px rgba(16, 185, 129, 0.6)',
-                  '0 0 20px rgba(16, 185, 129, 0.3)',
-                ],
-              }}
-              transition={{
-                boxShadow: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
-              }}
             >
-              {/* Animated border glow */}
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 opacity-75 blur-sm animate-pulse" />
               <div className="relative z-10 w-full h-full p-1 rounded-xl overflow-hidden bg-white">
-                <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                <img src="/logo.png" alt="Agri Elite" className="w-full h-full object-cover" />
               </div>
-              {/* Shine effect */}
-              <motion.div
-                className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                animate={{
-                  x: ['-200%', '200%'],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  repeatDelay: 2,
-                  ease: 'easeInOut',
-                }}
-              />
             </motion.div>
             <div>
-              <motion.p
-                className="text-xs font-semibold tracking-[0.3em] uppercase bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent"
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{ duration: 5, repeat: Infinity }}
-              >
-                {t('header_logo_title')}
-              </motion.p>
-              <p className="text-sm text-slate-700 dark:text-slate-300 leading-snug">
-                {t('header_logo_subtitle_line1')}
-                <br />
-                {t('header_logo_subtitle_line2')}
-              </p>
+              <h1 className="text-3xl font-black tracking-tighter leading-none h-8 flex items-center">
+                <span className="text-slate-900">Agri</span>
+                <span className="text-emerald-600">Smart</span>
+              </h1>
+              <p className="text-[10px] text-emerald-600/60 font-black tracking-[0.1em] uppercase mt-1 italic">Innovation for inclusive agriculture v12.0</p>
             </div>
           </motion.div>
 
@@ -456,6 +422,7 @@ export default function LoginModern() {
                 { label: t('nav_crops'), icon: '🌾', onClick: () => navigate('/crops') },
                 { label: t('nav_farm_docs'), icon: '🧾', onClick: () => navigate('/farm-docs') },
                 { label: t('nav_support'), icon: '🫂', onClick: () => navigate('/support') },
+                { label: 'Admin', icon: '🛡️', onClick: () => navigate('/admin-login') },
               ].map((btn) => (
                 <motion.button
                   key={btn.label}
@@ -573,153 +540,159 @@ export default function LoginModern() {
             </motion.h2>
 
             {/* Main Welcome Card */}
-            <div className="flex-1 rounded-xl border border-emerald-100 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-900/20 shadow-sm px-4 py-4 text-sm text-slate-700 dark:text-slate-300 leading-relaxed space-y-3">
-              <p>{t('welcome_page_body')}</p>
+            <div className="flex-1 rounded-2xl border border-emerald-100 dark:border-emerald-800 bg-white/60 dark:bg-emerald-900/20 shadow-premium px-8 py-8 text-sm text-slate-800 dark:text-slate-300 leading-relaxed space-y-6 relative overflow-hidden backdrop-blur-xl">
+              <div className="absolute top-0 right-0 p-4 opacity-5">
+                <Icon name="Crown" className="w-32 h-32" />
+              </div>
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase mb-4 leading-none">Agri Elite <br /> <span className="text-emerald-600">Precision Protocol</span></h2>
+              <p className="text-lg font-medium opacity-80">{t('welcome_page_body')}</p>
 
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <motion.div
-                  className="flex items-center gap-3 text-xs md:text-sm text-emerald-800 dark:text-emerald-300"
+                  className="flex items-center gap-4 text-sm font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-widest"
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  <span
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-full shadow-sm"
-                    style={{
-                      background: 'conic-gradient(from 180deg, #22c55e, #22d3ee, #22c55e)',
-                    }}
-                  >
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-900">
-                      <Icon
-                        name="Sprout"
-                        className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400"
-                      />
-                    </span>
-                  </span>
+                  <Icon name="Zap" className="h-5 w-5 text-amber-500 fill-amber-500" />
                   <span>{t('welcome_point_1')}</span>
                 </motion.div>
 
                 <motion.div
-                  className="flex items-center gap-3 text-xs md:text-sm text-emerald-800 dark:text-emerald-300"
+                  className="flex items-center gap-4 text-sm font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-widest"
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.45 }}
                 >
-                  <span
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-full shadow-sm"
-                    style={{
-                      background: 'conic-gradient(from 0deg, #a3e635, #22c55e, #a3e635)',
-                    }}
-                  >
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-900">
-                      <Icon
-                        name="Users"
-                        className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400"
-                      />
-                    </span>
-                  </span>
+                  <Icon name="Target" className="h-5 w-5 text-emerald-600" />
                   <span>{t('welcome_point_2')}</span>
                 </motion.div>
               </div>
             </div>
 
-            {/* Feature Cards */}
+
+            {/* Feature Cards - Floating Animation */}
+
+
+            {/* 3D TILT HOVER CARDS */}
             <motion.div
               className="grid grid-cols-2 gap-3"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1
+                  }
+                }
+              }}
             >
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 border border-emerald-100 dark:border-emerald-800 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                    <Icon
-                      name="TrendingUp"
-                      className="h-4 w-4 text-emerald-600 dark:text-emerald-400"
-                    />
-                  </div>
-                  <h3 className="text-xs font-semibold text-slate-800 dark:text-white">
-                    {t('feature_smart_analytics_title')}
-                  </h3>
-                </div>
-                <p className="text-[10px] text-slate-600 dark:text-slate-400">
-                  {t('feature_smart_analytics_desc')}
-                </p>
-              </div>
-
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 border border-emerald-100 dark:border-emerald-800 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                    <Icon name="CloudSun" className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <h3 className="text-xs font-semibold text-slate-800 dark:text-white">
-                    {t('feature_weather_alerts_title')}
-                  </h3>
-                </div>
-                <p className="text-[10px] text-slate-600 dark:text-slate-400">
-                  {t('feature_weather_alerts_desc')}
-                </p>
-              </div>
-
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 border border-emerald-100 dark:border-emerald-800 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
-                    <Icon
-                      name="ShoppingCart"
-                      className="h-4 w-4 text-purple-600 dark:text-purple-400"
-                    />
-                  </div>
-                  <h3 className="text-xs font-semibold text-slate-800 dark:text-white">
-                    {t('feature_marketplace_title')}
-                  </h3>
-                </div>
-                <p className="text-[10px] text-slate-600 dark:text-slate-400">
-                  {t('feature_marketplace_desc')}
-                </p>
-              </div>
-
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 border border-emerald-100 dark:border-emerald-800 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
-                    <Icon name="Users" className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <h3 className="text-xs font-semibold text-slate-800 dark:text-white">
-                    {t('feature_job_board_title')}
-                  </h3>
-                </div>
-                <p className="text-[10px] text-slate-600 dark:text-slate-400">
-                  {t('feature_job_board_desc')}
-                </p>
-              </div>
+              {[
+                { title: t('feature_smart_analytics_title'), desc: t('feature_smart_analytics_desc'), icon: 'TrendingUp', color: 'emerald' },
+                { title: t('feature_weather_alerts_title'), desc: t('feature_weather_alerts_desc'), icon: 'CloudSun', color: 'blue' },
+                { title: t('feature_marketplace_title'), desc: t('feature_marketplace_desc'), icon: 'ShoppingCart', color: 'purple' },
+                { title: t('feature_job_board_title'), desc: t('feature_job_board_desc'), icon: 'Users', color: 'amber' },
+              ].map((feature, idx) => (
+                <motion.div
+                  key={idx}
+                  style={{ perspective: 1000 }}
+                  variants={{
+                    hidden: { y: 20, opacity: 0, scale: 0.9 },
+                    visible: {
+                      y: 0,
+                      opacity: 1,
+                      scale: 1,
+                      transition: { type: "spring", stiffness: 300, damping: 20 }
+                    }
+                  }}
+                >
+                  <motion.div
+                    className={`h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-3 border border-${feature.color}-100 dark:border-${feature.color}-800 shadow-sm cursor-default`}
+                    whileHover={{
+                      scale: 1.05,
+                      rotateX: 10,
+                      rotateY: -10,
+                      boxShadow: "0px 20px 30px -10px rgba(0,0,0,0.2)",
+                      zIndex: 10
+                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    <div className="flex items-center gap-2 mb-2" style={{ transform: "translateZ(20px)" }}>
+                      <div className={`w-8 h-8 rounded-full bg-${feature.color}-100 dark:bg-${feature.color}-900/50 flex items-center justify-center`}>
+                        <Icon
+                          name={feature.icon}
+                          className={`h-4 w-4 text-${feature.color}-600 dark:text-${feature.color}-400`}
+                        />
+                      </div>
+                      <h3 className="text-xs font-semibold text-slate-800 dark:text-white">
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <p className="text-[10px] text-slate-600 dark:text-slate-400" style={{ transform: "translateZ(10px)" }}>
+                      {feature.desc}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              ))}
             </motion.div>
 
-            {/* Stats Card */}
-            <motion.div
-              className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 text-white shadow-lg"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Icon name="BarChart3" className="h-4 w-4" />
-                {t('stats_platform_stats')}
-              </h3>
-              <div className="grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <div className="text-2xl font-bold">500+</div>
-                  <div className="text-[10px] text-emerald-100">{t('stats_farmers')}</div>
+
+            {/* FLIP CARD STATS */}
+            <div className="group h-32 perspective-1000 cursor-pointer">
+              <motion.div
+                className="relative h-full w-full rounded-xl shadow-lg transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                {/* Front Face */}
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl p-4 text-white [backface-visibility:hidden]">
+                  {/* Shimmer Effect */}
+                  <motion.div
+                    className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ x: '-100%' }}
+                    animate={{ x: '100%' }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 2,
+                      ease: "linear",
+                      repeatDelay: 3
+                    }}
+                  />
+
+                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                    <Icon name="BarChart3" className="h-4 w-4" />
+                    {t('stats_platform_stats')}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <div className="text-2xl font-bold">500+</div>
+                      <div className="text-[10px] text-emerald-100">{t('stats_farmers')}</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">1K+</div>
+                      <div className="text-[10px] text-emerald-100">{t('stats_products')}</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">200+</div>
+                      <div className="text-[10px] text-emerald-100">{t('stats_jobs')}</div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-2xl font-bold">1K+</div>
-                  <div className="text-[10px] text-emerald-100">{t('stats_products')}</div>
+
+                {/* Back Face */}
+                <div className="absolute inset-0 h-full w-full rounded-xl bg-purple-600 text-white p-4 [transform:rotateY(180deg)] [backface-visibility:hidden] flex flex-col items-center justify-center text-center">
+                  <h3 className="text-lg font-bold mb-1">Did You Know?</h3>
+                  <p className="text-xs text-purple-100">AgriSmart AI has helped save over 10,000 liters of water this season through smart irrigation alerts.</p>
                 </div>
-                <div>
-                  <div className="text-2xl font-bold">200+</div>
-                  <div className="text-[10px] text-emerald-100">{t('stats_jobs')}</div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.section>
+              </motion.div>
+            </div>
+          </motion.section >
 
           {/* Middle Column: Login Form box - Enhanced with Glassmorphism */}
           <motion.section
@@ -735,17 +708,19 @@ export default function LoginModern() {
             {/* Animated Rotating Gradient Border */}
             <motion.div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-[2px] rounded-2xl opacity-75"
+              className="pointer-events-none absolute -inset-[9px] rounded-9xl opacity-75"
               animate={{
                 background: [
                   'linear-gradient(0deg, rgba(16,185,129,0.8), rgba(20,184,166,0.8), rgba(96,165,250,0.8))',
                   'linear-gradient(120deg, rgba(20,184,166,0.8), rgba(96,165,250,0.8), rgba(168,85,247,0.8))',
                   'linear-gradient(240deg, rgba(96,165,250,0.8), rgba(168,85,247,0.8), rgba(16,185,129,0.8))',
                   'linear-gradient(360deg, rgba(168,85,247,0.8), rgba(16,185,129,0.8), rgba(20,184,166,0.8))',
+                  'linear-gradient(360deg, rgba(40, 178, 169, 0.8), rgba(205, 17, 193, 0.8), rgba(118, 37, 218, 0.8))',
+
                 ],
               }}
               transition={{
-                duration: 8,
+                duration: 2,
                 repeat: Infinity,
                 ease: 'linear',
               }}
@@ -839,28 +814,40 @@ export default function LoginModern() {
                     </div>
                   )}
 
-                  {isNew && (
-                    <div>
-                      <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
-                        {t('full_name')}
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                          <Icon name="User" className="h-4 w-4" />
-                        </span>
-                        <input
-                          type="text"
-                          required
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder={t('full_name')}
-                          className="w-full pl-12 pr-3 py-2.5 rounded-lg border border-slate-200 text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-                  )}
+                  <AnimatePresence mode="wait">
+                    {isNew && (
+                      <motion.div
+                        key="new-user-fields"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="mb-3">
+                          <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
+                            {t('full_name')}
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                              <Icon name="User" className="h-4 w-4" />
+                            </span>
+                            <motion.input
+                              initial={{ x: -20, opacity: 0 }}
+                              animate={{ x: 0, opacity: 1 }}
+                              type="text"
+                              required
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                              placeholder={t('full_name')}
+                              className="w-full pl-12 pr-3 py-2.5 rounded-lg border border-slate-200 text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-                  <div>
+                  <motion.div layout>
                     <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
                       {t('email_or_phone')}
                     </label>
@@ -883,14 +870,18 @@ export default function LoginModern() {
                       />
                     </div>
                     {emailError && (
-                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                      >
                         <Icon name="AlertCircle" className="h-3 w-3" />
                         <span>{emailError}</span>
-                      </p>
+                      </motion.p>
                     )}
-                  </div>
+                  </motion.div>
 
-                  <div>
+                  <motion.div layout>
                     <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
                       {t('password_label')}
                     </label>
@@ -923,87 +914,112 @@ export default function LoginModern() {
                       </motion.button>
                     </div>
                     {passwordError && (
-                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                      >
                         <Icon name="AlertCircle" className="h-3 w-3" />
                         <span>{passwordError}</span>
-                      </p>
+                      </motion.p>
                     )}
 
-                    {isNew && password && (
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[11px] text-slate-500">
-                            {t('password_strength_label')}
-                          </span>
-                          <span
-                            className={`text-[11px] font-medium ${getPasswordStrength(password) <= 2
-                              ? 'text-red-600'
-                              : getPasswordStrength(password) <= 3
-                                ? 'text-amber-600'
-                                : 'text-emerald-600'
-                              }`}
-                          >
-                            {getPasswordStrength(password) <= 2
-                              ? t('password_strength_weak')
-                              : getPasswordStrength(password) <= 3
-                                ? t('password_strength_medium')
-                                : t('password_strength_strong')}
-                          </span>
-                        </div>
-                        <div className="w-full bg-slate-200 rounded-full h-1">
-                          <div
-                            className={`h-1 rounded-full transition-all duration-300 ${getPasswordStrength(password) <= 2
-                              ? 'bg-red-500'
-                              : getPasswordStrength(password) <= 3
-                                ? 'bg-amber-500'
-                                : 'bg-emerald-500'
-                              }`}
-                            style={{ width: `${(getPasswordStrength(password) / 5) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {isNew && (
-                    <div>
-                      <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
-                        {t('confirm_password_label')}
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                          <Icon name="Lock" className="h-4 w-4" />
-                        </span>
-                        <input
-                          type={showConfirmPassword ? 'text' : 'password'}
-                          required
-                          value={confirmPassword}
-                          onChange={(e) => {
-                            setConfirmPassword(e.target.value);
-                            if (confirmPasswordError) setConfirmPasswordError(null);
-                          }}
-                          onBlur={validateConfirmPasswordField}
-                          placeholder={t('confirm_password_placeholder')}
-                          className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${confirmPasswordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
-                            }`}
-                        />
-                        <motion.button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          whileTap={{ scale: 0.9, rotate: showConfirmPassword ? -90 : 90 }}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                    <AnimatePresence>
+                      {isNew && password && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-2 text-xs"
                         >
-                          <Icon name={showConfirmPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
-                        </motion.button>
-                      </div>
-                      {confirmPasswordError && (
-                        <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                          <Icon name="AlertCircle" className="h-3 w-3" />
-                          <span>{confirmPasswordError}</span>
-                        </p>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-slate-500">
+                              {t('password_strength_label')}
+                            </span>
+                            <span
+                              className={`font-medium ${getPasswordStrength(password) <= 2
+                                ? 'text-red-600'
+                                : getPasswordStrength(password) <= 3
+                                  ? 'text-amber-600'
+                                  : 'text-emerald-600'
+                                }`}
+                            >
+                              {getPasswordStrength(password) <= 2
+                                ? t('password_strength_weak')
+                                : getPasswordStrength(password) <= 3
+                                  ? t('password_strength_medium')
+                                  : t('password_strength_strong')}
+                            </span>
+                          </div>
+                          <div className="w-full bg-slate-200 rounded-full h-1">
+                            <motion.div
+                              className={`h-1 rounded-full`}
+                              initial={{ width: 0 }}
+                              animate={{
+                                width: `${(getPasswordStrength(password) / 5) * 100}%`,
+                                backgroundColor: getPasswordStrength(password) <= 2
+                                  ? '#ef4444' // red-500
+                                  : getPasswordStrength(password) <= 3
+                                    ? '#f59e0b' // amber-500
+                                    : '#10b981' // emerald-500
+                              }}
+                              transition={{ duration: 0.3 }}
+                            />
+                          </div>
+                        </motion.div>
                       )}
-                    </div>
-                  )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  <AnimatePresence>
+                    {isNew && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                      >
+                        <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1 mt-3">
+                          {t('confirm_password_label')}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                            <Icon name="Lock" className="h-4 w-4" />
+                          </span>
+                          <input
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => {
+                              setConfirmPassword(e.target.value);
+                              if (confirmPasswordError) setConfirmPasswordError(null);
+                            }}
+                            onBlur={validateConfirmPasswordField}
+                            placeholder={t('confirm_password_placeholder')}
+                            className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${confirmPasswordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
+                              }`}
+                          />
+                          <motion.button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            whileTap={{ scale: 0.9, rotate: showConfirmPassword ? -90 : 90 }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                          >
+                            <Icon name={showConfirmPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
+                          </motion.button>
+                        </div>
+                        {confirmPasswordError && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                          >
+                            <Icon name="AlertCircle" className="h-3 w-3" />
+                            <span>{confirmPasswordError}</span>
+                          </motion.p>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <div className="flex items-center justify-between pt-1">
                     <label className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-700 cursor-pointer">
@@ -1131,10 +1147,10 @@ export default function LoginModern() {
                 </form>
               </div>
             </motion.div>
-          </motion.section>
+          </motion.section >
 
           {/* Right Column: Welcome to the future of farming - Enhanced */}
-          <motion.section
+          < motion.section
             className="flex flex-col gap-4"
             initial={{ opacity: 0, x: 12 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -1287,9 +1303,9 @@ export default function LoginModern() {
                 </div>
               </div>
             </motion.div>
-          </motion.section>
-        </main>
-      </motion.div>
-    </div>
+          </motion.section >
+        </main >
+      </motion.div >
+    </div >
   );
 }

@@ -13,7 +13,7 @@ export default function FloatingChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      text: "Hello! I'm your AgriSmart AI Assistant. I can help you with agriculture, farming, and dashboard features. Ask me about crops, irrigation, fertilizers, pests, or how to use the dashboard!",
+      text: "🌾 Hello! I'm your AgriSmart AI Assistant with web search capabilities.\n\nI can help you with:\n✅ Crop management & diseases\n✅ Fertilizers & soil health\n✅ Pest control & IPM\n✅ Irrigation techniques\n✅ Weather-based advice\n✅ Dashboard features\n\nAsk me anything about agriculture! I'll search the web for the latest information when connected to the API.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -27,30 +27,45 @@ export default function FloatingChatbot() {
     setInput('');
     setLoading(true);
 
-    // Prefer local proxy at /api/ai
-    const proxyUrl = import.meta.env.VITE_AI_PROXY_URL || '/api/ai';
+    // Try backend API with better error handling
+    const apiUrl = import.meta.env.VITE_AI_PROXY_URL || 'http://localhost:3001/api/ai';
+
     try {
-      const r = await fetch(proxyUrl, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: text, messages, locale }),
       });
 
-      if (r.ok) {
-        const j = await r.json();
-        const reply = j?.reply || (typeof j === 'string' ? j : JSON.stringify(j));
-        setMessages((prev) => [...prev, { role: 'assistant', text: reply }]);
+      if (response.ok) {
+        const data = await response.json();
+        const reply = data?.reply || (typeof data === 'string' ? data : JSON.stringify(data));
+
+        // Add source indicator if available
+        let fullReply = reply;
+        if (data.source === 'gemini-ai-web-search') {
+          fullReply = `${reply}\n\n✨ Powered by AI with web search`;
+        } else if (data.source === 'local-knowledge-base') {
+          fullReply = `${reply}`;
+        }
+
+        setMessages((prev) => [...prev, { role: 'assistant', text: fullReply }]);
         setLoading(false);
         return;
+      } else {
+        console.warn('API returned non-OK status:', response.status);
       }
     } catch (err) {
-      console.warn('AI proxy request failed, using fallback', err);
+      console.warn('Backend API request failed:', err);
     }
 
-    // Fallback to local responder
+    // Fallback to local responder (always available)
     const reply = getLocalResponse(text, locale);
     setTimeout(() => {
-      setMessages((prev) => [...prev, { role: 'assistant', text: reply }]);
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        text: `${reply}\n\n⚠️ Using offline mode. Connect to backend for web-powered AI.`
+      }]);
       setLoading(false);
     }, 300);
   };
@@ -109,11 +124,10 @@ export default function FloatingChatbot() {
                 className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                    m.role === 'user'
-                      ? 'bg-green-500 text-white rounded-br-none'
-                      : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none'
-                  }`}
+                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${m.role === 'user'
+                    ? 'bg-green-500 text-white rounded-br-none'
+                    : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-bl-none'
+                    }`}
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{m.text}</p>
                 </div>
@@ -187,7 +201,7 @@ export default function FloatingChatbot() {
   );
 }
 
-// Local fallback responder with agriculture/dashboard focus
+// Enhanced local AI responder with intelligent agriculture/dashboard knowledge
 function getLocalResponse(question: string, locale: string = 'en'): string {
   const q = question.toLowerCase();
   const isTa = locale === 'ta';
@@ -195,24 +209,11 @@ function getLocalResponse(question: string, locale: string = 'en'): string {
 
   // Check if question is agriculture/dashboard related
   const agriKeywords = [
-    'crop',
-    'farm',
-    'soil',
-    'fertilizer',
-    'irrigation',
-    'pest',
-    'disease',
-    'harvest',
-    'plant',
-    'seed',
-    'rice',
-    'wheat',
-    'water',
-    'land',
-    'dashboard',
-    'profile',
-    'worker',
-    'resource',
+    'crop', 'farm', 'soil', 'fertilizer', 'irrigation', 'pest', 'disease',
+    'harvest', 'plant', 'seed', 'rice', 'wheat', 'cotton', 'corn', 'sugarcane',
+    'soybean', 'water', 'land', 'dashboard', 'profile', 'worker', 'resource',
+    'grow', 'yield', 'sowing', 'weather', 'temperature', 'humidity', 'nitrogen',
+    'potassium', 'phosphorus', 'organic', 'compost', 'mulch', 'weed'
   ];
   const isRelated = agriKeywords.some((keyword) => q.includes(keyword));
 
@@ -225,48 +226,110 @@ function getLocalResponse(question: string, locale: string = 'en'): string {
     return "I'm sorry, but I can only answer questions related to agriculture, farming, and dashboard features. Please ask me about crops, irrigation, fertilizers, pests, farm management, or how to use the dashboard features.";
   }
 
-  // Agriculture-specific responses
-  if (/fertilizer|npk|urea|fertiliser/i.test(q)) {
-    if (isTa) {
-      return 'அரிசிக்கு பரிந்துரைக்கப்படும் உர பயன்பாட்டு திட்டம்:\n\n- ஆதாரமாகப் போடுதல்: 50-60 kg N/ha, 20-30 kg P2O5/ha, 20-30 kg K2O/ha\n- N-ஐ பிரித்து: 1/3 ஆதாரமாக, 1/3 தழைக்கும் காலத்தில், 1/3 மூட்டிக்காலத்தில்\n- மைக்ரோநியமங்கள்: மண் பரிசோதனையைப் பின்பற்றவும்';
-    } else if (isHi) {
-      return 'चावल के लिए अनुशंसित उर्वरक योजना:\n\n- बेसल: 50-60 kg N/ha, 20-30 kg P2O5/ha, 20-30 kg K2O/ha\n- N को विभाजित करें: 1/3 बेसल, 1/3 टिलरिंग पर, 1/3 पैनिकल पर\n- सूक्ष्म पोषक तत्व: मिट्टी परीक्षण का पालन करें';
+  // ========== CROP-SPECIFIC ADVICE ==========
+
+  // Rice-specific questions
+  if (/rice|paddy/i.test(q)) {
+    if (/disease|blast|blight/i.test(q)) {
+      return 'Rice diseases and management:\n\n🔬 Common Rice Diseases:\n- Blast Disease: Use Tricyclazole (0.6g/L)\n- Bacterial Leaf Blight: Use copper-based sprays\n- Sheath Blight: Apply Validamycin (2ml/L)\n\n✅ Prevention:\n- Use resistant varieties\n- Maintain proper plant spacing\n- Avoid excess nitrogen\n- Ensure good drainage';
     }
-    return 'Recommended fertilizer for rice:\n\n- Basal: 50-60 kg N/ha, 20-30 kg P2O5/ha, 20-30 kg K2O/ha\n- Split N: 1/3 basal, 1/3 at tillering, 1/3 at panicle initiation\n- Micronutrients: Follow soil test recommendations';
+    if (/fertilizer|urea|npk/i.test(q)) {
+      return 'Rice fertilizer schedule:\n\n🌱 Basal Application (Before Planting):\n- 60 kg N/ha, 30 kg P₂O₅/ha, 30 kg K₂O/ha\n- Add 25 tons FYM/ha 2-3 weeks before\n\n🌿 Top Dressing:\n- 1st: 30 kg Urea/ha at 20-25 days\n- 2nd: 30 kg Urea/ha at panicle initiation\n\n💡 Tip: Split nitrogen application for better efficiency';
+    }
+    if (/sowing|planting|transplanting/i.test(q)) {
+      return 'Rice planting guide:\n\n📅 Timing: Monsoon onset (June-July)\n\n🌱 Seed Treatment:\n- Soak seeds in water for 24 hours\n- Treat with Carbendazim (2g/kg)\n\n🚜 Transplanting:\n- Age: 21-25 day old seedlings\n- Spacing: 20x15 cm\n- Depth: 2-3 cm\n- 2-3 seedlings per hill\n\n💧 Water: Maintain 2-3 cm standing water';
+    }
+    return 'Rice cultivation basics:\n\n🌾 Growing Season: 120-150 days\n⏰ Best Time: Kharif (June-November)\n💧 Water: Flooded conditions\n🌡️ Temperature: 20-35°C\n🌍 Soil: Clay or clay loam\n\nAsk me about rice diseases, fertilizers, or specific stages!';
   }
 
-  if (/irrigation|water|drip/i.test(q)) {
-    if (isTa) {
-      return 'அரிசி நீர் மேலாண்மை:\n\n- 2-3 செமி நிற்மல நீரை பராமரிக்கவும்\n- மூட்டிக்காலம் மற்றும் மலர்ச்சி நேரத்தில் நீர் பாழ்ச்சி தவிர்க்கவும்\n- அறுவடைக்கு 10-14 நாட்கள் முன் நீரை இறக்கு';
-    } else if (isHi) {
-      return 'चावल जल प्रबंधन:\n\n- 2-3 सेमी खड़े पानी बनाए रखें\n- पैनिकल और फूल के दौरान पानी की कमी से बचें\n- कटाई से 10-14 दिन पहले पानी निकालें';
+  // Wheat-specific questions
+  if (/wheat/i.test(q)) {
+    if (/disease|rust|smut/i.test(q)) {
+      return 'Wheat disease management:\n\n🦠 Common Diseases:\n- Brown Rust: Spray Propiconazole (0.1%)\n- Yellow Rust: Use resistant varieties\n- Loose Smut: Seed treatment with Vitavax (2.5g/kg)\n\n🛡️ Prevention:\n- Use certified disease-free seeds\n- Proper crop rotation\n- Avoid late sowing\n- Remove infected plants';
     }
-    return 'Rice irrigation:\n\n- Maintain 2-3 cm standing water\n- Avoid water stress during panicle initiation and flowering\n- Drain fields 10-14 days before harvest';
+    if (/fertilizer/i.test(q)) {
+      return 'Wheat fertilizer program:\n\n🌱 Basal (At Sowing):\n- 60 kg N/ha, 30 kg P₂O₅/ha, 20 kg K₂O/ha\n- 10 tons FYM/ha (2-3 weeks before)\n\n🌿 Top Dressing:\n- 1st: 65 kg Urea/ha at CRI stage (20-25 days)\n- 2nd: 65 kg Urea/ha at late jointing (40-45 days)\n\n⚠️ Apply with irrigation for best results';
+    }
+    return 'Wheat cultivation guide:\n\n🌾 Duration: 120-150 days\n⏰ Season: Rabi (Nov-Apr)\n🌡️ Temperature: 15-20°C ideal\n🌍 Soil: Loamy, well-drained\n💧 Irrigation: 4-6 irrigations needed\n🌱 Seed Rate: 100-125 kg/ha\n\nAsk about wheat diseases, fertilizers, or harvesting!';
   }
 
-  if (/pest|disease|insect/i.test(q)) {
-    if (isTa) {
-      return 'பூச்சி மேலாண்மை:\n\n- வாரம் ஒரு முறை கண்காணிப்பு\n- பறவை எதிர்ப்பு வகைகள் பயன்படுத்தவும்\n- நீம எண்ணெய் (2-5 ml/L) பயன்படுத்தவும்';
-    } else if (isHi) {
-      return 'कीट प्रबंधन:\n\n- साप्ताहिक निगरानी करें\n- प्रतिरोधी किस्मों का उपयोग करें\n- नीम तेल (2-5 ml/L) का उपयोग करें';
+  // Cotton-specific questions
+  if (/cotton/i.test(q)) {
+    if (/pest|bollworm|whitefly/i.test(q)) {
+      return 'Cotton pest management:\n\n🐛 Major Pests:\n- Pink Bollworm: Use pheromone traps\n- Whitefly: Yellow sticky traps + neem oil\n- Aphids: Spray imidacloprid (0.3ml/L)\n\n🌿 Integrated Management:\n- Install pheromone traps (4-5/acre)\n- Release natural predators (Trichogramma)\n- Neem oil spray (5ml/L) weekly\n- Avoid excess nitrogen';
     }
-    return 'Pest management:\n\n- Scout weekly during critical stages\n- Use resistant varieties\n- Apply neem oil (2-5 ml/L) for minor pests';
+    return 'Cotton farming essentials:\n\n🌱 Season: Kharif (April-June sowing)\n⏳ Duration: 150-180 days\n🌡️ Temperature: 21-30°C\n💧 Irrigation: Every 15-20 days\n🌍 Soil: Black cotton soil ideal\n\n💡 Key Stages:\n- Squaring (40-50 days)\n- Flowering (60-80 days)\n- Boll formation (80-100 days)';
   }
 
-  if (/dashboard|profile|worker|resource/i.test(q)) {
-    if (isTa) {
-      return 'டாஷ்போர்டு உதவி:\n\n- உங்கள் நிலங்கள், பயிர்கள் மற்றும் தொழிலாளர்களை நிர்வகிக்கவும்\n- வளங்களைப் பகிரவும்\n- AI ஆலோசகரைப் பயன்படுத்தவும்\n- அறிக்கைகளை CSV ஆக ஏற்றுமதி செய்யவும்';
-    } else if (isHi) {
-      return 'डैशबोर्ड सहायता:\n\n- अपनी भूमि, फसलें और कर्मचारियों को प्रबंधित करें\n- संसाधन साझा करें\n- AI सलाहकार का उपयोग करें\n- रिपोर्ट को CSV में निर्यात करें';
+  // ========== GENERAL AGRICULTURAL TOPICS ==========
+
+  // Fertilizer questions (general)
+  if (/fertilizer|npk|urea|dap|nutrient/i.test(q)) {
+    if (/organic/i.test(q)) {
+      return 'Organic fertilizer options:\n\n🌿 Farm Yard Manure (FYM):\n- Application: 10-25 tons/ha\n- Rich in NPK + micronutrients\n\n🪱 Vermicompost:\n- Application: 5-8 tons/ha\n- Excellent soil conditioner\n\n🌱 Green Manure:\n- Crops: Sunhemp, Dhaincha\n- Plow in at flowering\n\n🦠 Biofertilizers:\n- Rhizobium (legumes)\n- Azotobacter (cereals)\n- PSB (all crops)';
     }
-    return 'Dashboard help:\n\n- Manage your lands, crops, and workers\n- Share resources with other farmers\n- Use AI advisor for crop guidance\n- Export reports as CSV';
+    return 'NPK Fertilizer guide:\n\n🔵 Nitrogen (N):\n- Promotes leaf growth\n- Sources: Urea, Amm. Sulfate\n- Mobile in soil\n\n🟢 Phosphorus (P):\n- Root development\n- Sources: DAP, SSP\n- Less mobile\n\n🟡 Potassium (K):\n- Disease resistance\n- Sources: MOP, SOP\n\n💡 Soil test before application!';
   }
 
-  // Generic response
+  // Irrigation questions
+  if (/irrigation|water|drip|sprinkler/i.test(q)) {
+    if (/drip/i.test(q)) {
+      return 'Drip irrigation benefits:\n\n💧 Water Saving: 30-70% less water\n⚡ Energy Saving: Lower pumping costs\n🌱 Better Yield: 20-50% increase\n🎯 Precision: Water directly to roots\n\n🔧 Components:\n- Main line\n- Sub-main line\n- Lateral pipes\n- Drippers/Emitters\n\n✅ Best for: Vegetables, orchard crops, cotton';
+    }
+    return 'Irrigation methods comparison:\n\n🌊 Flood Irrigation:\n- Traditional method\n- Suitable for rice\n- High water use\n\n💦 Sprinkler:\n- 30-40% water saving\n- Good for wheat, vegetables\n- Uniform distribution\n\n💧 Drip:\n- 50-70% water saving\n- Best efficiency\n- Higher initial cost\n\n🎯 Choose based on crop and water availability';
+  }
+
+  // Pest and disease management
+  if (/pest|disease|insect|fungus|blight/i.test(q)) {
+    if (/organic|natural/i.test(q)) {
+      return 'Organic pest control methods:\n\n🌿 Neem-based:\n- Neem oil spray (5ml/L)\n- Neem cake in soil\n- Effective against 200+ pests\n\n🐞 Biological Control:\n- Trichogramma (egg parasitoid)\n- Ladybird beetles (aphid predator)\n- Bacillus thuringiensis (caterpillars)\n\n🌾 Cultural Practices:\n- Crop rotation\n- Intercropping\n- Trap crops\n- Proper sanitation';
+    }
+    return 'Integrated Pest Management (IPM):\n\n👁️ Monitoring:\n- Weekly field scouting\n- Pheromone traps\n- Yellow/blue sticky traps\n\n🌱 Prevention:\n- Use resistant varieties\n- Proper spacing\n- Balanced nutrition\n- Field sanitation\n\n⚗️ Control:\n- Start with organic methods\n- Use chemicals as last resort\n- Rotate pesticides\n- Follow safety precautions';
+  }
+
+  // Soil management
+  if (/soil|ph|texture|health/i.test(q)) {
+    if (/test|testing/i.test(q)) {
+      return 'Soil testing guide:\n\n🔬 What to Test:\n- pH level (6-7.5 ideal for most crops)\n- NPK levels\n- Organic matter content\n- Micronutrients\n\n📅 When:\n- Before cropping season\n- Every 2-3 years\n- When yields decline\n\n📍 How:\n- Collect from 10-15 spots\n- Mix thoroughly\n- 500g sample needed\n- Submit to nearest lab';
+    }
+    return 'Soil health management:\n\n🌱 Organic Matter:\n- Add FYM/compost regularly\n- Green manuring\n- Crop residue incorporation\n\n🔄 Crop Rotation:\n- Legumes → Cereals\n- Prevents nutrient depletion\n- Breaks pest cycles\n\n🌾 Cover Crops:\n- Protect soil erosion\n- Add nitrogen\n- Improve structure\n\n💧 Avoid waterlogging and over-tillage';
+  }
+
+  // Weather-related questions
+  if (/weather|rain|temperature|climate/i.test(q)) {
+    return 'Weather impact on farming:\n\n🌡️ Temperature:\n- Too high: Heat stress, reduced yield\n- Too low: Frost damage\n- Monitor daily forecasts\n\n🌧️ Rainfall:\n- Critical during flowering\n- Excess: Disease spread\n- Deficit: Use irrigation\n\n💨 Wind:\n- Strong winds: Lodging in tall crops\n- Use windbreaks\n\n📱 Use weather apps and AgriSmart dashboard for forecasts!';
+  }
+
+  // Dashboard-specific questions
+  if (/dashboard|how to use|feature|profile|worker|land/i.test(q)) {
+    if (/worker|hire|labor/i.test(q)) {
+      return 'Finding Workers on Dashboard:\n\n👷 Steps:\n1. Go to "Find Workers" section\n2. Use filters (skills, location, gender)\n3. View worker profiles\n4. Send job offers\n5. Track responses\n\n✅ Workers show:\n- Skills & experience\n- Ratings & reviews\n- Availability status\n- Contact information';
+    }
+    if (/land|add|manage/i.test(q)) {
+      return 'Managing Lands on Dashboard:\n\n🌾 Add New Land:\n1. Click "Add Land"\n2. Enter location, area\n3. Select soil type\n4. Add current crops\n5. Set growth stage\n\n📊 View Data:\n- Crop schedules\n- Weather for location\n- AI recommendations\n- Yield predictions';
+    }
+    if (/ai|advisor|recommendation/i.test(q)) {
+      return 'Using AI Crop Advisor:\n\n🤖 Features:\n- Crop-specific advice\n- Growth stage recommendations\n- Weather-based insights\n- Fertilizer schedules\n- Pest alerts\n\n📱 Access:\n1. Select your land\n2. Click "AI Crop Advisor"\n3. Auto-detects crop & stage\n4. Get personalized advice\n5. Download PDF reports';
+    }
+    return 'AgriSmart Dashboard Features:\n\n🌾 Land Management:\n- Track multiple lands\n- Monitor crop stages\n- Weather integration\n\n👷 Worker Management:\n- Find skilled workers\n- Send job offers\n- View ratings\n\n🤖 AI Advisor:\n- Crop recommendations\n- Pest alerts\n- Fertilizer schedules\n\n🛒 Agro Shops:\n- Find nearby shops\n- Compare prices\n- Check availability\n\nAsk me about specific features!';
+  }
+
+  // Harvesting questions
+  if (/harvest|harvesting|maturity|ready/i.test(q)) {
+    return 'Harvesting best practices:\n\n⏰ Right Time:\n- 80-90% physiological maturity\n- Morning hours (less shattering)\n- Avoid rainy days\n\n🌾 Rice:\n- Golden yellow grains\n- 20-25% moisture\n- Dry to 12-14% before storage\n\n🌾 Wheat:\n- Hard grains\n- 20-22% moisture\n- Immediate threshing\n\n💡 Delayed harvesting = grain loss + quality reduction';
+  }
+
+  // Sowing/planting questions
+  if (/sow|plant|seed|germination/i.test(q)) {
+    return 'Seed sowing guidelines:\n\n🌱 Seed Treatment:\n- Fungicide treatment\n- Bioagent coating\n- Priming (soaking)\n\n📏 Spacing:\n- Proper spacing = better yield\n- Use rope/markers\n- Follow crop-specific guides\n\n🕐 Timing:\n- Check soil moisture\n- Follow crop calendar\n- Weather forecast\n\n🌡️ Depth:\n- Small seeds: 1-2 cm\n- Large seeds: 3-5 cm\n- Rice: 2-3 cm';
+  }
+
+  // Default helpful response
   if (isTa) {
-    return 'நான் விவசாயம் மற்றும் டாஷ்போர்டு அம்சங்கள் பற்றி உதவ முடியும். தயவுசெய்து தெளிவாக கேளுங்கள்.';
+    return 'நான் விவசாயம் மற்றும் டாஷ்போர்டு அம்சங்கள் பற்றி உதவ முடியும்! பயிர்கள், உரங்கள், பூச்சிகள், நீர்ப்பாசனம், அல்லது டாஷ்போர்டு பயன்பாடு பற்றி குறிப்பிட்டு கேளுங்கள்.';
   } else if (isHi) {
-    return 'मैं कृषि और डैशबोर्ड सुविधाओं के बारे में मदद कर सकता हूं। कृपया स्पष्ट रूप से पूछें।';
+    return 'मैं कृषि और डैशबोर्ड सुविधाओं के बारे में मदद कर सकता हूं! कृपया फसलों, उर्वरकों, कीटों, सिंचाई या डैशबोर्ड उपयोग के बारे में विशेष रूप से पूछें।';
   }
-  return 'I can help with agriculture and dashboard features. Please ask specifically about crops, irrigation, fertilizers, pests, or dashboard usage.';
+
+  return '🌾 I\'m your AgriSmart AI Assistant!\n\nI can help with:\n✅ Crop-specific advice (Rice, Wheat, Cotton, etc.)\n✅ Fertilizer recommendations\n✅ Pest & disease management\n✅ Irrigation techniques\n✅ Soil health\n✅ Dashboard features\n\n💡 Ask me specific questions like:\n- "How to manage rice blast disease?"\n- "Fertilizer schedule for wheat?"\n- "How to use drip irrigation?"\n- "How to add land in dashboard?"';
 }
