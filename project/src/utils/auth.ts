@@ -1,4 +1,4 @@
-export type UserRole = 'farmer' | 'worker' | 'buyer' | 'renter';
+export type UserRole = 'farmer' | 'worker' | 'buyer' | 'renter' | 'admin';
 
 export interface AuthSession {
   id?: string;
@@ -31,8 +31,22 @@ export interface AuthSession {
   equipmentList?: Array<{ name: string; hourlyRate: string }>;
 }
 
-const STORAGE_KEY = 'agri_auth_session';
-const USERS_KEY = 'agri_users';
+const STORAGE_KEY = 'uzhavan_x_auth_session';
+const USERS_KEY = 'uzhavan_x_users';
+
+// Quick cleanup for demo users if they still exist in local storage
+try {
+  const raw = localStorage.getItem(USERS_KEY);
+  if (raw) {
+    const users = JSON.parse(raw) as any[];
+    const filtered = users.filter(u => !['farmer@demo.com', 'worker@demo.com', 'buyer@demo.com', 'renter@demo.com'].includes(u.email));
+    if (filtered.length !== users.length) {
+      localStorage.setItem(USERS_KEY, JSON.stringify(filtered));
+    }
+  }
+} catch (e) {
+  // ignore
+}
 
 export function saveSession(session: AuthSession) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
@@ -57,6 +71,10 @@ export function updateSession(update: Partial<AuthSession>) {
 
 export function clearSession() {
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem('agri_lands');
+  localStorage.removeItem('agri_jobs');
+  localStorage.removeItem('agri_orders');
+  localStorage.removeItem('workerOffers');
 }
 
 export function isAuthenticated() {
@@ -107,49 +125,6 @@ export interface StoredUser {
 }
 
 function readUsers(): StoredUser[] {
-  // Define defaults
-  const demoUsers: StoredUser[] = [
-    {
-      id: 'demo-farmer',
-      role: 'farmer',
-      name: 'Demo Farmer',
-      email: 'farmer@demo.com',
-      phone: '9876543210',
-      passwordHash: naiveHash('password'),
-    },
-    {
-      id: 'demo-worker',
-      role: 'worker',
-      name: 'Demo Worker',
-      email: 'worker@demo.com',
-      phone: '9876543211',
-      passwordHash: naiveHash('password'),
-    },
-    {
-      id: 'demo-buyer',
-      role: 'buyer',
-      name: 'Demo Buyer',
-      email: 'buyer@demo.com',
-      phone: '9876543212',
-      passwordHash: naiveHash('password'),
-      buyerAddressLine1: 'Demo Address',
-      buyerCity: 'Demo City',
-      buyerState: 'Demo State',
-      buyerPincode: '123456',
-    },
-    {
-      id: 'demo-renter',
-      role: 'renter',
-      name: 'Demo Renter',
-      email: 'renter@demo.com',
-      phone: '9876543213',
-      passwordHash: naiveHash('password'),
-      businessName: 'Demo Equipment Rental',
-      businessAddress: 'Demo Business Address',
-      serviceRadiusKm: 50,
-    },
-  ];
-
   const raw = localStorage.getItem(USERS_KEY);
   let users: StoredUser[] = [];
 
@@ -157,27 +132,6 @@ function readUsers(): StoredUser[] {
     users = raw ? JSON.parse(raw) : [];
   } catch {
     users = [];
-  }
-
-  // Ensure demo users exist and have correct passwords
-  let changed = false;
-  demoUsers.forEach(demoUser => {
-    const existingIndex = users.findIndex(u => u.email === demoUser.email);
-    if (existingIndex === -1) {
-      users.push(demoUser);
-      changed = true;
-    } else {
-      // Optional: Reset password to 'password' if it doesn't match, to ensure demo login works
-      // We preserve other fields (like profile updates) but enforce the login credential
-      if (users[existingIndex].passwordHash !== demoUser.passwordHash) {
-        users[existingIndex].passwordHash = demoUser.passwordHash;
-        changed = true;
-      }
-    }
-  });
-
-  if (changed || !raw) {
-    writeUsers(users);
   }
 
   return users;
@@ -190,7 +144,7 @@ function writeUsers(users: StoredUser[]) {
 function naiveHash(input: string) {
   // Simple but better hash for demo purposes
   let hash = 0;
-  const salt = 'agri_demo_salt_2024';
+  const salt = 'uzhavan_x_demo_salt_2026';
   const saltedInput = input + salt;
 
   for (let i = 0; i < saltedInput.length; i++) {
@@ -217,7 +171,11 @@ export function registerUser(user: Omit<StoredUser, 'id' | 'passwordHash'> & { p
   writeUsers([newUser, ...users]);
   const session: AuthSession = { ...newUser } as unknown as AuthSession;
   delete (session as any).passwordHash;
+  clearSession();
   saveSession(session);
+  if (session.id) {
+    localStorage.setItem("currentUserId", session.id);
+  }
   return session;
 }
 
@@ -232,6 +190,10 @@ export function loginUser(identifier: string, password: string): AuthSession | n
   if (user.passwordHash !== naiveHash(password)) return null;
   const session: AuthSession = { ...user } as unknown as AuthSession;
   delete (session as any).passwordHash;
+  clearSession();
   saveSession(session);
+  if (session.id) {
+    localStorage.setItem("currentUserId", session.id);
+  }
   return session;
 }

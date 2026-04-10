@@ -5,7 +5,8 @@ import { useI18n } from '../utils/i18n';
 import LanguageSelector from './LanguageSelector';
 import FloatingChatbot from './FloatingChatbot';
 import Icon from './Icon';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { useToast, ToastContainer } from './Toast';
 
 const skillFilters = ['all', 'Harvesting', 'Irrigation', 'Pest Control', 'Equipment'];
 
@@ -19,16 +20,19 @@ const Sidebar = ({ activeTab, setActiveTab, workerOffers }: SidebarProps) => {
   const { t } = useI18n();
   return (
     <div className="w-72 glass-card border-r border-white/5 relative z-20 flex flex-col hidden md:flex shrink-0">
-      <div className="p-8 border-b border-white/5">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 glass-card rounded-2xl flex items-center justify-center text-emerald-400 glow-emerald">
-            <Icon name="Brain" className="h-6 w-6" />
+      <div className="p-8 border-b border-white/10 dark:border-white/5">
+        <div className="flex items-center gap-4 group">
+          <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-xl border border-emerald-50 group-hover:rotate-6 transition-transform duration-500">
+            <Icon name="Brain" className="h-8 w-8" />
           </div>
-          <div>
-            <h1 className="text-sm font-black text-white tracking-[0.2em] uppercase leading-none">
-              {t('brand_name')}
+          <div className="flex flex-col">
+            <h1 className="text-xl font-black text-slate-900 tracking-tighter leading-none">
+              உழவன் <span className="text-emerald-600 uppercase tracking-widest ml-1">X</span>
             </h1>
-            <p className="text-[10px] font-black text-emerald-500/50 uppercase tracking-widest mt-1">Worker Node</p>
+            <p className="text-[10px] font-bold text-emerald-600/60 uppercase tracking-widest mt-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+              Worker Node
+            </p>
           </div>
         </div>
       </div>
@@ -76,18 +80,118 @@ const Sidebar = ({ activeTab, setActiveTab, workerOffers }: SidebarProps) => {
   );
 };
 
+const WorkerProfileContent = ({ about, setAbout, onSave, isSaving }: any) => {
+  const { t } = useI18n();
+  const session = JSON.parse(localStorage.getItem('user') || '{}');
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+      <div className="bg-white rounded-[2.5rem] p-10 shadow-premium border border-emerald-50 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-600 via-green-400 to-amber-400"></div>
+        <div className="flex flex-col md:flex-row gap-10 items-start">
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-[2rem] bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-4xl text-white font-black shadow-2xl group-hover:rotate-3 transition-transform duration-500">
+              {session.name ? session.name.charAt(0).toUpperCase() : 'W'}
+            </div>
+            <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-white rounded-xl shadow-lg flex items-center justify-center border border-emerald-50 cursor-pointer hover:scale-110 transition-transform">
+              <Icon name="Camera" className="w-5 h-5 text-emerald-600" />
+            </div>
+          </div>
+
+          <div className="flex-1 space-y-6">
+            <div>
+              <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-1">{t('title_profile')}</h2>
+              <p className="text-emerald-600 font-bold uppercase tracking-widest text-[10px]">{t('label_profile_header')}</p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('label_full_name')}</p>
+                  <p className="font-bold text-slate-700 px-6 py-4 rounded-2xl bg-gray-50 border border-gray-100">{session.name || 'Demo Worker'}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('label_phone')}</p>
+                  <p className="font-bold text-slate-700 px-6 py-4 rounded-2xl bg-gray-50 border border-gray-100">{session.phone || '+91 99999 99999'}</p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('label_bio')}</label>
+                <textarea
+                  value={about}
+                  onChange={(e) => setAbout(e.target.value)}
+                  rows={5}
+                  className="w-full px-6 py-4 rounded-2xl bg-emerald-50/30 border-2 border-emerald-50/50 focus:border-emerald-500 outline-none font-bold text-slate-700 transition-all focus:bg-white resize-none"
+                  placeholder={t('placeholder_bio')}
+                ></textarea>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                  <Icon name="CheckCircle" className="w-4 h-4" />
+                  {t('badge_verified')}
+                </span>
+                <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                  <Icon name="Star" className="w-4 h-4" />
+                  {t('badge_top_rated')}
+                </span>
+              </div>
+
+              <button
+                onClick={onSave}
+                disabled={isSaving}
+                className="px-10 py-5 rounded-2xl bg-emerald-600 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 disabled:opacity-50 flex items-center gap-3 active:scale-95"
+              >
+                <Icon name={isSaving ? 'Loader2' : 'CheckCircle'} className={`w-4 h-4 ${isSaving ? 'animate-spin' : ''}`} />
+                {isSaving ? t('please_wait') : t('btn_save_profile')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] p-10 border border-white shadow-soft">
+        <h3 className="text-xl font-black text-slate-900 tracking-tight mb-6">{t('label_account_details')}</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
+              <Icon name="Mail" className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Email Address</p>
+              <p className="font-bold text-slate-700">{session.email || 'worker@agrismart.com'}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600">
+              <Icon name="Award" className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Experience Level</p>
+              <p className="font-bold text-slate-700">Senior Farmer • 8+ Years</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const FarmWorkerDashboard = () => {
   const { data: jobs } = useJobs();
   const { applyForJob } = useJobActions();
   const { t } = useI18n();
 
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [about, setAbout] = useState(t('default_about_worker'));
+  const [about, setAbout] = useState(localStorage.getItem('worker_bio') || t('default_about_worker'));
   const [selectedSkill, setSelectedSkill] = useState('all');
   const [view, setView] = useState<'list' | 'compact'>('list');
   const [applyStatus, setApplyStatus] = useState<string | null>(null);
   const [workerOffers, setWorkerOffers] = useState<any[]>([]);
   const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const { addToast, removeToast, toasts } = useToast();
 
   // Load applied jobs from localStorage
   const loadAppliedJobs = useCallback(() => {
@@ -307,6 +411,14 @@ const FarmWorkerDashboard = () => {
     // In a real app, this would open a modal or navigate to details page
   };
 
+  const handleSaveWorkerProfile = useCallback(async () => {
+    setIsSavingProfile(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    localStorage.setItem('worker_bio', about);
+    setIsSavingProfile(false);
+    addToast({ type: 'success', title: 'Success', message: t('msg_profile_updated') });
+  }, [about, addToast, t]);
+
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
       {/* Sidebar */}
@@ -335,13 +447,15 @@ const FarmWorkerDashboard = () => {
               </div>
               <button
                 onClick={logoutAndRedirect}
-                className="ml-4 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors"
+                className="ml-4 px-4 py-2 rounded-xl bg-gray-50 text-sm font-bold text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all border border-gray-100 flex items-center gap-2"
               >
+                <Icon name="LogOut" className="h-4 w-4" />
                 {t('logout')}
               </button>
             </div>
           </div>
         </header>
+
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto p-6 scrollbar-hide">
@@ -687,46 +801,14 @@ const FarmWorkerDashboard = () => {
               </div>
             )}
 
-            {/* PROFILE TAB (Placeholder for now, simplified) */}
+            {/* PROFILE TAB */}
             {activeTab === 'profile' && (
-              <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100 max-w-2xl mx-auto">
-                <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900">{t('my_profile')}</h3>
-                  <button className="text-emerald-600 font-medium hover:underline">{t('edit')}</button>
-                </div>
-
-                <div className="flex flex-col items-center mb-8">
-                  <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl font-bold text-gray-500 mb-4 ring-4 ring-emerald-100">
-                    DW
-                  </div>
-                  <h4 className="text-xl font-bold text-gray-900">Demo Worker</h4>
-                  <p className="text-gray-500">+91 99999 99999</p>
-                  <div className="flex gap-2 mt-2">
-                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">{t('badge_verified')}</span>
-                    <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">{t('badge_top_rated')}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('label_about')}</label>
-                    <textarea
-                      value={about}
-                      onChange={(e) => setAbout(e.target.value)}
-                      className="w-full border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-shadow"
-                      rows={4}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('label_skills')}</label>
-                    <div className="flex flex-wrap gap-2">
-                      {/* Filtered skills would be dynamic */}
-                      <span className="px-3 py-1.5 border border-dashed border-gray-300 text-gray-500 rounded-lg text-sm hover:bg-gray-50">{t('action_add_skill')}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <WorkerProfileContent
+                about={about}
+                setAbout={setAbout}
+                onSave={handleSaveWorkerProfile}
+                isSaving={isSavingProfile}
+              />
             )}
 
             {/* SHIFTS TAB */}
@@ -966,6 +1048,9 @@ const FarmWorkerDashboard = () => {
 
       {/* Floating AI Chatbot */}
       <FloatingChatbot />
+
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 };

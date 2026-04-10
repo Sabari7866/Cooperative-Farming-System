@@ -10,13 +10,13 @@ export default function DataBackup() {
 
             // Collect all localStorage data
             const keys = [
-                'agrismart_products',
-                'agrismart_jobs',
-                'agrismart_resources',
-                'agrismart_expenses',
-                'agrismart_inventory',
-                'agrismart_activity',
-                'agrismart_user',
+                'uzhavan_x_products',
+                'uzhavan_x_jobs',
+                'uzhavan_x_resources',
+                'uzhavan_x_expenses',
+                'uzhavan_x_inventory',
+                'uzhavan_x_activity',
+                'uzhavan_x_user',
             ];
 
             keys.forEach((key) => {
@@ -31,7 +31,7 @@ export default function DataBackup() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `agrismart-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `uzhavan-x-backup-${new Date().toISOString().split('T')[0]}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

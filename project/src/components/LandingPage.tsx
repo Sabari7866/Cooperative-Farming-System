@@ -25,14 +25,14 @@ const LandingPage = () => {
               <div className="w-12 h-12 rounded-2xl overflow-hidden bg-white p-2 flex items-center justify-center shadow-lg border border-emerald-50">
                 <img
                   src="/logo.png"
-                  alt="Agri Elite"
+                  alt="உழவன் X"
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex flex-col">
                 <h1 className="text-3xl font-black tracking-tighter leading-none h-8 flex items-center">
-                  <span className="text-slate-900">Agri</span>
-                  <span className="text-emerald-600">Smart</span>
+                  <span className="text-slate-900">உழவன் X</span>
+                  <span className="text-emerald-600"> X</span>
                 </h1>
                 <p className="text-[10px] text-emerald-600/60 font-black tracking-[0.1em] uppercase mt-1 italic">Innovation for inclusive agriculture</p>
               </div>
@@ -94,7 +94,7 @@ const LandingPage = () => {
 
             <h2 className="text-8xl md:text-[9rem] font-black text-slate-900 mb-12 tracking-tighter leading-[0.85] drop-shadow-sm">
               Experience <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-green-500 to-amber-500">AgriSmart.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-green-500 to-amber-500">உழவன் X.</span>
             </h2>
 
             <p className="text-2xl md:text-3xl text-slate-500 mb-14 max-w-4xl mx-auto leading-relaxed font-medium">

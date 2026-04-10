@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ==============================================
-   🎨 AGRISMART - POLISHED UI/UX STYLES
+   🎨 உழவன் X - POLISHED UI/UX STYLES
    Professional, Modern, Beautiful
    ============================================== */
 
@@ -15,7 +15,7 @@ html {
 }
 
 /* ============================================
-   AGRI ELITE DESIGN TOKENS
+   உழவன் X DESIGN TOKENS
    ============================================ */
 :root {
   --elite-emerald: #065f46;
@@ -743,3 +743,11 @@ input.success {
 /* ============================================
    END OF POLISHED STYLES
    ============================================ */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}

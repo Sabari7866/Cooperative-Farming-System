@@ -17,10 +17,14 @@ export interface Worker {
   languages: string[];
   hourlyRate: number;
   verified: boolean;
+  maxTravelKm?: number;
+  availableHoursPerDay?: number;
+  distanceKm?: number;
 }
 
 export interface Job {
   id: string;
+  userId?: string;
   title: string;
   description: string;
   farmOwner: string;
@@ -56,6 +60,7 @@ export interface WorkerApplication {
 
 export interface Land {
   id: string;
+  userId?: string;
   name: string;
   location: string;
   crop: string;
@@ -68,6 +73,7 @@ export interface Land {
   status: 'preparation' | 'sowing' | 'growing' | 'flowering' | 'harvest';
   lastUpdated: string;
   coordinates?: { lat: number; lng: number };
+  parts?: Array<{ crop: string; area: number; stage: string }>;
   notes: string;
 }
 
@@ -118,12 +124,13 @@ export const api = {
   },
 
   // --- Worker APIs ---
-  async getWorkers(filters?: { skills?: string[]; maxDistance?: number; available?: boolean; gender?: string }): Promise<Worker[]> {
+  async getWorkers(filters?: { skills?: string[]; maxDistance?: number; available?: boolean; gender?: string; minWorkHours?: number, landId?: string }): Promise<Worker[]> {
     const params = new URLSearchParams();
     if (filters?.available !== undefined) params.append('available', String(filters.available));
     if (filters?.gender && filters.gender !== 'all') params.append('gender', filters.gender);
-    // Note: skills and distance filtering would ideally happen on backend. 
-    // Here we just fetch all suitable ones or pass params if backend supports.
+    if (filters?.maxDistance) params.append('maxDistance', String(filters.maxDistance));
+    if (filters?.minWorkHours) params.append('minWorkHours', String(filters.minWorkHours));
+    if (filters?.landId) params.append('landId', filters.landId);
 
     return this.request<Worker[]>(`/workers?${params.toString()}`);
   },
@@ -138,13 +145,15 @@ export const api = {
 
   async contactWorker(workerId: string, message: string): Promise<boolean> {
     // Placeholder as backend doesn't have a contact endpoint yet
+    console.log(`Contacting worker ${workerId}: ${message}`);
     return new Promise(resolve => setTimeout(() => resolve(true), 500));
   },
 
   // --- Job APIs ---
-  async getJobs(filters?: { skills?: string[]; urgent?: boolean; maxDistance?: number }): Promise<Job[]> {
+  async getJobs(filters?: { skills?: string[]; urgent?: boolean; maxDistance?: number; userId?: string }): Promise<Job[]> {
     const params = new URLSearchParams();
     if (filters?.urgent !== undefined) params.append('urgent', String(filters.urgent));
+    if (filters?.userId) params.append('userId', filters.userId);
     return this.request<Job[]>(`/jobs?${params.toString()}`);
   },
 
@@ -172,9 +181,7 @@ export const api = {
   },
 
   async getJobApplications(jobId: string): Promise<WorkerApplication[]> {
-    // Not implemented as separate endpoint in backend yet.
-    // Fetch generic job list or implement /jobs/:id
-    return [];
+    return this.request<WorkerApplication[]>(`/jobs/${jobId}/applications`);
   },
 
   async updateApplicationStatus(
@@ -182,13 +189,17 @@ export const api = {
     applicationId: string,
     status: 'accepted' | 'rejected',
   ): Promise<boolean> {
-    // Placeholder
+    await this.request(`/jobs/${jobId}/applications/${applicationId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
     return true;
   },
 
   // --- Land APIs ---
-  async getLands(): Promise<Land[]> {
-    return this.request<Land[]>('/lands');
+  async getLands(userId?: string): Promise<Land[]> {
+    const query = userId ? `?userId=${userId}` : '';
+    return this.request<Land[]>(`/lands${query}`);
   },
 
   async createLand(landData: Omit<Land, 'id' | 'lastUpdated'>): Promise<Land> {
@@ -226,10 +237,12 @@ export const api = {
   },
 
   async markNotificationRead(id: string): Promise<boolean> {
+    await this.request(`/notifications/${id}/read`, { method: 'PATCH' });
     return true;
   },
 
   async markAllNotificationsRead(): Promise<boolean> {
+    await this.request('/notifications/mark-all-read', { method: 'POST' });
     return true;
   },
 

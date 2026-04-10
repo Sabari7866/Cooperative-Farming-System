@@ -1,4 +1,4 @@
-// Resource Sharing API for AgriSmart
+// Resource Sharing API for உழவன் X
 export interface Resource {
   id: string;
   ownerId: string;

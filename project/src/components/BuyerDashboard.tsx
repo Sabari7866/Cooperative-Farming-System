@@ -178,8 +178,8 @@ function UzhavarSandhaiWidget() {
               key={m.id}
               onClick={() => setSelectedMarket(i)}
               className={`px-2 py-0.5 rounded text-[10px] font-black transition-all ${i === selectedMarket
-                  ? 'bg-white text-green-700 shadow'
-                  : 'bg-green-800/40 text-green-100 hover:bg-green-800/60'
+                ? 'bg-white text-green-700 shadow'
+                : 'bg-green-800/40 text-green-100 hover:bg-green-800/60'
                 }`}
             >
               {m.short}
@@ -566,7 +566,7 @@ export default function BuyerDashboard() {
     doc.setFont('helvetica', 'italic');
     const footerY = doc.internal.pageSize.getHeight() - 20;
     doc.text('Thank you for your business!', pageWidth / 2, footerY, { align: 'center' });
-    doc.text('For queries: support@agrismart.com | +91 1800 123 4567', pageWidth / 2, footerY + 5, {
+    doc.text('For queries: support@uzhavanx.com | +91 1800 123 4567', pageWidth / 2, footerY + 5, {
       align: 'center',
     });
     doc.text('This is a computer-generated invoice', pageWidth / 2, footerY + 10, {
@@ -574,7 +574,7 @@ export default function BuyerDashboard() {
     });
 
     // Save PDF
-    doc.save(`AgriSmart_Invoice_${order.orderNumber}.pdf`);
+    doc.save(`Uzhavan_X_Invoice_${order.orderNumber}.pdf`);
     toast.success(t('msg_invoice_downloaded'));
   };
 
@@ -614,7 +614,7 @@ export default function BuyerDashboard() {
         const newItem: CartItem = {
           id: negotiationItem.id,
           name: negotiationItem.title + ' (Negotiated)',
-          category: categoryFromTitle(negotiationItem.title),
+          category: categoryFromName(negotiationItem.title, negotiationItem.category),
           price: Number(offerPrice),
           quantity: 1,
           unit: 'kg'

@@ -8,12 +8,12 @@ type Message = {
 };
 
 export default function FloatingChatbot() {
-  const { t, locale } = useI18n();
+  const { locale } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      text: "🌾 Hello! I'm your AgriSmart AI Assistant with web search capabilities.\n\nI can help you with:\n✅ Crop management & diseases\n✅ Fertilizers & soil health\n✅ Pest control & IPM\n✅ Irrigation techniques\n✅ Weather-based advice\n✅ Dashboard features\n\nAsk me anything about agriculture! I'll search the web for the latest information when connected to the API.",
+      text: "🌾 Hello! I'm your உழவன் X AI Assistant with web search capabilities.\n\nI can help you with:\n✅ Crop management & diseases\n✅ Fertilizers & soil health\n✅ Pest control & IPM\n✅ Irrigation techniques\n✅ Weather-based advice\n✅ Dashboard features\n\nAsk me anything about agriculture! I'll search the web for the latest information when connected to the API.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -28,7 +28,7 @@ export default function FloatingChatbot() {
     setLoading(true);
 
     // Try backend API with better error handling
-    const apiUrl = import.meta.env.VITE_AI_PROXY_URL || 'http://localhost:3001/api/ai';
+    const apiUrl = import.meta.env.VITE_AI_PROXY_URL || '/api/ai';
 
     try {
       const response = await fetch(apiUrl, {
@@ -61,10 +61,15 @@ export default function FloatingChatbot() {
 
     // Fallback to local responder (always available)
     const reply = getLocalResponse(text, locale);
+    const isOffline = !navigator.onLine;
+    const fallbackMessage = isOffline 
+      ? `${reply}\n\n⚠️ Currently Offline. Connecting to backend when internet is restored...`
+      : `${reply}\n\n💡 Local Knowledge Response. (Backend AI currently syncing or unreachable)`;
+
     setTimeout(() => {
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        text: `${reply}\n\n⚠️ Using offline mode. Connect to backend for web-powered AI.`
+        text: fallbackMessage
       }]);
       setLoading(false);
     }, 300);
@@ -103,7 +108,7 @@ export default function FloatingChatbot() {
                 <MessageCircle className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">AgriSmart AI</h3>
+                <h3 className="font-semibold text-lg">உழவன் X AI</h3>
                 <p className="text-xs text-green-100">Agriculture & Dashboard Assistant</p>
               </div>
             </div>
@@ -297,7 +302,7 @@ function getLocalResponse(question: string, locale: string = 'en'): string {
 
   // Weather-related questions
   if (/weather|rain|temperature|climate/i.test(q)) {
-    return 'Weather impact on farming:\n\n🌡️ Temperature:\n- Too high: Heat stress, reduced yield\n- Too low: Frost damage\n- Monitor daily forecasts\n\n🌧️ Rainfall:\n- Critical during flowering\n- Excess: Disease spread\n- Deficit: Use irrigation\n\n💨 Wind:\n- Strong winds: Lodging in tall crops\n- Use windbreaks\n\n📱 Use weather apps and AgriSmart dashboard for forecasts!';
+    return 'Weather impact on farming:\n\n🌡️ Temperature:\n- Too high: Heat stress, reduced yield\n- Too low: Frost damage\n- Monitor daily forecasts\n\n🌧️ Rainfall:\n- Critical during flowering\n- Excess: Disease spread\n- Deficit: Use irrigation\n\n💨 Wind:\n- Strong winds: Lodging in tall crops\n- Use windbreaks\n\n📱 Use weather apps and உழவன் X dashboard for forecasts!';
   }
 
   // Dashboard-specific questions
@@ -311,7 +316,7 @@ function getLocalResponse(question: string, locale: string = 'en'): string {
     if (/ai|advisor|recommendation/i.test(q)) {
       return 'Using AI Crop Advisor:\n\n🤖 Features:\n- Crop-specific advice\n- Growth stage recommendations\n- Weather-based insights\n- Fertilizer schedules\n- Pest alerts\n\n📱 Access:\n1. Select your land\n2. Click "AI Crop Advisor"\n3. Auto-detects crop & stage\n4. Get personalized advice\n5. Download PDF reports';
     }
-    return 'AgriSmart Dashboard Features:\n\n🌾 Land Management:\n- Track multiple lands\n- Monitor crop stages\n- Weather integration\n\n👷 Worker Management:\n- Find skilled workers\n- Send job offers\n- View ratings\n\n🤖 AI Advisor:\n- Crop recommendations\n- Pest alerts\n- Fertilizer schedules\n\n🛒 Agro Shops:\n- Find nearby shops\n- Compare prices\n- Check availability\n\nAsk me about specific features!';
+    return 'உழவன் X Dashboard Features:\n\n🌾 Land Management:\n- Track multiple lands\n- Monitor crop stages\n- Weather integration\n\n👷 Worker Management:\n- Find skilled workers\n- Send job offers\n- View ratings\n\n🤖 AI Advisor:\n- Crop recommendations\n- Pest alerts\n- Fertilizer schedules\n\n🛒 Agro Shops:\n- Find nearby shops\n- Compare prices\n- Check availability\n\nAsk me about specific features!';
   }
 
   // Harvesting questions
@@ -331,5 +336,5 @@ function getLocalResponse(question: string, locale: string = 'en'): string {
     return 'मैं कृषि और डैशबोर्ड सुविधाओं के बारे में मदद कर सकता हूं! कृपया फसलों, उर्वरकों, कीटों, सिंचाई या डैशबोर्ड उपयोग के बारे में विशेष रूप से पूछें।';
   }
 
-  return '🌾 I\'m your AgriSmart AI Assistant!\n\nI can help with:\n✅ Crop-specific advice (Rice, Wheat, Cotton, etc.)\n✅ Fertilizer recommendations\n✅ Pest & disease management\n✅ Irrigation techniques\n✅ Soil health\n✅ Dashboard features\n\n💡 Ask me specific questions like:\n- "How to manage rice blast disease?"\n- "Fertilizer schedule for wheat?"\n- "How to use drip irrigation?"\n- "How to add land in dashboard?"';
+  return '🌾 I\'m your உழவன் X AI Assistant!\n\nI can help with:\n✅ Crop-specific advice (Rice, Wheat, Cotton, etc.)\n✅ Fertilizer recommendations\n✅ Pest & disease management\n✅ Irrigation techniques\n✅ Soil health\n✅ Dashboard features\n\n💡 Ask me specific questions like:\n- "How to manage rice blast disease?"\n- "Fertilizer schedule for wheat?"\n- "How to use drip irrigation?"\n- "How to add land in dashboard?"';
 }

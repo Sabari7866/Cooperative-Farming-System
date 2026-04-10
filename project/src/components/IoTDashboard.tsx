@@ -16,7 +16,11 @@ import Icon from './Icon';
 import SmartIrrigationControl from './SmartIrrigationControl';
 // import SmartCropDoctor from './SmartCropDoctor'; // Removed as per user request
 import SmartWaterManager from './SmartWaterManager';
+import { useFarmStore } from '../store/farmStore';
+import { io } from 'socket.io-client';
 import { useLands } from '../hooks/useApi';
+
+const socket = io("http://localhost:3000");
 
 interface SensorData {
     time: string;
@@ -26,12 +30,16 @@ interface SensorData {
     nitrogen: number;
     phosphorus: number;
     potassium: number;
+    phLevel?: number;
 }
 
 const IoTDashboard: React.FC = () => {
-    const { data: lands, loading: landsLoading } = useLands();
+    const currentUserId = localStorage.getItem("currentUserId") || undefined;
+    const { data: rawLands, loading: landsLoading } = useLands(currentUserId);
+    const lands = (rawLands || []).filter((l: any) => l.userId === currentUserId);
     const [selectedLandId, setSelectedLandId] = useState<string>('');
     const [data, setData] = useState<SensorData[]>([]);
+    const { setSensorData } = useFarmStore();
     const [currentReadings, setCurrentReadings] = useState<SensorData | null>(null);
     const [isLive, setIsLive] = useState(true);
 
@@ -79,36 +87,23 @@ const IoTDashboard: React.FC = () => {
         }
     }, []);
 
-    // Initialize with some historical data (keep existing logic)
-    useEffect(() => {
-        const initialData: SensorData[] = [];
-        const now = new Date();
-        // Use selectedLandId as seed for slight variation (mock)
-        const seed = selectedLandId ? selectedLandId.charCodeAt(0) : 0;
-
-        for (let i = 20; i >= 0; i--) {
-            const time = new Date(now.getTime() - i * 60000); // 1 minute intervals
-            initialData.push(generateRandomData(time, seed));
-        }
-        setData(initialData);
-        setCurrentReadings(initialData[initialData.length - 1]);
-    }, [selectedLandId]);
-
-    // Loop for Data Updates
+    // Loop for Data Updates via Socket
     useEffect(() => {
         if (!isLive) return;
 
-        const interval = setInterval(() => {
-            const now = new Date();
-            let newData: SensorData;
-            const seed = selectedLandId ? selectedLandId.charCodeAt(0) : 0;
-
+        socket.on('iotUpdate', (newData: SensorData) => {
             if (simulationMode === 'auto') {
-                newData = generateRandomData(now, seed);
+                setSensorData(newData);
+                setCurrentReadings(newData);
+                setData(prev => {
+                    const newHistory = [...prev, newData];
+                    if (newHistory.length > 30) newHistory.shift();
+                    return newHistory;
+                });
             } else {
-                // Manual Mode: Use the manual values but add slight jitter for realism
-                newData = {
-                    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                // Manual Mode override
+                const manualData = {
+                    time: newData.time,
                     temperature: Number((manualValues.temperature + Math.random() * 0.4 - 0.2).toFixed(1)),
                     humidity: Math.floor(manualValues.humidity + Math.random() * 2 - 1),
                     moisture: Math.floor(manualValues.moisture + Math.random() * 2 - 1),
@@ -116,35 +111,21 @@ const IoTDashboard: React.FC = () => {
                     phosphorus: manualValues.phosphorus,
                     potassium: manualValues.potassium,
                 };
+                setCurrentReadings(manualData);
+                setData(prev => {
+                    const newHistory = [...prev, manualData];
+                    if (newHistory.length > 30) newHistory.shift();
+                    return newHistory;
+                });
             }
+        });
 
-            setData(prev => {
-                const newHistory = [...prev, newData];
-                if (newHistory.length > 30) newHistory.shift();
-                return newHistory;
-            });
-            setCurrentReadings(newData);
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, [isLive, simulationMode, manualValues, selectedLandId]);
-
-    const generateRandomData = (date: Date, seed: number = 0): SensorData => {
-        // Simulate some realistic fluctuations
-        const baseTemp = 28 + (seed % 5);
-        const baseHum = 65 + (seed % 10 - 5);
-        const baseMoisture = 45 + (seed % 10 - 5);
-
-        return {
-            time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-            temperature: Number((baseTemp + Math.random() * 2 - 1).toFixed(1)),
-            humidity: Math.floor(baseHum + Math.random() * 5 - 2.5),
-            moisture: Math.floor(baseMoisture + Math.random() * 4 - 2),
-            nitrogen: Math.floor(140 + Math.random() * 10 - 5),
-            phosphorus: Math.floor(45 + Math.random() * 4 - 2),
-            potassium: Math.floor(180 + Math.random() * 15 - 7.5),
+        return () => {
+            socket.off('iotUpdate');
         };
-    };
+    }, [isLive, simulationMode, manualValues, setSensorData]);
+
+    // --- End Generate Random Data ---
 
     const getStatusColor = (value: number, type: 'moisture' | 'temp' | 'humidity') => {
         if (type === 'moisture') {

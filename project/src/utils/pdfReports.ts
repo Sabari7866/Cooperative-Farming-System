@@ -20,7 +20,7 @@ export const pdfReports = {
       // Header
       doc.setFontSize(20);
       doc.setTextColor(16, 185, 129); // green-600
-      doc.text('AgriSmart - Product Inventory Report', 20, 20);
+      doc.text('உழவன் X - Product Inventory Report', 20, 20);
 
       doc.setFontSize(10);
       doc.setTextColor(107, 114, 128); // gray-500
@@ -82,7 +82,7 @@ export const pdfReports = {
       // Header
       doc.setFontSize(20);
       doc.setTextColor(59, 130, 246); // blue-600
-      doc.text('AgriSmart - Job Postings Report', 20, 20);
+      doc.text('உழவன் X - Job Postings Report', 20, 20);
 
       doc.setFontSize(10);
       doc.setTextColor(107, 114, 128);
@@ -136,7 +136,7 @@ export const pdfReports = {
       // Header
       doc.setFontSize(20);
       doc.setTextColor(34, 197, 94); // green-500
-      doc.text('AgriSmart - Crop Schedule Report', 20, 20);
+      doc.text('உழவன் X - Crop Schedule Report', 20, 20);
 
       doc.setFontSize(10);
       doc.setTextColor(107, 114, 128);
@@ -194,7 +194,7 @@ export const pdfReports = {
       // Header
       doc.setFontSize(22);
       doc.setTextColor(16, 185, 129);
-      doc.text('AgriSmart - Complete Summary Report', 20, 20);
+      doc.text('உழவன் X - Complete Summary Report', 20, 20);
 
       doc.setFontSize(10);
       doc.setTextColor(107, 114, 128);
@@ -259,7 +259,7 @@ export const pdfReports = {
         margin: { left: 20, right: 20 },
       });
 
-      doc.save(`agrismart-summary-${Date.now()}.pdf`);
+      doc.save(`uzhavan-x-summary-${Date.now()}.pdf`);
       toast.success('Summary report generated!');
       return true;
     } catch (error) {

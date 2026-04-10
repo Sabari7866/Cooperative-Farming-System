@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Icon from './Icon';
 import WeatherWidget from './WeatherWidget';
 import CropPriceTracker from './CropPriceTracker';
-import ExpenseTracker from './ExpenseTracker';
+
 import InventoryManagement from './InventoryManagement';
 import ActivityTimeline from './ActivityTimeline';
 import DataBackup from './DataBackup';
@@ -16,7 +16,7 @@ export default function FeaturesDashboard() {
         { id: 'overview', label: 'Overview', icon: 'LayoutDashboard' },
         { id: 'weather', label: 'Weather', icon: 'Cloud' },
         { id: 'prices', label: 'Market Prices', icon: 'TrendingUp' },
-        { id: 'expenses', label: 'Expenses', icon: 'Wallet' },
+
         { id: 'inventory', label: 'Inventory', icon: 'Package' },
         { id: 'activity', label: 'Activity', icon: 'Activity' },
         { id: 'backup', label: 'Data Backup', icon: 'Database' },
@@ -104,13 +104,7 @@ export default function FeaturesDashboard() {
                                     <h3 className="text-lg font-bold text-gray-800 dark:text-white">Quick Actions</h3>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
-                                    <button
-                                        onClick={() => setActiveTab('expenses')}
-                                        className="p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-all text-left"
-                                    >
-                                        <Icon name="PlusCircle" className="w-5 h-5 text-green-600 mb-2" />
-                                        <div className="text-sm font-semibold text-gray-800 dark:text-white">Add Expense</div>
-                                    </button>
+
                                     <button
                                         onClick={() => setActiveTab('inventory')}
                                         className="p-3 bg-white dark:bg-gray-800 rounded-lg hover:shadow-md transition-all text-left"
@@ -172,7 +166,7 @@ export default function FeaturesDashboard() {
                 )}
 
                 {activeTab === 'prices' && <CropPriceTracker />}
-                {activeTab === 'expenses' && <ExpenseTracker />}
+
                 {activeTab === 'inventory' && <InventoryManagement />}
                 {activeTab === 'activity' && <ActivityTimeline />}
                 {activeTab === 'backup' && <DataBackup />}
@@ -196,12 +190,7 @@ export default function FeaturesDashboard() {
                                 description: 'Real-time crop price updates',
                                 color: 'green',
                             },
-                            {
-                                icon: 'Wallet',
-                                title: 'Expense Tracker',
-                                description: 'Track income and expenses',
-                                color: 'purple',
-                            },
+
                             {
                                 icon: 'Package',
                                 title: 'Inventory',

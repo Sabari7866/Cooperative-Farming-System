@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Icon from './Icon';
 import { useI18n } from '../utils/i18n';
-import { loginUser, saveSession, registerUser, loginUser as login, getSession } from '../utils/auth';
+import { loginUser, saveSession, registerUser, getSession } from '../utils/auth';
 import type { UserRole } from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
-import SupportModal from './SupportModal';
-import CropsShowcase from './CropsShowcase';
+
 
 export default function LoginModern() {
   const navigate = useNavigate();
-  const { locale, t, setLocale } = useI18n();
+  const { t, setLocale, locale } = useI18n();
   const [isNew, setIsNew] = useState(false);
   const [role, setRole] = useState<UserRole>('farmer');
   const [name, setName] = useState('');
@@ -28,16 +27,6 @@ export default function LoginModern() {
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
   const [isVideoTheme, setIsVideoTheme] = useState(false);
 
-  const localeOptions: Array<{
-    id: 'en' | 'hi' | 'ta';
-    label: string;
-    accent: string;
-    flag: string;
-  }> = [
-      { id: 'en', label: 'English', accent: 'from-emerald-500 to-green-600', flag: '🇬🇧' },
-      { id: 'hi', label: 'हिन्दी', accent: 'from-amber-500 to-orange-500', flag: '🇮🇳' },
-      { id: 'ta', label: 'தமிழ்', accent: 'from-purple-500 to-pink-500', flag: '🇮🇳' },
-    ];
 
   const heroVideoSrc = 'https://cdn.coverr.co/videos/coverr-farmer-with-tablet-4100/1080p.mp4';
 
@@ -187,65 +176,9 @@ export default function LoginModern() {
     }
   };
 
-  const navigateBasedOnRole = (userRole: UserRole, isNewUser: boolean = false) => {
-    // Get the latest session to ensure we have the most up-to-date data
-    const session = getSession();
-
-    switch (userRole) {
-      case 'farmer': {
-        // Only check profile completion for NEW farmer registrations
-        // Existing users logging in should go directly to dashboard
-        if (isNewUser) {
-          // Check if farmer profile is complete for new users only
-          if (
-            !session?.name ||
-            !session.farmAreaAcres ||
-            !session.farmLocation ||
-            !session.currentCrops?.length
-          ) {
-            navigate('/farmer-profile-setup');
-            return;
-          }
-        }
-        // Existing users or new users with complete profile go to dashboard
-        navigate('/farm-owner');
-        return;
-      }
-      case 'worker':
-        // New workers need to complete profile
-        if (isNewUser) {
-          navigate('/profile-completion');
-          return;
-        }
-        navigate('/farm-worker');
-        return;
-      case 'buyer':
-        // Buyers go directly to dashboard (like Amazon/Flipkart) and fill details later
-        navigate('/buyer');
-        return;
-      case 'renter':
-        // New renters need to complete profile
-        if (isNewUser) {
-          navigate('/profile-completion');
-          return;
-        }
-        navigate('/renter');
-        return;
-      default:
-        // Fallback to login if role is unknown
-        console.warn('Unknown role:', userRole);
-        navigate('/login');
-    }
-  };
-
   // Date & time for the top info row
   const [currentDate, setCurrentDate] = useState('');
   const [currentTime, setCurrentTime] = useState('');
-
-  // Parallax for background shapes
-  const { scrollYProgress } = useScroll();
-  const bgTranslateYSlow = useTransform(scrollYProgress, [0, 1], [0, 40]);
-  const bgTranslateYFast = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -268,6 +201,40 @@ export default function LoginModern() {
     const timer = setInterval(updateDateTime, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const navigateBasedOnRole = (userRole: UserRole, isNewUser: boolean = false) => {
+    const session = getSession();
+    switch (userRole) {
+      case 'farmer':
+        if (isNewUser) {
+          if (!session?.name || !session.farmAreaAcres || !session.farmLocation || !session.currentCrops?.length) {
+            navigate('/farmer-profile-setup');
+            return;
+          }
+        }
+        navigate('/farm-owner');
+        return;
+      case 'worker':
+        if (isNewUser) {
+          navigate('/profile-completion');
+          return;
+        }
+        navigate('/farm-worker');
+        return;
+      case 'buyer':
+        navigate('/buyer');
+        return;
+      case 'renter':
+        if (isNewUser) {
+          navigate('/profile-completion');
+          return;
+        }
+        navigate('/renter');
+        return;
+      default:
+        navigate('/login');
+    }
+  };
 
   return (
     <div className="relative w-screen min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-gray-900 dark:via-emerald-950 dark:to-gray-900 flex justify-center px-4 py-6 md:px-6 md:py-8 overflow-hidden">
@@ -385,7 +352,8 @@ export default function LoginModern() {
 
       {/* Content wrapper (full-width with max for 4K) */}
       <motion.div
-        className="relative z-10 w-full max-w-[1800px] mx-auto px-2 sm:px-4 md:px-6"
+        className="relative z-10 w-full max-w-[1800px] mx-auto px-2 sm:px-4 md:px-6 pb-12"
+        style={{ zoom: '0.8' }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
@@ -404,13 +372,13 @@ export default function LoginModern() {
               whileHover={{ scale: 1.05, rotate: 5 }}
             >
               <div className="relative z-10 w-full h-full p-1 rounded-xl overflow-hidden bg-white">
-                <img src="/logo.png" alt="Agri Elite" className="w-full h-full object-cover" />
+                <img src="/logo.png" alt="உழவன் X" className="w-full h-full object-cover" />
               </div>
             </motion.div>
             <div>
               <h1 className="text-3xl font-black tracking-tighter leading-none h-8 flex items-center">
-                <span className="text-slate-900">Agri</span>
-                <span className="text-emerald-600">Smart</span>
+                <span className="text-slate-900">உழவன்</span>
+                <span className="text-emerald-600"> X</span>
               </h1>
               <p className="text-[10px] text-emerald-600/60 font-black tracking-[0.1em] uppercase mt-1 italic">Innovation for inclusive agriculture v12.0</p>
             </div>
@@ -443,9 +411,10 @@ export default function LoginModern() {
               onClick={() => setIsVideoTheme((prev) => !prev)}
               className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50/80 px-3 py-1 text-[11px] font-medium text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 transition"
             >
-              <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
+              <div className={`h-2 w-2 rounded-full ${isVideoTheme ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
               {isVideoTheme ? t('video_theme_on') : t('video_theme_off')}
             </button>
+
           </div>
         </header>
 
@@ -519,6 +488,10 @@ export default function LoginModern() {
           </div>
         </section>
 
+
+        
+
+
         {/* MAIN BODY: Responsive Columns */}
         <main className="grid gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Left Column: Welcome Page - Enhanced with More Content */}
@@ -544,7 +517,7 @@ export default function LoginModern() {
               <div className="absolute top-0 right-0 p-4 opacity-5">
                 <Icon name="Crown" className="w-32 h-32" />
               </div>
-              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase mb-4 leading-none">Agri Elite <br /> <span className="text-emerald-600">Precision Protocol</span></h2>
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase mb-4 leading-none">உழவன் X <br /> <span className="text-emerald-600">Precision Protocol</span></h2>
               <p className="text-lg font-medium opacity-80">{t('welcome_page_body')}</p>
 
               <div className="space-y-4">
@@ -688,7 +661,7 @@ export default function LoginModern() {
                 {/* Back Face */}
                 <div className="absolute inset-0 h-full w-full rounded-xl bg-purple-600 text-white p-4 [transform:rotateY(180deg)] [backface-visibility:hidden] flex flex-col items-center justify-center text-center">
                   <h3 className="text-lg font-bold mb-1">Did You Know?</h3>
-                  <p className="text-xs text-purple-100">AgriSmart AI has helped save over 10,000 liters of water this season through smart irrigation alerts.</p>
+                  <p className="text-xs text-purple-100">உழவன் X AI has helped save over 10,000 liters of water this season through smart irrigation alerts.</p>
                 </div>
               </motion.div>
             </div>
@@ -696,7 +669,7 @@ export default function LoginModern() {
 
           {/* Middle Column: Login Form box - Enhanced with Glassmorphism */}
           <motion.section
-            className="flex flex-col relative"
+            className="flex flex-col gap-6"
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -705,448 +678,438 @@ export default function LoginModern() {
               ease: [0.22, 0.61, 0.36, 1],
             }}
           >
-            {/* Animated Rotating Gradient Border */}
-            <motion.div
-              aria-hidden="true"
-              className="pointer-events-none absolute -inset-[9px] rounded-9xl opacity-75"
-              animate={{
-                background: [
-                  'linear-gradient(0deg, rgba(16,185,129,0.8), rgba(20,184,166,0.8), rgba(96,165,250,0.8))',
-                  'linear-gradient(120deg, rgba(20,184,166,0.8), rgba(96,165,250,0.8), rgba(168,85,247,0.8))',
-                  'linear-gradient(240deg, rgba(96,165,250,0.8), rgba(168,85,247,0.8), rgba(16,185,129,0.8))',
-                  'linear-gradient(360deg, rgba(168,85,247,0.8), rgba(16,185,129,0.8), rgba(20,184,166,0.8))',
-                  'linear-gradient(360deg, rgba(40, 178, 169, 0.8), rgba(205, 17, 193, 0.8), rgba(118, 37, 218, 0.8))',
+            <div className="relative flex flex-col">
+              {/* Animated Rotating Gradient Border */}
+              <motion.div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-[9px] rounded-9xl opacity-75"
+                animate={{
+                  background: [
+                    'linear-gradient(0deg, rgba(16,185,129,0.8), rgba(20,184,166,0.8), rgba(96,165,250,0.8))',
+                    'linear-gradient(120deg, rgba(20,184,166,0.8), rgba(96,165,250,0.8), rgba(168,85,247,0.8))',
+                    'linear-gradient(240deg, rgba(96,165,250,0.8), rgba(168,85,247,0.8), rgba(16,185,129,0.8))',
+                    'linear-gradient(360deg, rgba(168,85,247,0.8), rgba(16,185,129,0.8), rgba(20,184,166,0.8))',
+                    'linear-gradient(360deg, rgba(40, 178, 169, 0.8), rgba(205, 17, 193, 0.8), rgba(118, 37, 218, 0.8))',
 
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              style={{ filter: 'blur(8px)' }}
-            />
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+                style={{ filter: 'blur(8px)' }}
+              />
 
-            {/* Glassmorphism Card */}
-            <motion.div
-              className="relative flex-1 rounded-2xl border border-white/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-2xl px-4 py-5 md:px-5 md:py-6"
-              whileHover={{
-                boxShadow: '0 25px 50px -12px rgba(16, 185, 129, 0.25)',
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Inner glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 pointer-events-none" />
+              {/* Glassmorphism Card */}
+              <motion.div
+                className="relative flex-1 rounded-2xl border border-white/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-2xl px-4 py-5 md:px-5 md:py-6"
+                whileHover={{
+                  boxShadow: '0 25px 50px -12px rgba(16, 185, 129, 0.25)',
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Inner glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 pointer-events-none" />
 
-              <div className="relative z-10">
-                <motion.h2
-                  className="text-base md:text-lg font-semibold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent mb-1"
-                  animate={{
-                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                  }}
-                  transition={{ duration: 5, repeat: Infinity }}
-                >
-                  {isNew ? t('create_account') : t('sign_in')}
-                </motion.h2>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mb-4">
-                  {isNew ? t('login_subtitle_new') : t('login_subtitle_existing')}
-                </p>
+                <div className="relative z-10">
+                  <motion.h2
+                    className="text-base md:text-lg font-semibold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent mb-1"
+                    animate={{
+                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{ duration: 5, repeat: Infinity }}
+                  >
+                    {isNew ? t('create_account') : t('sign_in')}
+                  </motion.h2>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mb-4">
+                    {isNew ? t('login_subtitle_new') : t('login_subtitle_existing')}
+                  </p>
 
-                {/* Toggle New User */}
-                <div className="mb-4">
-                  <label className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-700 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isNew}
-                      onChange={(e) => setIsNew(e.target.checked)}
-                      className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span>{t('new_user_create_account')}</span>
-                  </label>
-                </div>
-
-                {/* Role Selection (only when creating account) */}
-                {isNew && (
+                  {/* Toggle New User */}
                   <div className="mb-4">
-                    <label className="block text-xs md:text-sm font-medium text-slate-700 mb-2">
-                      {t('choose_role')}
+                    <label className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isNew}
+                        onChange={(e) => setIsNew(e.target.checked)}
+                        className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <span>{t('new_user_create_account')}</span>
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        { id: 'farmer', label: 'Farmer', icon: 'Sprout' },
-                        { id: 'worker', label: 'Worker', icon: 'Users' },
-                        { id: 'buyer', label: 'Buyer', icon: 'ShoppingCart' },
-                        { id: 'renter', label: 'Renter', icon: 'Wrench' },
-                      ].map((r) => (
-                        <button
-                          key={r.id}
-                          type="button"
-                          onClick={() => setRole(r.id as UserRole)}
-                          className={`flex items-center justify-center gap-1.5 rounded-lg border text-xs py-2 px-2 transition ${role === r.id
-                            ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
-                            : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300'
-                            }`}
-                        >
-                          <Icon
-                            name={r.icon}
-                            className={`h-4 w-4 ${role === r.id ? 'text-emerald-600' : 'text-slate-400'
-                              }`}
-                          />
-                          <span>{t(`role_${r.id}`)}</span>
-                        </button>
-                      ))}
-                    </div>
                   </div>
-                )}
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md text-xs md:text-sm flex items-center gap-2">
-                      <Icon name="AlertCircle" className="h-4 w-4 flex-shrink-0" />
-                      <span>{error}</span>
-                    </div>
-                  )}
-                  {success && (
-                    <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-2 rounded-md text-xs md:text-sm flex items-center gap-2">
-                      <Icon name="CheckCircle" className="h-4 w-4 flex-shrink-0" />
-                      <span>{success}</span>
-                    </div>
-                  )}
-
-                  <AnimatePresence mode="wait">
-                    {isNew && (
-                      <motion.div
-                        key="new-user-fields"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="mb-3">
-                          <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
-                            {t('full_name')}
-                          </label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                              <Icon name="User" className="h-4 w-4" />
-                            </span>
-                            <motion.input
-                              initial={{ x: -20, opacity: 0 }}
-                              animate={{ x: 0, opacity: 1 }}
-                              type="text"
-                              required
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                              placeholder={t('full_name')}
-                              className="w-full pl-12 pr-3 py-2.5 rounded-lg border border-slate-200 text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <motion.div layout>
-                    <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
-                      {t('email_or_phone')}
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                        <Icon name="Mail" className="h-4 w-4" />
-                      </span>
-                      <input
-                        type="text"
-                        required
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          if (emailError) setEmailError(null);
-                        }}
-                        onBlur={validateEmailField}
-                        placeholder={t('placeholder_email_phone')}
-                        className={`w-full pl-12 pr-3 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${emailError ? 'border-red-300 bg-red-50' : 'border-slate-200'
-                          }`}
-                      />
-                    </div>
-                    {emailError && (
-                      <motion.p
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        className="mt-1 text-xs text-red-600 flex items-center gap-1"
-                      >
-                        <Icon name="AlertCircle" className="h-3 w-3" />
-                        <span>{emailError}</span>
-                      </motion.p>
-                    )}
-                  </motion.div>
-
-                  <motion.div layout>
-                    <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
-                      {t('password_label')}
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                        <Icon name="Lock" className="h-4 w-4" />
-                      </span>
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        required
-                        value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          if (passwordError) setPasswordError(null);
-                        }}
-                        onBlur={validatePasswordField}
-                        placeholder={
-                          isNew ? t('create_a_strong_password') : t('enter_your_password')
-                        }
-                        className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${passwordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
-                          }`}
-                      />
-                      <motion.button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        whileTap={{ scale: 0.9, rotate: showPassword ? -90 : 90 }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
-                      >
-                        <Icon name={showPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
-                      </motion.button>
-                    </div>
-                    {passwordError && (
-                      <motion.p
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        className="mt-1 text-xs text-red-600 flex items-center gap-1"
-                      >
-                        <Icon name="AlertCircle" className="h-3 w-3" />
-                        <span>{passwordError}</span>
-                      </motion.p>
-                    )}
-
-                    <AnimatePresence>
-                      {isNew && password && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-2 text-xs"
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-slate-500">
-                              {t('password_strength_label')}
-                            </span>
-                            <span
-                              className={`font-medium ${getPasswordStrength(password) <= 2
-                                ? 'text-red-600'
-                                : getPasswordStrength(password) <= 3
-                                  ? 'text-amber-600'
-                                  : 'text-emerald-600'
+                  {/* Role Selection (only when creating account) */}
+                  {isNew && (
+                    <div className="mb-4">
+                      <label className="block text-xs md:text-sm font-medium text-slate-700 mb-2">
+                        {t('choose_role')}
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: 'farmer', label: 'Farmer', icon: 'Sprout' },
+                          { id: 'worker', label: 'Worker', icon: 'Users' },
+                          { id: 'buyer', label: 'Buyer', icon: 'ShoppingCart' },
+                          { id: 'renter', label: 'Renter', icon: 'Wrench' },
+                        ].map((r) => (
+                          <button
+                            key={r.id}
+                            type="button"
+                            onClick={() => setRole(r.id as UserRole)}
+                            className={`flex items-center justify-center gap-1.5 rounded-lg border text-xs py-2 px-2 transition ${role === r.id
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
+                              : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300'
+                              }`}
+                          >
+                            <Icon
+                              name={r.icon}
+                              className={`h-4 w-4 ${role === r.id ? 'text-emerald-600' : 'text-slate-400'
                                 }`}
-                            >
-                              {getPasswordStrength(password) <= 2
-                                ? t('password_strength_weak')
-                                : getPasswordStrength(password) <= 3
-                                  ? t('password_strength_medium')
-                                  : t('password_strength_strong')}
-                            </span>
-                          </div>
-                          <div className="w-full bg-slate-200 rounded-full h-1">
-                            <motion.div
-                              className={`h-1 rounded-full`}
-                              initial={{ width: 0 }}
-                              animate={{
-                                width: `${(getPasswordStrength(password) / 5) * 100}%`,
-                                backgroundColor: getPasswordStrength(password) <= 2
-                                  ? '#ef4444' // red-500
-                                  : getPasswordStrength(password) <= 3
-                                    ? '#f59e0b' // amber-500
-                                    : '#10b981' // emerald-500
-                              }}
-                              transition={{ duration: 0.3 }}
                             />
+                            <span>{t(`role_${r.id}`)}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    {error && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md text-xs md:text-sm flex items-center gap-2">
+                        <Icon name="AlertCircle" className="h-4 w-4 flex-shrink-0" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+                    {success && (
+                      <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-3 py-2 rounded-md text-xs md:text-sm flex items-center gap-2">
+                        <Icon name="CheckCircle" className="h-4 w-4 flex-shrink-0" />
+                        <span>{success}</span>
+                      </div>
+                    )}
+
+                    <AnimatePresence mode="wait">
+                      {isNew && (
+                        <motion.div
+                          key="new-user-fields"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="mb-3">
+                            <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
+                              {t('full_name')}
+                            </label>
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                                <Icon name="User" className="h-4 w-4" />
+                              </span>
+                              <motion.input
+                                initial={{ x: -20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                type="text"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder={t('full_name')}
+                                className="w-full pl-12 pr-3 py-2.5 rounded-lg border border-slate-200 text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                              />
+                            </div>
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
 
-                  <AnimatePresence>
-                    {isNew && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                      >
-                        <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1 mt-3">
-                          {t('confirm_password_label')}
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                            <Icon name="Lock" className="h-4 w-4" />
-                          </span>
-                          <input
-                            type={showConfirmPassword ? 'text' : 'password'}
-                            required
-                            value={confirmPassword}
-                            onChange={(e) => {
-                              setConfirmPassword(e.target.value);
-                              if (confirmPasswordError) setConfirmPasswordError(null);
-                            }}
-                            onBlur={validateConfirmPasswordField}
-                            placeholder={t('confirm_password_placeholder')}
-                            className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${confirmPasswordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
-                              }`}
-                          />
-                          <motion.button
-                            type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            whileTap={{ scale: 0.9, rotate: showConfirmPassword ? -90 : 90 }}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
-                          >
-                            <Icon name={showConfirmPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
-                          </motion.button>
-                        </div>
-                        {confirmPasswordError && (
-                          <motion.p
+                    <motion.div layout>
+                      <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
+                        {t('email_or_phone')}
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                          <Icon name="Mail" className="h-4 w-4" />
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (emailError) setEmailError(null);
+                          }}
+                          onBlur={validateEmailField}
+                          placeholder={t('placeholder_email_phone')}
+                          className={`w-full pl-12 pr-3 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${emailError ? 'border-red-300 bg-red-50' : 'border-slate-200'
+                            }`}
+                        />
+                      </div>
+                      {emailError && (
+                        <motion.p
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                        >
+                          <Icon name="AlertCircle" className="h-3 w-3" />
+                          <span>{emailError}</span>
+                        </motion.p>
+                      )}
+                    </motion.div>
+
+                    <motion.div layout>
+                      <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1">
+                        {t('password_label')}
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                          <Icon name="Lock" className="h-4 w-4" />
+                        </span>
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          required
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            if (passwordError) setPasswordError(null);
+                          }}
+                          onBlur={validatePasswordField}
+                          placeholder={
+                            isNew ? t('create_a_strong_password') : t('enter_your_password')
+                          }
+                          className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${passwordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
+                            }`}
+                        />
+                        <motion.button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          whileTap={{ scale: 0.9, rotate: showPassword ? -90 : 90 }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                        >
+                          <Icon name={showPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
+                        </motion.button>
+                      </div>
+                      {passwordError && (
+                        <motion.p
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                        >
+                          <Icon name="AlertCircle" className="h-3 w-3" />
+                          <span>{passwordError}</span>
+                        </motion.p>
+                      )}
+
+                      <AnimatePresence>
+                        {isNew && password && (
+                          <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
-                            className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-2 text-xs"
                           >
-                            <Icon name="AlertCircle" className="h-3 w-3" />
-                            <span>{confirmPasswordError}</span>
-                          </motion.p>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-slate-500">
+                                {t('password_strength_label')}
+                              </span>
+                              <span
+                                className={`font-medium ${getPasswordStrength(password) <= 2
+                                  ? 'text-red-600'
+                                  : getPasswordStrength(password) <= 3
+                                    ? 'text-amber-600'
+                                    : 'text-emerald-600'
+                                  }`}
+                              >
+                                {getPasswordStrength(password) <= 2
+                                  ? t('password_strength_weak')
+                                  : getPasswordStrength(password) <= 3
+                                    ? t('password_strength_medium')
+                                    : t('password_strength_strong')}
+                              </span>
+                            </div>
+                            <div className="w-full bg-slate-200 rounded-full h-1">
+                              <motion.div
+                                className={`h-1 rounded-full`}
+                                initial={{ width: 0 }}
+                                animate={{
+                                  width: `${(getPasswordStrength(password) / 5) * 100}%`,
+                                  backgroundColor: getPasswordStrength(password) <= 2
+                                    ? '#ef4444' // red-500
+                                    : getPasswordStrength(password) <= 3
+                                      ? '#f59e0b' // amber-500
+                                      : '#10b981' // emerald-500
+                                }}
+                                transition={{ duration: 0.3 }}
+                              />
+                            </div>
+                          </motion.div>
                         )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                      </AnimatePresence>
+                    </motion.div>
 
-                  <div className="flex items-center justify-between pt-1">
-                    <label className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-700 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={rememberMe}
-                        onChange={(e) => setRememberMe(e.target.checked)}
-                        className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                      />
-                      <span>{t('remember_me')}</span>
-                    </label>
-                    {!isNew && (
-                      <button
-                        type="button"
-                        onClick={() => setError(t('password_reset_flow_placeholder'))}
-                        className="text-xs md:text-sm text-emerald-700 hover:underline font-medium"
-                      >
-                        {t('forgot')}
-                      </button>
-                    )}
-                  </div>
-
-                  <motion.button
-                    type="submit"
-                    disabled={isLoading}
-                    whileTap={{ scale: 0.97 }}
-                    className="relative w-full mt-2 inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-emerald-600 to-green-700 text-white text-sm font-semibold py-2.5 shadow-md hover:from-emerald-700 hover:to-green-800 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition"
-                  >
-                    {/* simple ripple/wave effect */}
-                    <span className="pointer-events-none absolute inset-0 opacity-0 hover:opacity-20 bg-[radial-gradient(circle_at_center,_white,_transparent_55%)] transition-opacity duration-300" />
-                    {isLoading ? (
-                      <>
-                        <Icon name="Loader2" className="h-4 w-4 animate-spin" />
-                        <span>{t('please_wait')}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>{isNew ? t('create_account') : t('sign_in')}</span>
-                        <Icon name="ArrowRight" className="h-4 w-4" />
-                      </>
-                    )}
-                  </motion.button>
-
-                  {!isNew && (
-                    <div className="pt-3 border-t border-slate-200 mt-2">
-                      {/* ADS / PROMOTIONS SECTION */}
-                      <div className="mb-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg p-3 text-white shadow-lg transform hover:scale-105 transition-transform cursor-pointer">
-                        <div className="flex items-center gap-3">
-                          <span className="bg-white/20 p-2 rounded-full">
-                            <Icon name="Zap" className="w-5 h-5 text-yellow-300" />
-                          </span>
-                          <div>
-                            <p className="text-xs font-bold uppercase tracking-wide text-emerald-100">{t('promo_new_feature')}</p>
-                            <p className="font-bold text-sm">{t('promo_ai_doctor_live')}</p>
+                    <AnimatePresence>
+                      {isNew && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                        >
+                          <label className="block text-xs md:text-sm font-medium text-slate-700 mb-1 mt-3">
+                            {t('confirm_password_label')}
+                          </label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                              <Icon name="Lock" className="h-4 w-4" />
+                            </span>
+                            <input
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              required
+                              value={confirmPassword}
+                              onChange={(e) => {
+                                setConfirmPassword(e.target.value);
+                                if (confirmPasswordError) setConfirmPasswordError(null);
+                              }}
+                              onBlur={validateConfirmPasswordField}
+                              placeholder={t('confirm_password_placeholder')}
+                              className={`w-full pl-12 pr-10 py-2.5 rounded-lg border text-xs md:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${confirmPasswordError ? 'border-red-300 bg-red-50' : 'border-slate-200'
+                                }`}
+                            />
+                            <motion.button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              whileTap={{ scale: 0.9, rotate: showConfirmPassword ? -90 : 90 }}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                            >
+                              <Icon name={showConfirmPassword ? 'EyeOff' : 'Eye'} className="h-4 w-4" />
+                            </motion.button>
                           </div>
+                          {confirmPasswordError && (
+                            <motion.p
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                            >
+                              <Icon name="AlertCircle" className="h-3 w-3" />
+                              <span>{confirmPasswordError}</span>
+                            </motion.p>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <label className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-700 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                          className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span>{t('remember_me')}</span>
+                      </label>
+                      {!isNew && (
+                        <button
+                          type="button"
+                          onClick={() => setError(t('password_reset_flow_placeholder'))}
+                          className="text-xs md:text-sm text-emerald-700 hover:underline font-medium"
+                        >
+                          {t('forgot')}
+                        </button>
+                      )}
+                    </div>
+
+                    <motion.button
+                      type="submit"
+                      disabled={isLoading}
+                      whileTap={{ scale: 0.97 }}
+                      className="relative w-full mt-2 inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-emerald-600 to-green-700 text-white text-sm font-semibold py-2.5 shadow-md hover:from-emerald-700 hover:to-green-800 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition"
+                    >
+                      {/* simple ripple/wave effect */}
+                      <span className="pointer-events-none absolute inset-0 opacity-0 hover:opacity-20 bg-[radial-gradient(circle_at_center,_white,_transparent_55%)] transition-opacity duration-300" />
+                      {isLoading ? (
+                        <>
+                          <Icon name="Loader2" className="h-4 w-4 animate-spin" />
+                          <span>{t('please_wait')}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>{isNew ? t('create_account') : t('sign_in')}</span>
+                          <Icon name="ArrowRight" className="h-4 w-4" />
+                        </>
+                      )}
+                    </motion.button>
+
+                    <div className="mt-8 pt-6 border-t border-slate-200/50">
+                      <div className="flex flex-wrap justify-center gap-4 opacity-70">
+                        <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all cursor-default">
+                          <Icon name="ShieldCheck" className="w-4 h-4 text-emerald-600" />
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{t('secure_login')}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all cursor-default">
+                          <Icon name="Lock" className="w-4 h-4 text-emerald-600" />
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{t('encrypted_data')}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all cursor-default">
+                          <Icon name="Users" className="w-4 h-4 text-emerald-600" />
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{t('trusted_platform')}</span>
                         </div>
                       </div>
-
-                      <p className="text-[11px] text-slate-500 text-center mb-1 font-semibold">
-                        {t('quick_login_title')}
-                      </p>
-                      <p className="text-[11px] text-slate-400 text-center mb-2">
-                        {t('quick_login_subtitle')}
-                      </p>
-                      <div className="space-y-1.5 text-[11px]">
-                        <button
-                          type="button"
-                          className="w-full flex justify-between items-center px-3 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-slate-700 transition"
-                          onClick={() => {
-                            login('farmer@demo.com', 'password');
-                            navigate('/farm-owner');
-                          }}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Icon name="Sprout" className="h-3.5 w-3.5 text-emerald-600" />
-                            <span className="font-semibold">{t('quick_login_farmer')}</span>
-                          </span>
-                          <span>farmer@demo.com</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full flex justify_between items-center px-3 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-slate-700 transition"
-                          onClick={() => {
-                            login('worker@demo.com', 'password');
-                            navigate('/farm-worker');
-                          }}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Icon name="Users" className="h-3.5 w-3.5 text-blue-600" />
-                            <span className="font-semibold">{t('quick_login_worker')}</span>
-                          </span>
-                          <span>worker@demo.com</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full flex justify_between items-center px-3 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 border border-purple-200 text-slate-700 transition"
-                          onClick={() => {
-                            login('buyer@demo.com', 'password');
-                            navigate('/buyer');
-                          }}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Icon name="ShoppingCart" className="h-3.5 w-3.5 text-purple-600" />
-                            <span className="font-semibold">{t('quick_login_buyer')}</span>
-                          </span>
-                          <span>buyer@demo.com</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="w-full flex justify_between items-center px-3 py-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-slate-700 transition"
-                          onClick={() => {
-                            login('renter@demo.com', 'password');
-                            navigate('/renter');
-                          }}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Icon name="Wrench" className="h-3.5 w-3.5 text-amber-600" />
-                            <span className="font-semibold">{t('quick_login_renter')}</span>
-                          </span>
-                          <span>renter@demo.com</span>
-                        </button>
-                      </div>
                     </div>
-                  )}
-                </form>
+                  </form>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="mt-8 flex justify-center">
+              <p className="text-slate-500 dark:text-gray-400 font-medium tracking-wide">
+                Engineer to Farmer 🌾❤️
+              </p>
+            </div>
+
+            {/* Network Impact Section - Fills the left side blank space below the form */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="mt-6 md:mt-8 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl p-5 border border-white/50 dark:border-slate-800/80 shadow-md transform hover:scale-[1.02] transition-transform duration-300"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xs font-black text-slate-800 dark:text-gray-200 uppercase tracking-widest flex items-center gap-2">
+                  <Icon name="Activity" className="w-4 h-4 text-emerald-500" />
+                  Network Impact
+                </h3>
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col bg-emerald-50/50 dark:bg-emerald-900/20 p-3 rounded-xl border border-emerald-100/50 dark:border-emerald-800/30">
+                  <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">1200+</span>
+                  <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest mt-0.5">Active Farmers</span>
+                </div>
+                <div className="flex flex-col bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-xl border border-blue-100/50 dark:border-blue-800/30">
+                  <span className="text-2xl font-black text-blue-600 dark:text-blue-400">5000+</span>
+                  <span className="text-[9px] uppercase font-bold text-slate-500 tracking-widest mt-0.5">Acres Managed</span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center gap-3">
+                <div className="flex -space-x-2 shrink-0">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-100 to-green-200 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                      <Icon name="User" className="w-4 h-4 text-emerald-700" />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-tight">
+                  <span className="font-bold text-slate-800 dark:text-slate-200">24+</span> new users joined today.<br />
+                  Join our growing network!
+                </p>
               </div>
             </motion.div>
+
+            <AnimatePresence>
+            </AnimatePresence>
           </motion.section >
 
           {/* Right Column: Welcome to the future of farming - Enhanced */}
@@ -1303,9 +1266,64 @@ export default function LoginModern() {
                 </div>
               </div>
             </motion.div>
+
+            {/* MARKET TRENDS / LIVE UPDATES SECTION - Fills the right side blank space */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-xl"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  {t('live_market_trends')}
+                </h3>
+                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase">
+                  {t('trending_now')}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase">{t('crop_wheat')}</span>
+                    <Icon name="TrendingUp" className="w-3 h-3 text-emerald-500" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-bold text-slate-800 dark:text-white">₹2,450</span>
+                    <span className="text-[10px] font-bold text-emerald-500">+2.4%</span>
+                  </div>
+                </div>
+                <div className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl border border-blue-100 dark:border-blue-900/30">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-semibold text-slate-500 uppercase">{t('crop_rice')}</span>
+                    <Icon name="TrendingUp" className="w-3 h-3 text-emerald-500" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-lg font-bold text-slate-800 dark:text-white">₹3,800</span>
+                    <span className="text-[10px] font-bold text-emerald-500">+1.8%</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center justify-between p-2 bg-emerald-500/10 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <div className="p-1 bg-emerald-600/20 rounded-md">
+                    <Icon name="Zap" className="w-3 h-3 text-emerald-600" />
+                  </div>
+                  <span className="text-[11px] font-medium text-emerald-800 dark:text-emerald-200">
+                    {t('ai_insight_harvest_alert')}
+                  </span>
+                </div>
+                <Icon name="ChevronRight" className="w-4 h-4 text-emerald-600" />
+              </div>
+            </motion.div>
           </motion.section >
-        </main >
-      </motion.div >
-    </div >
+
+        </main>
+
+
+      </motion.div>
+    </div>
   );
 }

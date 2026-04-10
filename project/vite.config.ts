@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'AgriSmart - Farming Assistance Platform',
-        short_name: 'AgriSmart',
+        name: 'உழவன் X - Farming Assistance Platform',
+        short_name: 'உழவன் X',
         description:
           'Smart farming assistance platform for crop management, marketplace, and job posting',
         theme_color: '#10b981',
@@ -95,7 +95,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/api'),

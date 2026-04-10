@@ -7,7 +7,7 @@ type Props = {
   onSuggestForRole?: (role: string) => void;
 };
 
-export default function AIHelper({ onSuggestRole, onFillDemo }: Props) {
+export default function AIHelper({ onSuggestRole }: Omit<Props, 'onFillDemo'>) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -34,17 +34,8 @@ export default function AIHelper({ onSuggestRole, onFillDemo }: Props) {
               >
                 Suggest role for me
               </button>
-              <button
-                onClick={() => {
-                  onFillDemo();
-                  setOpen(false);
-                }}
-                className="w-full text-left px-2 py-1 rounded hover:bg-gray-50"
-              >
-                Fill demo data
-              </button>
               <div className="text-xs text-gray-400">
-                Tip: the assistant can pre-fill the form or recommend a role.
+                Tip: the assistant can recommend a role based on your input.
               </div>
             </div>
           </div>

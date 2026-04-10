@@ -34,7 +34,7 @@ export const dataImportExport = {
 
       const link = document.createElement('a');
       link.href = url;
-      link.download = `agrismart-backup-${Date.now()}.json`;
+      link.download = `uzhavan-x-backup-${Date.now()}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

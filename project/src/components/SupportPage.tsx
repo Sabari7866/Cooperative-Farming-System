@@ -6,18 +6,17 @@ import {
   MessageCircle,
   Phone,
   MapPin,
-  CheckCircle,
-  Copy,
   LayoutDashboard,
   Crown,
   Zap,
-  MapPin as MapPinIcon,
   Users,
   Settings,
   HelpCircle,
   ShieldCheck,
   Globe,
   Fingerprint,
+  Copy,
+  CheckCircle,
   X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +28,7 @@ const Icon = ({ name, className }: { name: string; className?: string }) => {
     Home: LayoutDashboard,
     Crown: Crown,
     Zap: Zap,
-    MapPin: MapPinIcon,
+    MapPin: MapPin,
     Users: Users,
     Settings: Settings,
     HelpCircle: HelpCircle,
@@ -37,7 +36,10 @@ const Icon = ({ name, className }: { name: string; className?: string }) => {
     Send: Send,
     Phone: Phone,
     Globe: Globe,
-    ShieldCheck: ShieldCheck
+    ShieldCheck: ShieldCheck,
+    Copy: Copy,
+    CheckCircle: CheckCircle,
+    X: X
   };
 
   const LucideIcon = icons[name] || MessageCircle;
@@ -60,7 +62,7 @@ export default function SupportPage() {
 
     try {
       const emailBody = `
-New Support Request from Agri Elite Platform
+New Support Request from உழவன் X Platform
 ============================================
 
 From: ${formData.name}
@@ -71,7 +73,7 @@ Message:
 ${formData.message}
 
 ---
-Sent via Agri Elite Neural Relay
+Sent via உழவன் X Neural Relay
 Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
             `.trim();
 
@@ -142,7 +144,7 @@ ${formData.message}
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-50">
       <AnimatePresence>
-        {/* Agri Elite Sidebar */}
+        {/* உழவன் X Sidebar */}
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -162,8 +164,8 @@ ${formData.message}
                 </div>
                 <div>
                   <h1 className="text-3xl font-black tracking-tighter leading-none">
-                    <span className="text-slate-900">Agri</span>
-                    <span className="text-emerald-600">Smart</span>
+                    <span className="text-slate-900">உழவன்</span>
+                    <span className="text-emerald-600"> X</span>
                   </h1>
                   <p className="text-[10px] text-emerald-600/60 font-black tracking-[0.1em] uppercase mt-2 italic">Cultivating Innovation, Feeding the Future</p>
                 </div>
@@ -221,7 +223,7 @@ ${formData.message}
         className="flex-1 overflow-y-auto custom-scrollbar relative px-10 py-12"
       >
         <div className="max-w-6xl mx-auto">
-          {/* Elite Support Header */}
+          {/* உழவன் X Support Header */}
           <div className="flex items-center justify-between mb-12">
             <button
               onClick={() => navigate('/login')}
@@ -241,7 +243,7 @@ ${formData.message}
               <Icon name="HelpCircle" className="w-12 h-12 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">AgriSmart Support Hub</h1>
+              <h1 className="text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none mb-4">உழவன் X Support Hub</h1>
               <p className="text-emerald-600/60 font-black tracking-[0.2em] uppercase text-xs italic">"Agriculture is the most healthful, most useful and most noble employment of man."</p>
             </div>
           </div>

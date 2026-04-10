@@ -280,8 +280,8 @@ const CropsShowcase: React.FC = () => {
                         setIsAutoPlay(false);
                       }}
                       className={`h-2 rounded-full transition-all ${index === currentIndex
-                          ? 'w-8 bg-green-600'
-                          : 'w-2 bg-green-300 hover:bg-green-400'
+                        ? 'w-8 bg-green-600'
+                        : 'w-2 bg-green-300 hover:bg-green-400'
                         }`}
                     />
                   ))}
@@ -311,7 +311,7 @@ const CropsShowcase: React.FC = () => {
           </div>
           <div className="flex items-center space-x-2 text-green-700">
             <Icon name="TrendingUp" className="h-4 w-4" />
-            <span className="font-medium">Smart farming with AgriSmart</span>
+            <span className="font-medium">Smart farming with உழவன் X</span>
           </div>
         </div>
       </div>

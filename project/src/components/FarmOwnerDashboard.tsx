@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -16,11 +16,13 @@ import ErrorMessage from './ErrorMessage';
 import ResourceSharing from './ResourceSharing';
 import { api } from '../utils/api';
 import Icon from './Icon';
-import { logoutAndRedirect } from '../utils/auth';
+import { logoutAndRedirect, getSession } from '../utils/auth';
 import FloatingChatbot from './FloatingChatbot';
 import Marketplace from './Marketplace';
 import SmartCropDoctor from './SmartCropDoctor';
 import AICropAdvisor from './AICropAdvisor';
+
+import AgriConnect from './AgriConnect';
 import { useI18n } from '../utils/i18n';
 import LanguageSelector from './LanguageSelector';
 
@@ -34,6 +36,8 @@ interface DashboardContentProps {
   cropAdvice: any; // Ideally this should be a specific type too
   analytics: any; // Ideally specific type
   loading: boolean;
+  lands: any[];
+  jobs?: any[];
 }
 
 interface LandContentProps {
@@ -41,9 +45,14 @@ interface LandContentProps {
   handleLandFormChange: (field: string, value: any) => void;
   myLands: any[];
   onAddLand: () => void;
+  onEditLand: (land: any) => void;
+  onDeleteLand: (id: string) => void;
+  onSearchCoordinates: (locationName: string) => void;
   loading: boolean;
   error: string | null;
   onPostJobFromLand: (land: any) => void;
+  onFindWorkersFromLand: (landId: string) => void;
+  onManageSequence: (land: any) => void;
 }
 
 interface JobsContentProps {
@@ -54,6 +63,7 @@ interface JobsContentProps {
   loading: boolean;
   error: string | null;
   onViewApplications: (jobId: string) => void;
+  lands: any[];
 }
 
 const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
@@ -70,8 +80,8 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
             </div>
             <div>
               <h1 className="text-3xl font-black tracking-tighter leading-none">
-                <span className="text-slate-900">Agri</span>
-                <span className="text-emerald-600">Smart</span>
+                <span className="text-slate-900">உழவன்</span>
+                <span className="text-emerald-600"> X</span>
               </h1>
               <p className="text-[10px] text-emerald-600/60 font-black tracking-[0.1em] uppercase mt-2 italic">Cultivating trust, harvesting intelligence</p>
             </div>
@@ -85,13 +95,13 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
             { id: 'dashboard', icon: 'Home', label: t('nav_dashboard') },
             { id: 'land', icon: 'MapPin', label: t('nav_my_land') },
             { id: 'jobs', icon: 'Users', label: t('nav_posted_jobs') },
-            { id: 'doctor', icon: 'Crown', label: 'AGRI DOCTOR', badge: 'v12.0', badgeColor: 'bg-amber-500' },
-            { id: 'agri_intelligence', icon: 'Zap', label: 'AGRI INTELLIGENCE', badge: 'AI', badgeColor: 'bg-emerald-500' },
+            { id: 'doctor', icon: 'Crown', label: 'உழவன் X DOCTOR', badge: 'v12.0', badgeColor: 'bg-amber-500' },
+            { id: 'agri_intelligence', icon: 'Zap', label: 'உழவன் INTELLIGENCE', badge: 'AI', badgeColor: 'bg-emerald-500' },
             { id: 'workers', icon: 'Phone', label: t('nav_find_workers') },
             { id: 'resources', icon: 'Wrench', label: t('nav_resource_sharing') },
             { id: 'marketplace', icon: 'ShoppingCart', label: t('nav_marketplace') },
-            { id: 'agroshops', icon: 'Store', label: 'Agri Shops' },
-            { id: 'farmer_connection', icon: 'Activity', label: 'Agri Network' },
+            { id: 'agroshops', icon: 'Store', label: 'உழவன் Shops' },
+            { id: 'agriconnect', icon: 'MessageCircle', label: 'உழவன் Connect Forum', badge: 'FORUM', badgeColor: 'bg-blue-500' },
           ].map((item) => (
             <li key={item.id}>
               <button
@@ -148,54 +158,147 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   );
 };
 
-const DashboardContent = ({ setActiveTab, cropAdvice, analytics }: DashboardContentProps) => {
+const LiveClock = () => {
+  const [time, setTime] = React.useState(new Date());
+  React.useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return (
+    <div className="flex flex-col items-end">
+      <span className="text-[11px] font-black text-emerald-300 tracking-widest font-mono">
+        {pad(time.getHours())}:{pad(time.getMinutes())}:{pad(time.getSeconds())}
+      </span>
+      <span className="text-[8px] text-slate-500 uppercase tracking-widest font-bold">
+        {time.toLocaleDateString('en-IN', { weekday: 'short', day: '2-digit', month: 'short' })}
+      </span>
+    </div>
+  );
+};
+
+const DashboardContent = ({ setActiveTab, cropAdvice, analytics, lands, jobs }: DashboardContentProps) => {
   const { t } = useI18n();
+
+  const userLands = lands || [];
+  const userJobs = jobs || [];
+
+  const totalLand = userLands.reduce(
+    (sum: number, land: any) => sum + (Number(land.acreage) || Number(land.acres) || 0),
+    0
+  );
+  const totalAcres = totalLand.toFixed(1);
+
+  const activeJobsCount = userJobs.filter((j: any) => j.status === 'active').length.toString() || '0';
+
+  const mainLand = userLands.length > 0 ? userLands[0] : null;
+  const mainCrop = mainLand?.crop?.toLowerCase() || 'rice';
+  const mainLandName = mainLand?.location || t('rice_fields_north_plot');
+  const irrigationAdvice = cropAdvice[mainCrop as keyof typeof cropAdvice]?.irrigation || cropAdvice.rice.irrigation;
+
   return (
     <div className="space-y-10 animate-fadeIn">
-      {/* Elite Welcome Section */}
-      <div className="relative group rounded-[3.5rem] overflow-hidden shadow-premium transition-all hover:shadow-emerald-100/50">
-        <div className="absolute inset-0 bg-slate-900 border-b-[8px] border-emerald-500/20 group-hover:bg-black transition-colors duration-1000"></div>
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-600/10 rounded-full blur-[140px] -mr-64 -mt-64 pointer-events-none group-hover:opacity-100 opacity-60 transition-opacity"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-400/5 rounded-full blur-[100px] -ml-40 -mb-40 pointer-events-none"></div>
+      {/* Compact Innovative Welcome Section */}
+      <div className="relative group rounded-3xl overflow-hidden shadow-xl transition-all hover:shadow-emerald-200/30" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #0d1f12 50%, #0f172a 100%)' }}>
+        {/* Animated floating particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[
+            { w: 3, h: 3, top: '15%', left: '8%', delay: '0s', dur: '3s' },
+            { w: 2, h: 2, top: '60%', left: '15%', delay: '1s', dur: '4s' },
+            { w: 4, h: 4, top: '30%', left: '85%', delay: '0.5s', dur: '5s' },
+            { w: 2, h: 2, top: '75%', left: '75%', delay: '2s', dur: '3.5s' },
+            { w: 3, h: 3, top: '45%', left: '50%', delay: '1.5s', dur: '4.5s' },
+          ].map((p, i) => (
+            <div key={i} className="absolute rounded-full bg-emerald-400/30" style={{ width: `${p.w * 4}px`, height: `${p.h * 4}px`, top: p.top, left: p.left, animation: `pulse ${p.dur} ${p.delay} infinite` }} />
+          ))}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/8 rounded-full blur-[80px] -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/6 rounded-full blur-[60px] -ml-16 -mb-16" />
+        </div>
 
-        <div className="relative p-14 flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="flex-1">
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-emerald-600/20 backdrop-blur-3xl text-xs font-black text-emerald-300 mb-10 border border-emerald-500/20 shadow-glow uppercase tracking-[0.4em]">
-              <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_15px_#10b981]"></span>
-              🌾 AgriSmart – Cultivating the Future
-            </motion.div>
-            <h2 className="text-6xl md:text-[8rem] font-black text-white mb-8 tracking-tighter leading-[0.85] drop-shadow-2xl">
-              Welcome to <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400">AgriSmart.</span>
-            </h2>
-            <p className="text-emerald-50/60 text-3xl max-w-2xl font-medium leading-tight tracking-tight mt-6">
-              🌱 <span className="text-white font-black underline decoration-emerald-500 decoration-[6px] underline-offset-[12px]">Connecting Farmers,</span> Cultivating the Future 🚜📱
-            </p>
+        {/* Top accent bar */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
+
+        <div className="relative px-8 py-6 flex items-center justify-between gap-6">
+          {/* Left: branding + tagline */}
+          <div className="flex items-center gap-5 flex-1 min-w-0">
+            {/* Animated icon badge */}
+            <div className="shrink-0 w-14 h-14 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
+              <Icon name="Crown" className="h-7 w-7 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+            </div>
+
+            <div className="min-w-0">
+              {/* Live badge */}
+              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/20 text-[9px] font-black text-emerald-300 uppercase tracking-[0.35em] mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#10b981]" />
+                🌾 உழவன் X · Live
+              </motion.div>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tighter"
+              >
+                Welcome to{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400">உழவன் X.</span>
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-emerald-100/50 text-xs font-medium mt-1 tracking-wide"
+              >
+                🌱 <span className="text-emerald-300/70 font-semibold">Connecting Farmers,</span> Cultivating the Future
+              </motion.p>
+            </div>
           </div>
-          <div className="shrink-0 flex items-center justify-center">
-            <div className="w-40 h-40 bg-white/5 backdrop-blur-3xl rounded-[3rem] p-8 border border-white/10 shadow-premium flex items-center justify-center transform rotate-6 hover:rotate-0 transition-all duration-700 hover:scale-105 group-hover:border-emerald-500/30">
-              <Icon name="Crown" className="h-20 w-20 text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
+
+          {/* Center: quick stats pills */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            {[
+              { icon: 'MapPin', label: 'Acres', val: totalAcres, color: 'emerald' },
+              { icon: 'Users', label: 'Jobs', val: activeJobsCount.padStart(2, '0'), color: 'blue' },
+              { icon: 'Activity', label: 'Health', val: analytics?.healthScore || '94%', color: 'teal' },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + i * 0.08 }}
+                className="flex flex-col items-center gap-1 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:border-emerald-500/30 transition-all group/stat cursor-default"
+              >
+                <span className="text-lg font-black text-white group-hover/stat:text-emerald-300 transition-colors">{s.val}</span>
+                <span className="text-[9px] text-slate-400 uppercase tracking-widest font-bold">{s.label}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Right: live clock + tamil motto */}
+          <div className="shrink-0 flex flex-col items-end gap-2">
+            <LiveClock />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 border border-white/5">
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="w-5 h-5 rounded-full bg-emerald-800 border-2 border-slate-900 flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  </div>
+                ))}
+              </div>
+              <span className="text-[8px] font-black text-emerald-400/70 uppercase tracking-[0.3em]">உழவே உயிர்</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-black/40 backdrop-blur-md px-14 py-6 flex items-center gap-8 border-t border-white/5">
-          <div className="flex -space-x-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="w-10 h-10 rounded-full bg-emerald-900 border-4 border-slate-900 shadow-2xl flex items-center justify-center">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-            ))}
-          </div>
-          <span className="text-[10px] font-black text-emerald-400/80 uppercase tracking-[0.5em] leading-none">🌾 உழவே உயிர் · Farming is Life · AgriSmart Live</span>
-        </div>
+        {/* Bottom gradient line */}
+        <div className="h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
       </div>
 
       {/* Stats Cards - Interactive Premium Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {[
-          { label: t('card_total_land'), val: analytics?.totalLands || '8.2', unit: t('unit_acres'), icon: 'MapPin', color: 'emerald', trend: '+12%' },
-          { label: t('card_active_jobs'), val: analytics?.activeJobs || '03', unit: t('label_active_positions'), icon: 'Users', color: 'blue', trend: 'ACTIVE' },
+          { label: t('card_total_land'), val: totalAcres, unit: t('unit_acres'), icon: 'MapPin', color: 'emerald', trend: 'TOTAL' },
+          { label: t('card_active_jobs'), val: activeJobsCount.padStart(2, '0'), unit: t('label_active_positions'), icon: 'Users', color: 'blue', trend: 'ACTIVE' },
           { label: t('card_available_workers'), val: analytics?.availableWorkers || '15', unit: t('card_within_km'), icon: 'Phone', color: 'amber', trend: 'NEAR' },
           { label: 'Health Index', val: analytics?.healthScore || '94.8%', unit: 'AGGREGATE SCORE', icon: 'Activity', color: 'teal', trend: 'OPTIMAL' },
         ].map((stat, i) => (
@@ -214,6 +317,152 @@ const DashboardContent = ({ setActiveTab, cropAdvice, analytics }: DashboardCont
             <p className="text-[10px] text-slate-400 font-bold uppercase">{stat.unit}</p>
           </div>
         ))}
+      </div>
+
+      {/* Land Utilization Sequence (New Innovation) */}
+      <div className="bg-white rounded-[2.5rem] p-10 shadow-premium border border-emerald-50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-[0.03] rotate-12">
+          <Icon name="Map" className="w-64 h-64 text-emerald-900" />
+        </div>
+
+        <div className="relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+            <div>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Land Utilization Sequence</h3>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Spatial breakdown of your segmented cultivation</p>
+            </div>
+            <button
+              onClick={() => setActiveTab('land')}
+              className="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 flex items-center gap-2 self-start md:self-auto"
+            >
+              <Icon name="Plus" className="w-4 h-4" />
+              Manage Land
+            </button>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Visual Sequence Bar */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="flex h-12 rounded-2xl overflow-hidden bg-slate-100 shadow-inner group-hover:shadow-emerald-100 transition-all duration-500">
+                  {userLands.length > 0 ? (
+                    (() => {
+                      const allParts = userLands.flatMap(land => (land.parts || []).map((p: any) => ({ ...p, landName: land.location })));
+                      if (allParts.length === 0) {
+                        return (
+                          <div className="w-full flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest gap-2">
+                             <Icon name="Info" className="w-3 h-3" />
+                             No sequence data defined. Click "Manage Land" to start.
+                          </div>
+                        );
+                      }
+                      const totalAreaAcrossLands = userLands.reduce((acc, l) => acc + (Number(l.acreage) || 0), 0) || 1;
+                      
+                      return allParts.map((part: any, idx) => {
+                        const width = ((Number(part.area) || 0) / totalAreaAcrossLands) * 100;
+                        const colors = ['bg-emerald-500', 'bg-teal-500', 'bg-green-500', 'bg-lime-500', 'bg-emerald-400'];
+                        return (
+                          <div
+                            key={idx}
+                            style={{ width: `${Math.max(width, 5)}%` }}
+                            className={`${colors[idx % colors.length]} h-full border-r border-white/20 relative group cursor-pointer transition-all hover:brightness-110 flex items-center justify-center`}
+                            title={`${part.crop} (${part.area} Acres) in ${part.landName}`}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
+                            <span className="text-[8px] font-black text-white uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity truncate px-1">
+                              {part.crop}
+                            </span>
+                          </div>
+                        );
+                      });
+                    })()
+                  ) : (
+                    <div className="w-full flex items-center justify-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                       Waiting for land data...
+                    </div>
+                  )}
+                </div>
+
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {(() => {
+                  const allParts = userLands.flatMap(land => (land.parts || []).map((p: any) => ({ ...p, landName: land.location })));
+                  if (allParts.length === 0) {
+                    return (
+                      <div className="col-span-full py-10 bg-emerald-50/30 rounded-[2rem] border border-dashed border-emerald-100 flex flex-col items-center text-center px-6">
+                        <Icon name="Info" className="w-8 h-8 text-emerald-300 mb-3" />
+                        <p className="text-xs font-black text-emerald-800 uppercase tracking-widest mb-2">Detailed Segmentation Required</p>
+                        <p className="text-[10px] text-emerald-600/60 font-medium leading-relaxed max-w-xs uppercase">
+                          Divide your plots into specific crop segments to unlock advanced analytics and optimized harvest scheduling.
+                        </p>
+                      </div>
+                    );
+                  }
+                  
+                  return allParts.slice(0, 3).map((part: any, idx) => (
+                    <div key={idx} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-emerald-50 transition-all group overflow-hidden relative">
+                      <div className="absolute top-0 right-0 w-12 h-12 bg-emerald-50/50 rounded-bl-[2rem] flex items-center justify-center">
+                        <span className="text-emerald-500 font-black text-xs">#{idx + 1}</span>
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        <div className="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-emerald-100 shadow-lg">
+                          <Icon name="Leaf" className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{part.landName || 'Main Field'}</p>
+                          <h4 className="text-base font-black text-slate-900 tracking-tighter uppercase truncate">{part.crop}</h4>
+                        </div>
+                        <div className="flex items-center justify-between border-t border-slate-50 pt-3 mt-1">
+                          <div className="flex flex-col text-left">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Region</span>
+                            <span className="text-[10px] font-bold text-emerald-600">{part.area} Acres</span>
+                          </div>
+                          <div className="flex flex-col text-right">
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</span>
+                            <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full capitalize">{part.stage}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </div>
+
+            {/* Sequence Stats */}
+            <div className="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden">
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mb-16" />
+              <h4 className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-6">Sequence Metrics</h4>
+
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between items-end mb-2">
+                    <span className="text-[10px] font-black uppercase text-slate-400">Total Segments</span>
+                    <span className="text-2xl font-black">{userLands.reduce((acc: number, l: any) => acc + (l.parts?.length || 0), 0)}</span>
+                  </div>
+                  <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '65%' }} />
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-white/5">
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Dominant Sequence Varieties</p>
+                  <div className="space-y-4">
+                    {Array.from(new Set(userLands.flatMap(l => (l.parts || []).map((p: any) => p.crop)))).slice(0, 3).map((crop, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          <span className="text-[10px] font-black uppercase tracking-tight">{crop}</span>
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-500">
+                          {userLands.reduce((acc: number, l: any) => acc + (l.parts?.filter((p: any) => p.crop === crop).reduce((sa: number, sp: any) => sa + (Number(sp.area) || 0), 0) || 0), 0).toFixed(1)} Ac
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
@@ -283,9 +532,9 @@ const DashboardContent = ({ setActiveTab, cropAdvice, analytics }: DashboardCont
             </span>
           </div>
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
-            <p className="text-blue-900 font-semibold mb-2">{t('rice_fields_north_plot')}</p>
+            <p className="text-blue-900 font-semibold mb-2">{mainLandName}</p>
             <p className="text-blue-700 text-sm leading-relaxed mb-4">
-              {cropAdvice.rice.irrigation}
+              {irrigationAdvice}
             </p>
             <button className="text-blue-700 text-sm font-semibold hover:text-blue-900 flex items-center space-x-1 group">
               <span>{t('view_full_schedule')}</span>
@@ -339,8 +588,8 @@ const DashboardContent = ({ setActiveTab, cropAdvice, analytics }: DashboardCont
               </div>
             </div>
             <div className="flex-1">
-              <p className="font-medium text-gray-900">{t('activity_rice_harvested')}</p>
-              <p className="text-sm text-gray-500">North plot completed successfully</p>
+              <p className="font-medium text-gray-900 capitalize">{mainCrop} Activity Updated</p>
+              <p className="text-sm text-gray-500">{mainLandName} completed successfully</p>
             </div>
             <span className="text-sm text-green-600 font-medium">{t('activity_2_hours_ago')}</span>
           </div>
@@ -381,9 +630,14 @@ const LandContent = ({
   handleLandFormChange,
   myLands,
   onAddLand,
+  onEditLand,
+  onDeleteLand,
+  onSearchCoordinates,
   loading,
   error,
   onPostJobFromLand,
+  onFindWorkersFromLand,
+  onManageSequence,
 }: LandContentProps) => {
   const { t } = useI18n();
   return (
@@ -400,7 +654,7 @@ const LandContent = ({
       {error && <ErrorMessage message={error} />}
 
       <div className="grid md:grid-cols-2 gap-6">
-        {myLands.map((land) => (
+        {myLands.map((land: Land) => (
           <div key={land.id} className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -428,6 +682,26 @@ const LandContent = ({
               </span>
             </div>
 
+            {land.parts && land.parts.length > 0 && (
+              <div className="mb-4 bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+                  <Icon name="Layers" className="h-3 w-3" />
+                  Land Segmentation ({land.parts.length} Parts)
+                </p>
+                <div className="grid grid-cols-1 gap-1.5">
+                  {land.parts.map((part: any, idx: number) => (
+                    <div key={idx} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-gray-100 text-xs shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="font-bold text-gray-800">{part.crop}</span>
+                      </div>
+                      <span className="text-gray-500 font-medium">{part.area} Acres</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="space-y-2 text-sm text-gray-600 mb-4">
               <div className="flex justify-between">
                 <span>{t('label_planted')}:</span>
@@ -439,25 +713,81 @@ const LandContent = ({
               </div>
               <div className="flex justify-between">
                 <span>{t('label_expected_harvest')}:</span>
-                <span>{new Date(land.expectedHarvest).toLocaleDateString()}</span>
+                <span>{land.expectedHarvest ? new Date(land.expectedHarvest).toLocaleDateString() : 'N/A'}</span>
               </div>
               <div className="flex justify-between">
                 <span>{t('label_last_updated')}:</span>
                 <span>{land.lastUpdated}</span>
               </div>
             </div>
+ 
+            {/* Mini Segmentation Bar */}
+            <div className="mt-4 space-y-1.5">
+              <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <span>Allocation Status</span>
+                <span className={((land.parts?.reduce((acc: number, p: any) => acc + (p.area || 0), 0) || 0) > land.acreage) ? 'text-red-500' : 'text-emerald-600'}>
+                   {((land.parts?.reduce((acc: number, p: any) => acc + (p.area || 0), 0) || 0)).toFixed(1)} / {Number(land.acreage || 0).toFixed(1)} Acres
+                </span>
+              </div>
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden flex">
+                {(land.parts || []).map((part: any, idx: number) => {
+                  const colors = ['bg-emerald-500', 'bg-teal-500', 'bg-blue-500', 'bg-lime-500'];
+                  return (
+                    <div 
+                      key={idx}
+                      style={{ width: `${(part.area / (land.acreage || 1)) * 100}%` }}
+                      className={`${colors[idx % colors.length]} h-full border-r border-white/20`}
+                      title={`${part.crop}: ${part.area} Acres`}
+                    />
+                  );
+                })}
+                {((land.parts?.reduce((acc: number, p: any) => acc + (p.area || 0), 0) || 0) < land.acreage) && (
+                  <div className="flex-1 bg-slate-200/50" />
+                )}
+              </div>
+            </div>
 
-            <div className="flex space-x-2">
-              <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700">
-                {t('view_details')}
+            <div className="flex space-x-2 mt-4">
+              <button
+                onClick={() => onEditLand(land)}
+                className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors shadow-blue-100 shadow-lg flex items-center justify-center gap-2"
+              >
+                <Icon name="Edit2" className="h-4 w-4" />
+                <span>{t('btn_edit_land') || 'Edit'}</span>
               </button>
               <button
                 onClick={() => onPostJobFromLand(land)}
-                className="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm hover:bg-green-700"
+                className="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm hover:bg-green-700 transition-colors shadow-green-100 shadow-lg flex items-center justify-center gap-2"
               >
-                {t('action_post_job')}
+                <Icon name="Briefcase" className="h-4 w-4" />
+                <span>{t('action_post_job')}</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this land record?')) {
+                    onDeleteLand(land.id);
+                  }
+                }}
+                className="w-10 bg-red-50 text-red-600 border border-red-100 py-2 rounded-lg text-sm hover:bg-red-600 hover:text-white transition-all flex items-center justify-center"
+                title="Delete Land"
+              >
+                <Icon name="Trash2" className="h-4 w-4" />
               </button>
             </div>
+            <button
+              onClick={() => onManageSequence(land)}
+              className="w-full mt-3 py-2 bg-emerald-600 text-white font-bold border border-emerald-500 rounded-xl hover:bg-emerald-700 transition-all shadow-lg flex items-center justify-center gap-2 group"
+            >
+              <Icon name="Layers" className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+              <span>Sequence Method (Segmentation)</span>
+            </button>
+            <button
+              onClick={() => onFindWorkersFromLand(land.id)}
+              className="w-full mt-3 py-2 bg-emerald-50 text-emerald-700 font-bold border border-emerald-100 rounded-xl hover:bg-emerald-100 transition-all flex items-center justify-center gap-2"
+            >
+              <Icon name="Map" className="h-4 w-4" />
+              <span>Find Workers Near This Land</span>
+            </button>
           </div>
         ))}
       </div>
@@ -539,89 +869,21 @@ const LandContent = ({
                 <Icon name="MapPin" className="h-5 w-5 mr-2" />
                 <span className="whitespace-nowrap">{t('btn_live_location')}</span>
               </button>
+              <button
+                type="button"
+                onClick={() => onSearchCoordinates(landForm.location)}
+                className="flex items-center justify-center px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                title="Search Coordinates from Name"
+              >
+                <Icon name="Search" className="h-5 w-5 mr-2" />
+                <span className="whitespace-nowrap">Find by Name</span>
+              </button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               {t('coordinate_help') || 'Use the button to get your current GPS location or enter manually.'}
             </p>
           </div>
 
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('label_crops_on_land')}
-            </label>
-            <div className="space-y-2">
-              {(landForm.crops || []).map((c: any, idx: number) => (
-                <div key={idx} className="grid grid-cols-2 gap-2">
-                  <select
-                    aria-label={t('aria_select_crop')}
-                    value={c.crop}
-                    onChange={(e) =>
-                      handleLandFormChange(
-                        'crops',
-                        landForm.crops.map((x: any, i: number) =>
-                          i === idx ? { ...x, crop: e.target.value } : x,
-                        ),
-                      )
-                    }
-                    className="px-3 py-2 border border-gray-300 rounded-lg"
-                  >
-                    <option value="rice">{t('crop_rice')}</option>
-                    <option value="cotton">{t('crop_cotton')}</option>
-                    <option value="wheat">{t('crop_wheat')}</option>
-                    <option value="corn">{t('crop_corn')}</option>
-                    <option value="sugarcane">{t('crop_sugarcane')}</option>
-                    <option value="soybean">{t('crop_soybean')}</option>
-                  </select>
-                  <select
-                    aria-label={t('aria_select_crop_stage')}
-                    value={c.stage}
-                    onChange={(e) =>
-                      handleLandFormChange(
-                        'crops',
-                        landForm.crops.map((x: any, i: number) =>
-                          i === idx ? { ...x, stage: e.target.value } : x,
-                        ),
-                      )
-                    }
-                    className="px-3 py-2 border border-gray-300 rounded-lg"
-                  >
-                    <option value="sowing">{t('stage_sowing')}</option>
-                    <option value="growing">{t('stage_growing')}</option>
-                    <option value="flowering">{t('stage_flowering')}</option>
-                    <option value="harvest">{t('stage_harvest')}</option>
-                  </select>
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() =>
-                  handleLandFormChange('crops', [
-                    ...(landForm.crops || []),
-                    { crop: 'rice', stage: 'sowing' },
-                  ])
-                }
-                className="mt-1 text-sm text-blue-600 hover:underline"
-              >
-                + {t('add_another_crop')}
-              </button>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('label_crop_type')}</label>
-            <select
-              aria-label="Select crop type"
-              value={landForm.cropType}
-              onChange={(e) => handleLandFormChange('cropType', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <option value="rice">{t('crop_rice')}</option>
-              <option value="cotton">{t('crop_cotton')}</option>
-              <option value="wheat">{t('crop_wheat')}</option>
-              <option value="corn">{t('crop_corn')}</option>
-              <option value="sugarcane">{t('crop_sugarcane')}</option>
-              <option value="soybean">{t('crop_soybean')}</option>
-            </select>
-          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">{t('label_acreage')}</label>
             <input
@@ -709,6 +971,7 @@ const JobsContent = ({
   loading,
   error,
   onViewApplications,
+  lands,
 }: JobsContentProps) => {
   const { t } = useI18n();
   return (
@@ -755,9 +1018,9 @@ const JobsContent = ({
                         : 'bg-gray-100 text-gray-700'
                     }`}
                 >
-                  {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                  {(job.status || 'unknown').charAt(0).toUpperCase() + (job.status || 'unknown').slice(1)}
                 </span>
-                <p className="text-sm text-gray-500 mt-1">{job.applicants.length} applicants</p>
+                <p className="text-sm text-gray-500 mt-1">{(job.applicants || []).length} applicants</p>
                 {job.urgent && (
                   <span className="block text-xs text-red-600 font-medium mt-1">Urgent</span>
                 )}
@@ -765,7 +1028,7 @@ const JobsContent = ({
             </div>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {job.skills.map((skill: string) => (
+              {(job.skills || []).map((skill: string) => (
                 <span key={skill} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">
                   {skill}
                 </span>
@@ -783,7 +1046,7 @@ const JobsContent = ({
               >
                 <Icon name="Eye" className="h-4 w-4" />
                 <span>
-                  {t('view_applications')} ({job.applicants.length})
+                  {t('view_applications')} ({(job.applicants || []).length})
                 </span>
               </button>
               <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300">
@@ -815,6 +1078,32 @@ const JobsContent = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder={t('placeholder_job_title')}
             />
+          </div>
+          <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+            <label className="flex items-center text-sm font-bold text-emerald-800 mb-2">
+              <Icon name="Map" className="h-4 w-4 mr-2" />
+              Auto-fill from Registered Land
+            </label>
+            <select
+              onChange={(e) => {
+                const selectedLandId = e.target.value;
+                if (!selectedLandId) return;
+                const land = lands.find(l => l.id === selectedLandId || l._id === selectedLandId);
+                if (land) {
+                  handleJobFormChange('location', land.location);
+                  if (!jobForm.title) handleJobFormChange('title', `${land.crop || 'Crop'} Management at ${land.name}`);
+                }
+              }}
+              className="w-full px-3 py-2 border border-emerald-200 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium text-slate-700"
+            >
+              <option value="">-- Choose a land to auto-populate --</option>
+              {lands.map(land => (
+                <option key={land.id || land._id} value={land.id || land._id}>
+                  {land.name} ({land.location})
+                </option>
+              ))}
+            </select>
+            <p className="text-[10px] text-emerald-600 mt-2 font-medium">✨ Selecting a land will automatically set the location and suggest a title.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">{t('label_location')}</label>
@@ -954,336 +1243,7 @@ const JobsContent = ({
   );
 };
 
-import { AgroShop } from '../utils/api';
 
-const FarmerConnectionContent = () => {
-  const { t } = useI18n();
-  const [activeTab, setActiveTab] = useState<'feed' | 'network' | 'profile'>('feed');
-  const [postContent, setPostContent] = useState('');
-
-  // Mock Data for Current User
-  const userProfile = {
-    name: 'You',
-    location: 'Thanjavur, TN',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-    stats: { posts: 12, followers: 145, following: 89 },
-    bio: 'Organic rice farmer | Sustainable agriculture enthusiast'
-  };
-
-  // State for Posts Feed
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      author: 'Ramesh Kumar',
-      location: 'Vadipatti, Madurai',
-      avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop',
-      time: '2 hours ago',
-      content: 'Successfully harvested 5 acres of Ponni rice today! The yield looks fantastic this season thanks to the timely rains. Anyone looking for bulk paddy procurement?',
-      image: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&h=400&fit=crop',
-      likes: 24,
-      comments: 5,
-      liked: false,
-      tags: ['Harvest', 'Rice', 'Organic']
-    },
-    {
-      id: 2,
-      author: 'Selvi Farm',
-      location: 'Melur, Madurai',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
-      time: '5 hours ago',
-      content: 'Just finished sowing cotton seeds. Used the new drought-resistant variety suggested by the Crop Doctor AI. Fingers crossed! 🌱',
-      likes: 18,
-      comments: 2,
-      liked: true,
-      tags: ['Sowing', 'Cotton', 'Innovation']
-    },
-    {
-      id: 3,
-      author: 'Karthik Raja',
-      location: 'Usilampatti',
-      avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop',
-      time: '1 day ago',
-      content: 'Warning to fellow farmers in Usilampatti area: Spotted some Fall Armyworm activity in my maize field. Please check your crops and take preventive measures immediately.',
-      likes: 56,
-      comments: 12,
-      liked: false,
-      tags: ['Alert', 'PestControl', 'Maize']
-    }
-  ]);
-
-  // State for Suggestions
-  const [suggestions, setSuggestions] = useState([
-    { id: 101, name: 'Anitha Paul', location: 'Trichy', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop', mutual: 12, status: 'none' },
-    { id: 102, name: 'Velu Agrotech', location: 'Dindigul', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop', mutual: 5, status: 'none' },
-    { id: 103, name: 'Green Earth Coop', location: 'Coimbatore', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop', mutual: 23, status: 'none' },
-  ]);
-
-  const handlePostSubmit = () => {
-    if (!postContent.trim()) return;
-
-    const newPost = {
-      id: Date.now(),
-      author: userProfile.name,
-      location: userProfile.location,
-      avatar: userProfile.avatar,
-      time: 'Just now',
-      content: postContent,
-      likes: 0,
-      comments: 0,
-      liked: false,
-      tags: ['Update']
-    };
-
-    setPosts([newPost, ...posts]);
-    setPostContent('');
-    // toast.success('Update posted successfully!'); // Assuming toast is available or passed down
-  };
-
-  const toggleLike = (postId: number) => {
-    setPosts(posts.map(post => {
-      if (post.id === postId) {
-        return {
-          ...post,
-          liked: !post.liked,
-          likes: post.liked ? post.likes - 1 : post.likes + 1
-        };
-      }
-      return post;
-    }));
-  };
-
-  const handleConnect = (id: number) => {
-    setSuggestions(suggestions.map(s =>
-      s.id === id ? { ...s, status: s.status === 'sent' ? 'none' : 'sent' } : s
-    ));
-  };
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-100px)] overflow-hidden">
-      {/* Left Sidebar - Profile Summary */}
-      <div className="hidden lg:block space-y-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-          <div className="w-24 h-24 mx-auto bg-green-100 rounded-full p-1 mb-4">
-            <img src={userProfile.avatar} alt="Profile" className="w-full h-full rounded-full object-cover" />
-          </div>
-          <h3 className="font-bold text-gray-900 text-lg">{userProfile.name}</h3>
-          <p className="text-gray-500 text-sm mb-4">{userProfile.bio}</p>
-
-          <div className="flex justify-center divide-x divide-gray-200 py-4 border-t border-b border-gray-100 mb-4">
-            <div className="px-4">
-              <span className="block font-bold text-xl text-gray-900">{userProfile.stats.posts}</span>
-              <span className="text-xs text-gray-500">Posts</span>
-            </div>
-            <div className="px-4">
-              <span className="block font-bold text-xl text-gray-900">{userProfile.stats.followers}</span>
-              <span className="text-xs text-gray-500">Connections</span>
-            </div>
-            <div className="px-4">
-              <span className="block font-bold text-xl text-gray-900">{userProfile.stats.following}</span>
-              <span className="text-xs text-gray-500">Following</span>
-            </div>
-          </div>
-
-          <button className="w-full py-2 text-green-600 font-bold hover:bg-green-50 rounded-lg transition-colors">
-            View My Profile
-          </button>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
-          <h4 className="font-bold mb-2 flex items-center gap-2">
-            <Icon name="TrendingUp" className="h-5 w-5" /> Trending Topics
-          </h4>
-          <ul className="space-y-2 text-sm mt-4 text-green-50">
-            <li className="flex justify-between cursor-pointer hover:text-white"><span>#OrganicFarming</span> <span className="opacity-75">1.2k</span></li>
-            <li className="flex justify-between cursor-pointer hover:text-white"><span>#Monsoon2024</span> <span className="opacity-75">856</span></li>
-            <li className="flex justify-between cursor-pointer hover:text-white"><span>#SustainableAgri</span> <span className="opacity-75">642</span></li>
-            <li className="flex justify-between cursor-pointer hover:text-white"><span>#SmartFarming</span> <span className="opacity-75">420</span></li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Main Feed */}
-      <div className="lg:col-span-2 overflow-y-auto pr-2 custom-scrollbar">
-        {/* Create Post Widget */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6">
-          <div className="flex gap-4">
-            <img src={userProfile.avatar} alt="You" className="w-10 h-10 rounded-full object-cover" />
-            <div className="flex-1">
-              <textarea
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-                placeholder="Share your farm updates, tips, or ask questions..."
-                className="w-full bg-gray-50 border-0 rounded-xl p-3 focus:ring-2 focus:ring-green-500 resize-none h-24"
-              ></textarea>
-              <div className="flex justify-between items-center mt-3">
-                <div className="flex gap-2">
-                  <button className="p-2 text-green-600 hover:bg-green-50 rounded-full" title="Add Image">
-                    <Icon name="Image" className="h-5 w-5" />
-                  </button>
-                  <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-full" title="Add Video">
-                    <Icon name="Film" className="h-5 w-5" />
-                  </button>
-                  <button className="p-2 text-red-600 hover:bg-red-50 rounded-full" title="Add Location">
-                    <Icon name="MapPin" className="h-5 w-5" />
-                  </button>
-                </div>
-                <button
-                  onClick={handlePostSubmit}
-                  disabled={!postContent.trim()}
-                  className="bg-green-600 text-white px-6 py-2 rounded-full font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                >
-                  Post Update
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Feed Tabs */}
-        <div className="flex border-b border-gray-200 mb-6 bg-white sticky top-0 z-10 p-2 rounded-xl shadow-sm">
-          <button
-            onClick={() => setActiveTab('feed')}
-            className={`flex-1 py-3 font-bold text-center rounded-lg transition-colors ${activeTab === 'feed' ? 'bg-green-50 text-green-700' : 'text-gray-500 hover:bg-gray-50'}`}
-          >
-            Following
-          </button>
-          <button
-            onClick={() => setActiveTab('network')}
-            className={`flex-1 py-3 font-bold text-center rounded-lg transition-colors ${activeTab === 'network' ? 'bg-green-50 text-green-700' : 'text-gray-500 hover:bg-gray-50'}`}
-          >
-            My Network
-          </button>
-        </div>
-
-        {/* Posts */}
-        <div className="space-y-6 pb-20">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slideUp">
-              <div className="p-4 flex justify-between items-start">
-                <div className="flex gap-3">
-                  <img src={post.avatar} alt={post.author} className="w-12 h-12 rounded-full object-cover border border-gray-200" />
-                  <div>
-                    <h4 className="font-bold text-gray-900">{post.author}</h4>
-                    <p className="text-xs text-gray-500 flex items-center">
-                      <span>{post.time}</span>
-                      <span className="mx-1">•</span>
-                      <Icon name="MapPin" className="h-3 w-3 mr-0.5" /> {post.location}
-                    </p>
-                  </div>
-                </div>
-                <button className="text-gray-400 hover:text-gray-600">
-                  <Icon name="MoreHorizontal" className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="px-4 pb-2">
-                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{post.content}</p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {post.tags.map(tag => (
-                    <span key={tag} className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">#{tag}</span>
-                  ))}
-                </div>
-              </div>
-
-              {post.image && (
-                <div className="mt-2 text-center bg-black">
-                  <img src={post.image} alt="Post content" className="w-full object-cover max-h-96" />
-                </div>
-              )}
-
-              <div className="px-4 py-3 flex items-center justify-between text-sm text-gray-500 border-b border-gray-100">
-                <span>{post.likes} Likes</span>
-                <span>{post.comments} Comments</span>
-              </div>
-
-              <div className="grid grid-cols-4 p-2 gap-1">
-                <button
-                  onClick={() => toggleLike(post.id)}
-                  className={`flex items-center justify-center gap-2 py-2 rounded-lg transition-colors font-medium ${post.liked ? 'text-red-500 bg-red-50' : 'text-gray-600 hover:bg-gray-50'}`}
-                >
-                  <Icon name="Heart" className={`h-5 w-5 ${post.liked ? 'fill-current' : ''}`} />
-                  Like
-                </button>
-                <button className="flex items-center justify-center gap-2 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-medium">
-                  <Icon name="MessageCircle" className="h-5 w-5" />
-                  Comment
-                </button>
-                <button className="flex items-center justify-center gap-2 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-medium">
-                  <Icon name="Share2" className="h-5 w-5" />
-                  Share
-                </button>
-                <button className="flex items-center justify-center gap-2 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors font-medium">
-                  <Icon name="Bookmark" className="h-5 w-5" />
-                  Save
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right Sidebar - Suggestions */}
-      <div className="hidden lg:block space-y-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-gray-900">Farmers You May Know</h3>
-            <button className="text-green-600 text-sm font-bold">See All</button>
-          </div>
-          <div className="space-y-4">
-            {suggestions.map(user => (
-              <div key={user.id} className="flex items-center gap-3">
-                <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-gray-900 text-sm truncate">{user.name}</h4>
-                  <p className="text-xs text-gray-500 truncate">{user.location} • {user.mutual} mutual</p>
-                </div>
-                <button
-                  onClick={() => handleConnect(user.id)}
-                  className={`p-2 rounded-full transition-colors ${user.status === 'sent' ? 'bg-gray-100 text-gray-500' : 'bg-green-100 text-green-600 hover:bg-green-200'}`}
-                >
-                  <Icon name={user.status === 'sent' ? 'Check' : 'UserPlus'} className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-gray-900 mb-4">Upcoming Events</h3>
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <div className="bg-purple-100 text-purple-700 rounded-lg p-2 text-center min-w-[3.5rem]">
-                <span className="block text-xs font-bold uppercase">Jun</span>
-                <span className="block text-xl font-bold">15</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900 text-sm">Organic Farming Expo</h4>
-                <p className="text-xs text-gray-500">Madurai Trade Center</p>
-                <span className="text-xs text-blue-600 font-medium">120 interested</span>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <div className="bg-amber-100 text-amber-700 rounded-lg p-2 text-center min-w-[3.5rem]">
-                <span className="block text-xs font-bold uppercase">Jun</span>
-                <span className="block text-xl font-bold">22</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900 text-sm">Govt Loan Camp</h4>
-                <p className="text-xs text-gray-500">Panchayat Office, Melur</p>
-                <span className="text-xs text-blue-600 font-medium">85 interested</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-xs text-gray-400 text-center">
-          <p>&copy; 2024 AgriSmart Inc.</p>
-          <p className="mt-1">Privacy • Terms • Advertising • Cookies</p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 
 
@@ -1309,7 +1269,7 @@ const AgroShopsContent = ({ agroShops, loading, error }: AgroShopsContentProps) 
     { name: 'Zinc Sulphate', price: 850, unit: '10kg', trend: 'up' },
   ];
 
-  const allProducts = Array.from(new Set(agroShops?.flatMap(shop => shop.productPrices?.map(p => p.name) || []) || []));
+  const allProducts = Array.from(new Set(agroShops?.flatMap((shop: AgroShop) => shop.productPrices?.map((p: any) => p.name) || []) || []));
 
   return (
     <div className="space-y-6">
@@ -1564,7 +1524,7 @@ const AgroShopsContent = ({ agroShops, loading, error }: AgroShopsContentProps) 
                     </thead>
                     <tbody>
                       {allProducts.map((productName, idx) => {
-                        const prices = agroShops.map(shop => shop.productPrices?.find(p => p.name === productName)?.price).filter(p => p !== undefined) as number[];
+                        const prices = agroShops.map((shop: AgroShop) => shop.productPrices?.find((p: any) => p.name === productName)?.price).filter((p): p is number => p !== undefined);
                         const minPrice = Math.min(...prices);
 
                         return (
@@ -1636,7 +1596,7 @@ const AgroShopsContent = ({ agroShops, loading, error }: AgroShopsContentProps) 
   );
 };
 
-import { Worker } from '../utils/api';
+import { Worker, AgroShop, Land } from '../utils/api';
 
 interface WorkersContentProps {
   searchTerm: string;
@@ -1648,6 +1608,7 @@ interface WorkersContentProps {
   filters: any;
   onFilterChange: any;
   sentOffers: Set<string>;
+  lands: Land[];
 }
 
 const WorkersContent = ({
@@ -1660,9 +1621,70 @@ const WorkersContent = ({
   filters,
   onFilterChange,
   sentOffers,
+  lands,
 }: WorkersContentProps) => {
+  const [selectedLandId, setSelectedLandId] = useState<string>(filters.landId || 'default');
+
+  // Update internal state when filter prop changes (for external triggers)
+  useEffect(() => {
+    if (filters.landId) {
+      setSelectedLandId(filters.landId);
+    }
+  }, [filters.landId]);
+
+  const selectedLand = lands.find(l => l.id === selectedLandId);
+
   return (
     <div className="space-y-6">
+      {/* ── RELAY SECTOR ── */}
+      <div className="bg-slate-900 rounded-[2rem] px-7 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl border border-slate-800">
+        <div className="flex items-center gap-5 flex-1">
+          <div className="flex flex-col min-w-[90px]">
+            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-[0.3em]">Relay</span>
+            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-[0.3em]">Sector:</span>
+          </div>
+          <div className="relative flex-1 min-w-[220px] max-w-sm">
+            <select
+              aria-label="Relay Sector – select land"
+              value={selectedLandId}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedLandId(val);
+                onFilterChange({ ...filters, landId: val === 'default' ? undefined : val });
+              }}
+              className="w-full appearance-none bg-slate-800 text-white font-black text-sm uppercase tracking-widest px-5 py-3 pr-12 rounded-2xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+            >
+              <option value="default">All Locations (Default)</option>
+              {lands.map(land => (
+                <option key={land.id} value={land.id}>
+                  {(land.name || land.location || 'Unnamed Land').toUpperCase()}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+              <Icon name="ChevronDown" className="h-4 w-4 text-emerald-400" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {selectedLandId !== 'default' && selectedLand && (
+            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-black text-emerald-300 uppercase tracking-widest">
+                {selectedLand.acreage} Acre{selectedLand.acreage !== 1 ? 's' : ''} • {selectedLand.location}
+              </span>
+            </div>
+          )}
+          <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 border border-slate-700 rounded-2xl">
+            <Icon name="Users" className="h-4 w-4 text-slate-400" />
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
+              {workers.length} Workers Found
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Available Workers</h2>
         <div className="flex items-center space-x-2">
@@ -1673,21 +1695,23 @@ const WorkersContent = ({
             <Icon name="Filter" className="h-4 w-4" />
             <span>Filters</span>
           </button>
-          <Icon name="Search" className="h-5 w-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search workers..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div className="relative">
+            <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search workers..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 w-64"
+            />
+          </div>
         </div>
       </div>
 
       {filters.showFilters && (
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="font-semibold mb-3">Filter Workers</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Max Distance (km)
@@ -1699,7 +1723,21 @@ const WorkersContent = ({
                   onFilterChange({ ...filters, maxDistance: parseInt(e.target.value) || undefined })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                placeholder="10"
+                placeholder="20"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Min. Hours/Day</label>
+              <input
+                type="number"
+                min="1"
+                max="24"
+                value={filters.minWorkHours || ''}
+                onChange={(e) =>
+                  onFilterChange({ ...filters, minWorkHours: parseInt(e.target.value) || undefined })
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="8"
               />
             </div>
             <div>
@@ -1714,33 +1752,9 @@ const WorkersContent = ({
                 }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="all">All Workers</option>
-                <option value="true">Available Only</option>
-                <option value="false">Busy Workers</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Required Skills
-              </label>
-              <select
-                aria-label="Filter skills"
-                multiple
-                value={filters.skills || []}
-                onChange={(e) =>
-                  onFilterChange({
-                    ...filters,
-                    skills: Array.from(e.target.selectedOptions, (option) => option.value),
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-
-                <option value="Harvesting">Harvesting</option>
-                <option value="Sowing">Sowing</option>
-                <option value="Irrigation">Irrigation</option>
-                <option value="Pest Control">Pest Control</option>
-                <option value="Equipment Operation">Equipment Operation</option>
+                <option value="all">Any</option>
+                <option value="true">Available</option>
+                <option value="false">Busy</option>
               </select>
             </div>
             <div>
@@ -1756,119 +1770,160 @@ const WorkersContent = ({
                 <option value="Female">Female</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Skill</label>
+              <select
+                aria-label="Filter skill"
+                value={filters.skills?.[0] || 'all'}
+                onChange={(e) => onFilterChange({ ...filters, skills: e.target.value === 'all' ? [] : [e.target.value] })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="all">Any</option>
+                <option value="Harvesting">Harvesting</option>
+                <option value="Sowing">Sowing</option>
+                <option value="Irrigation">Irrigation</option>
+                <option value="Pest Control">Pest Control</option>
+                <option value="Equipment Operation">Equipment Operation</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <label className="block text-sm font-semibold text-gray-800 mb-2">Find Workers Near Specific Land</label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setSelectedLandId('default')}
+                className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${selectedLandId === 'default'
+                    ? 'bg-green-600 text-white border-green-600 shadow-md'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                  }`}
+              >
+                My Default Location
+              </button>
+              {lands.map(land => (
+                <button
+                  key={land.id}
+                  onClick={() => setSelectedLandId(land.id)}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all flex items-center gap-2 ${selectedLandId === land.id
+                      ? 'bg-green-600 text-white border-green-600 shadow-md'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-green-400'
+                    }`}
+                >
+                  <Icon name="MapPin" className="h-3 w-3" />
+                  {land.name || land.location}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Map placeholder */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold mb-4">Workers Near You</h3>
-        <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-          <div className="text-center">
-            <Icon name="MapPin" className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-            <p className="text-gray-600">Interactive Map View</p>
-            <p className="text-sm text-gray-500">Showing {workers.length} workers within radius</p>
+      {/* Map View Toggle Area (Placeholder) */}
+      <div className="bg-white rounded-lg shadow p-4 border border-emerald-100 bg-emerald-50/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-emerald-100 rounded-lg">
+              <Icon name="Map" className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-emerald-900">Map Intelligence</p>
+              <p className="text-xs text-emerald-700">
+                {selectedLandId === 'default'
+                  ? `Showing ${workers.length} workers near your primary location`
+                  : `Showing ${workers.length} workers eligible to travel to ${selectedLand?.name || selectedLand?.location}`
+                }
+              </p>
+            </div>
           </div>
+          <button className="text-sm font-bold text-emerald-600 hover:text-emerald-700 px-4 py-2 bg-white rounded-lg border border-emerald-200 shadow-sm transition-all hover:shadow-md">
+            View on Map
+          </button>
         </div>
       </div>
 
-      {loading && <LoadingSpinner text="Loading workers..." />}
+      {loading && <LoadingSpinner text="Finding available workers..." />}
       {error && <ErrorMessage message={error} />}
 
-      {/* Workers List */}
       {!loading && !error && (
-        <div className="grid gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {workers.map((worker) => (
             <div
               key={worker.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group active:scale-[0.98]"
             >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <div className="flex items-center">
-                    <h3 className="text-lg font-semibold text-gray-900">{worker.name}</h3>
-                    {worker.verified && <Icon name="CheckCircle" className="h-4 w-4 text-blue-500 ml-1" />}
+              <div className="p-6 flex-1">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center text-green-700 font-bold text-lg shadow-inner">
+                      {worker.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 flex items-center">
+                        {worker.name}
+                        {worker.verified && <Icon name="CheckCircle" className="h-4 w-4 text-blue-500 ml-1.5" />}
+                      </h3>
+                      <div className="flex items-center text-gray-500 text-xs mt-0.5">
+                        <Icon name="MapPin" className="h-3 w-3 mr-1" />
+                        <span>{worker.location} ({worker.distance})</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center text-gray-500 text-sm mt-1">
-                    <Icon name="MapPin" className="h-4 w-4 mr-1" />
-                    <span>{worker.location} ({worker.distance})</span>
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-center space-x-1 px-2 py-1 bg-yellow-50 rounded-lg border border-yellow-100">
+                      <Icon name="Star" className="h-3.5 w-3.5 text-yellow-500 fill-current" />
+                      <span className="text-xs font-bold text-yellow-700">{worker.rating}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center text-gray-500 text-sm mt-1">
-                    <Icon name="Phone" className="h-3 w-3 mr-1" />
-                    <span>{worker.phone}</span>
-                  </div>
-                  <div className="flex items-center text-gray-500 text-sm mt-1">
-                    <Icon name="User" className="h-3 w-3 mr-1" />
-                    <span>{worker.gender || 'Unknown'}</span>
-                  </div>
-                  <p className="text-gray-500 text-sm mt-1">
-                    {worker.experience} years exp • {worker.completedJobs} jobs
-                  </p>
                 </div>
-                <div className="text-right">
-                  <div className="flex items-center space-x-1 justify-end">
-                    <Icon name="Star" className="h-4 w-4 text-yellow-400 fill-current" />
-                    <span className="text-sm font-medium">{worker.rating}</span>
+
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-1">Travel Radius</p>
+                    <p className="text-sm font-black text-gray-700">{worker.maxTravelKm || 50} km</p>
                   </div>
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium mt-1 inline-block ${worker.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      }`}
-                  >
-                    {worker.available ? 'Available' : 'Busy'}
-                  </span>
+                  <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-1">Max Hours/Day</p>
+                    <p className="text-sm font-black text-gray-700">{worker.availableHoursPerDay || 8} h</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Icon name="Briefcase" className="h-4 w-4 mr-2 text-gray-400" />
+                    <span>{worker.experience} years exp • {worker.completedJobs} jobs</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Icon name="Wallet" className="h-4 w-4 mr-2 text-gray-400" />
+                    <span className="font-bold text-gray-900">₹{worker.hourlyRate}/hr</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 line-clamp-2">
+                  {worker.skills.map((skill) => (
+                    <span key={skill} className="bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-green-100 uppercase tracking-tight">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                {worker.skills.map((skill) => (
-                  <span key={skill} className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs border border-blue-100">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              <div className="text-sm text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg">
-                <div className="flex justify-between border-b border-gray-200 pb-2 mb-2">
-                  <span>Hourly Rate:</span>
-                  <span className="font-semibold">₹{worker.hourlyRate}/hr</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Languages:</span>
-                  <span className="font-medium text-right">{worker.languages.join(', ')}</span>
-                </div>
-              </div>
-
-              <div className="flex space-x-2">
+              <div className="px-6 py-4 bg-gray-50/80 border-t border-gray-100 flex gap-2">
                 <button
                   onClick={() => onContactWorker(worker, 'call')}
-                  className={`flex-1 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors ${worker.available
-                    ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-200 shadow-md'
-                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    }`}
-                  disabled={!worker.available}
+                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 hover:bg-green-50 hover:text-green-600 hover:border-green-200 transition-all shadow-sm"
+                  aria-label="Call worker"
                 >
-                  <Icon name="Phone" className="h-4 w-4" />
-                  <span>Call</span>
+                  <Icon name="Phone" className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => onContactWorker(worker, 'offer')}
                   disabled={sentOffers.has(worker.id)}
-                  className={`flex-1 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors ${sentOffers.has(worker.id)
-                    ? 'bg-green-100 text-green-700 border-2 border-green-300 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200 shadow-md'
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md active:scale-95 ${sentOffers.has(worker.id)
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                      : 'bg-green-600 text-white hover:bg-green-700 shadow-green-100'
                     }`}
                 >
-                  {sentOffers.has(worker.id) ? (
-                    <>
-                      <Icon name="CheckCircle" className="h-4 w-4" />
-                      <span>Offer Sent</span>
-                    </>
-                  ) : (
-                    <>
-                      <Icon name="Send" className="h-4 w-4" />
-                      <span>Send Offer</span>
-                    </>
-                  )}
+                  {sentOffers.has(worker.id) ? 'Offer Sent' : 'Hire Now'}
                 </button>
               </div>
             </div>
@@ -1990,47 +2045,56 @@ export default function FarmOwnerDashboard() {
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applications, setApplications] = useState<any[]>([]);
   const [showWorkerFilters, setShowWorkerFilters] = useState(false);
+  const session = getSession();
   const [workerFilters, setWorkerFilters] = useState({
     skills: [] as string[],
-    maxDistance: 50,
+    maxDistance: 20, // Default to a smaller nearby distance
     available: true,
-    gender: 'all'
+    gender: 'all',
+    minWorkHours: undefined as number | undefined
   });
 
   // Track sent offers
   const [sentOffers, setSentOffers] = useState<Set<string>>(new Set());
+  const [selectedEditLand, setSelectedEditLand] = useState<any>(null);
+  const [selectedSequenceLand, setSelectedSequenceLand] = useState<any>(null);
 
   // Load sent offers from localStorage on mount
   React.useEffect(() => {
     const offers = JSON.parse(localStorage.getItem('workerOffers') || '[]');
-    const sentWorkerIds = new Set(offers.map((offer: any) => offer.workerId));
+    const sentWorkerIds = new Set<string>(offers.map((offer: any) => String(offer.workerId)));
     setSentOffers(sentWorkerIds);
   }, []);
 
-  // API hooks
   const {
     data: workers,
     loading: workersLoading,
     error: workersError,
   } = useWorkers(workerFilters);
-  const { data: jobs, loading: jobsLoading, error: jobsError, refetch: refetchJobs } = useJobs();
+
+  const currentUserId = localStorage.getItem("currentUserId") || session?.id;
+
+  const { data: jobs, loading: jobsLoading, error: jobsError, refetch: refetchJobs } = useJobs({ userId: currentUserId });
 
   const {
     data: lands,
     loading: landsLoading,
     error: landsError,
     refetch: refetchLands,
-  } = useLands();
+  } = useLands(currentUserId || session?.id);
   const { data: analytics, loading: analyticsLoading } = useAnalytics();
   const { data: agroShops, loading: agroShopsLoading, error: agroShopsError } = useAgroShops();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [notifications, setNotifications] = useState<
     Array<{ id: string; message: string; type: string; timestamp: string; read: boolean }>
   >([]);
 
+
   // Action hooks
+  const [landActionsProgress, setLandActionsProgress] = useState(false); // Local loading for land actions
   const { createJob, loading: createJobLoading } = useJobActions();
-  const { createLand, loading: createLandLoading } = useLandActions();
+  const { createLand, updateLand, deleteLand, loading: landActionsLoading } = useLandActions();
 
   // Toast notifications
   const { toasts, addToast, removeToast } = useToast();
@@ -2040,7 +2104,7 @@ export default function FarmOwnerDashboard() {
     name: '',
     location: '',
     cropType: 'rice',
-    crops: [] as Array<{ crop: string; stage: string }>,
+    parts: [] as Array<{ crop: string; stage: string; area: string }>,
     acreage: '',
     stage: 'preparation',
     soilType: 'loam',
@@ -2114,6 +2178,9 @@ export default function FarmOwnerDashboard() {
     setSearchTerm(e.target.value);
   }, []);
 
+
+
+
   // New handlers for enhanced functionality
   const handleAddLand = useCallback(async () => {
     try {
@@ -2126,7 +2193,9 @@ export default function FarmOwnerDashboard() {
         return;
       }
 
+      const localUserId = localStorage.getItem("currentUserId") || session?.id;
       await createLand({
+        userId: localUserId,
         name: landForm.name,
         location: landForm.location,
         crop: landForm.cropType,
@@ -2135,6 +2204,11 @@ export default function FarmOwnerDashboard() {
         soilType: landForm.soilType,
         irrigationType: landForm.irrigationType,
         status: landForm.stage,
+        parts: landForm.parts.map(p => ({
+          crop: p.crop,
+          area: parseFloat(p.area) || 0,
+          stage: p.stage
+        })),
         plantedDate: landForm.stage === 'preparation' ? 'Not planted' : new Date().toISOString(),
         expectedHarvest: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
         notes: landForm.notes,
@@ -2148,7 +2222,7 @@ export default function FarmOwnerDashboard() {
         name: '',
         location: '',
         cropType: 'rice',
-        crops: [],
+        parts: [],
         acreage: '',
         stage: 'preparation',
         soilType: 'loam',
@@ -2172,24 +2246,91 @@ export default function FarmOwnerDashboard() {
         message: 'Failed to add land. Please try again.',
       });
     }
-  }, [landForm, createLand, addToast, refetchLands]);
+  }, [landForm, createLand, addToast, refetchLands, session?.id]);
+
+  const handleDeleteLand = useCallback(async (id: string) => {
+    try {
+      await deleteLand(id);
+      addToast({
+        type: 'success',
+        title: 'Land Deleted',
+        message: 'Land record has been removed successfully',
+      });
+      refetchLands();
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        message: 'Failed to delete land record',
+      });
+    }
+  }, [deleteLand, addToast, refetchLands]);
+
+  const handleUpdateLand = useCallback(async (id: string, updates: any) => {
+    try {
+      await updateLand(id, updates);
+      addToast({
+        type: 'success',
+        title: 'Land Updated',
+        message: 'Land record has been successfully updated',
+      });
+      setSelectedEditLand(null);
+      refetchLands();
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        message: 'Failed to update land record',
+      });
+    }
+  }, [updateLand, addToast, refetchLands]);
+
+  const handleSearchCoordinates = useCallback(async (locationName: string) => {
+    if (!locationName) return;
+    try {
+      setLandActionsProgress(true);
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName)}&limit=1`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        setLandForm(prev => ({ ...prev, latitude: lat, longitude: lon }));
+        addToast({
+          type: 'success',
+          title: 'Location Found',
+          message: `Coordinates for ${locationName} detected.`,
+        });
+      } else {
+        addToast({
+          type: 'error',
+          title: 'Not Found',
+          message: 'Could not find coordinates for this location.',
+        });
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+    } finally {
+      setLandActionsProgress(false);
+    }
+  }, [addToast]);
 
   const handleCreateJob = useCallback(async () => {
     try {
-      if (!jobForm.title || !jobForm.location || !jobForm.workers || !jobForm.date) {
+      if (!jobForm.title || !jobForm.location || !jobForm.workers || !jobForm.date || !jobForm.description) {
         addToast({
           type: 'error',
           title: 'Missing Information',
-          message: 'Please fill in all required fields',
+          message: 'Please fill in all required fields (title, location, workers, date, description)',
         });
         return;
       }
 
+      const localUserId = localStorage.getItem("currentUserId") || session?.id;
       await createJob({
+        userId: localUserId,
         title: jobForm.title,
         description: jobForm.description,
-        farmOwner: 'Current User', // This would come from auth context
-        farmOwnerPhone: '+91 98765 54321', // This would come from user profile
+        farmOwner: session?.name || 'Current User', // This would come from auth context
+        farmOwnerPhone: session?.phone || '+91 98765 54321', // This would come from user profile
         location: jobForm.location,
         distance: '0 km', // Would be calculated based on location
         workers: parseInt(jobForm.workers),
@@ -2197,7 +2338,7 @@ export default function FarmOwnerDashboard() {
         time: jobForm.time || '8:00 AM - 5:00 PM',
         duration: jobForm.duration,
         payment: jobForm.payment,
-        hourlyRate: parseInt(jobForm.payment.replace(/[^\d]/g, '')) / 8, // Rough calculation
+        hourlyRate: (parseInt(jobForm.payment.replace(/[^\d]/g, '')) || 0) / 8, // Rough calculation
         skills: jobForm.skills,
         urgent: jobForm.urgent,
         verified: true,
@@ -2328,6 +2469,13 @@ export default function FarmOwnerDashboard() {
     [selectedJobId, addToast],
   );
 
+  const filteredLands = (lands || []).filter(
+    (land: any) => land.userId === currentUserId
+  );
+  const filteredJobs = (jobs || []).filter(
+    (job: any) => job.userId === currentUserId
+  );
+
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -2337,6 +2485,8 @@ export default function FarmOwnerDashboard() {
             cropAdvice={cropAdvice}
             analytics={analytics}
             loading={analyticsLoading}
+            lands={filteredLands}
+            jobs={filteredJobs}
           />
         );
       case 'land':
@@ -2344,11 +2494,18 @@ export default function FarmOwnerDashboard() {
           <LandContent
             landForm={landForm}
             handleLandFormChange={handleLandFormChange}
-            myLands={lands || []}
+            myLands={filteredLands}
             onAddLand={handleAddLand}
-            loading={landsLoading || createLandLoading}
+            onEditLand={setSelectedEditLand}
+            onDeleteLand={handleDeleteLand}
+            onSearchCoordinates={handleSearchCoordinates}
+            loading={landsLoading || landActionsLoading || landActionsProgress}
             error={landsError}
-            onPostJobFromLand={(land) => {
+            onFindWorkersFromLand={(landId: string) => {
+              setWorkerFilters((prev: any) => ({ ...prev, landId }));
+              setActiveTab('workers');
+            }}
+            onPostJobFromLand={(land: any) => {
               setActiveTab('jobs');
               setJobForm((prev) => ({
                 ...prev,
@@ -2360,6 +2517,7 @@ export default function FarmOwnerDashboard() {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }, 0);
             }}
+            onManageSequence={(land: any) => setSelectedSequenceLand(land)}
           />
         );
       case 'jobs':
@@ -2367,11 +2525,12 @@ export default function FarmOwnerDashboard() {
           <JobsContent
             jobForm={jobForm}
             handleJobFormChange={handleJobFormChange}
-            postedJobs={jobs || []}
+            postedJobs={filteredJobs}
             onCreateJob={handleCreateJob}
             loading={jobsLoading || createJobLoading}
             error={jobsError}
             onViewApplications={handleViewApplications}
+            lands={filteredLands}
           />
         );
       case 'workers':
@@ -2391,6 +2550,7 @@ export default function FarmOwnerDashboard() {
               setWorkerFilters(newFilters);
             }}
             sentOffers={sentOffers}
+            lands={filteredLands}
           />
         );
       case 'resources':
@@ -2407,8 +2567,10 @@ export default function FarmOwnerDashboard() {
             error={agroShopsError}
           />
         );
-      case 'farmer_connection':
-        return <FarmerConnectionContent />;
+      case 'agriconnect':
+        return <AgriConnect />;
+
+
       case 'agri_intelligence':
         return <AICropAdvisor embeddedMode={true} />;
       default:
@@ -2418,6 +2580,8 @@ export default function FarmOwnerDashboard() {
             cropAdvice={cropAdvice}
             analytics={analytics}
             loading={analyticsLoading}
+            lands={filteredLands}
+            jobs={filteredJobs}
           />
         );
     }
@@ -2432,25 +2596,30 @@ export default function FarmOwnerDashboard() {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-800">
               {activeTab === 'dashboard' && t('nav_dashboard')}
+
               {activeTab === 'land' && t('nav_my_land')}
               {activeTab === 'jobs' && t('nav_posted_jobs')}
               {activeTab === 'workers' && t('nav_find_workers')}
               {activeTab === 'resources' && t('nav_resource_sharing')}
               {activeTab === 'agroshops' && t('nav_agro_shops')}
-              {activeTab === 'farmer_connection' && 'Farmer To Farmer Connection'}
-              {activeTab === 'agri_intelligence' && 'Agri Intelligence'}
+              {activeTab === 'agriconnect' && 'உழவன் Connect Forum'}
+              {activeTab === 'agri_intelligence' && 'உழவன் Intelligence'}
             </h1>
             <div className="flex items-center space-x-4">
               <LanguageSelector />
               <button
                 onClick={logoutAndRedirect}
-                className="px-3 py-1 rounded border text-sm text-gray-600 hover:bg-gray-50"
+                className="px-3 py-1 rounded border text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-2"
               >
+                <Icon name="LogOut" className="h-4 w-4" />
                 Logout
               </button>
               <div className="relative">
                 <button
-                  onClick={() => setShowNotifications((prev) => !prev)}
+                  onClick={() => {
+                    setShowNotifications((prev) => !prev);
+                    setShowProfileDropdown(false);
+                  }}
                   className="relative"
                   aria-label="Notifications"
                 >
@@ -2502,15 +2671,76 @@ export default function FarmOwnerDashboard() {
                   </div>
                 )}
               </div>
-              <div className="h-8 w-8 bg-green-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-medium">FO</span>
+
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setShowProfileDropdown(!showProfileDropdown);
+                    setShowNotifications(false);
+                  }}
+                  className="h-8 w-8 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors focus:ring-2 focus:ring-green-500 focus:outline-none focus:ring-offset-1"
+                >
+                  <span className="text-white font-medium">
+                    {session?.name ? session.name.charAt(0).toUpperCase() : 'FO'}
+                  </span>
+                </button>
+
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                    <div className="p-4 border-b border-gray-100 bg-gray-50/50">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-10 w-10 bg-green-600 rounded-full flex items-center justify-center shrink-0 shadow-sm border-2 border-green-200">
+                          <span className="text-white text-lg font-bold">
+                            {session?.name ? session.name.charAt(0).toUpperCase() : 'FO'}
+                          </span>
+                        </div>
+                        <div className="overflow-hidden">
+                          <h3 className="text-sm font-bold text-gray-900 truncate">{session?.name || 'Farm Owner'}</h3>
+                          <p className="text-xs text-gray-500 truncate">{session?.email || session?.phone || 'No contact info'}</p>
+                          <span className="inline-block mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-[9px] font-black rounded-full uppercase tracking-widest">
+                            {session?.role || 'Farmer'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-2 space-y-1">
+                      <div className="px-3 py-2">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1">Contact Details</p>
+                        <p className="text-sm text-gray-700 font-bold">{session?.phone || 'N/A'}</p>
+                        {session?.altPhone && <p className="text-xs text-gray-500 mt-0.5">Alt: {session.altPhone}</p>}
+                      </div>
+
+                      {(session?.farmName || session?.farmLocation) && (
+                        <div className="px-3 py-2 border-t border-gray-100">
+                          <p className="text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1">Farm Info</p>
+                          {session?.farmName && <p className="text-sm text-gray-700 font-bold">{session.farmName}</p>}
+                          {session?.farmLocation && (
+                            <p className="text-xs text-gray-500 mt-1 flex items-start gap-1">
+                              <Icon name="MapPin" className="h-3.5 w-3.5 mt-0.5 text-green-500 shrink-0" />
+                              <span className="leading-snug">{session.farmLocation}</span>
+                            </p>
+                          )}
+                          {session?.farmAreaAcres && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              <span className="font-bold text-gray-700">{session.farmAreaAcres}</span> Acres Total
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </header>
 
+
         {/* Main Content */}
-        <main className={`flex-1 overflow-y-auto custom-scrollbar bg-slate-50/50 ${activeTab === 'agri_intelligence' ? '' : 'p-6'}`}>{renderContent()}</main>
+        <main className={`flex-1 custom-scrollbar bg-slate-50/50 ${activeTab === 'agri_intelligence' ? 'overflow-hidden' : 'overflow-y-auto p-6'}`}>
+          {renderContent()}
+        </main>
       </div>
 
       {/* Application Modal */}
@@ -2524,8 +2754,415 @@ export default function FarmOwnerDashboard() {
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onClose={removeToast} />
+
+      {/* Edit Land Modal */}
+      {selectedEditLand && (
+        <EditLandModal
+          land={selectedEditLand}
+          onClose={() => setSelectedEditLand(null)}
+          onUpdate={handleUpdateLand}
+          loading={landActionsLoading}
+        />
+      )}
+
+      {/* NEW: Sequence Management Modal */}
+      {selectedSequenceLand && (
+        <SequenceManagementModal
+          land={selectedSequenceLand}
+          onClose={() => setSelectedSequenceLand(null)}
+          onSave={(id: string, parts: any[]) => handleUpdateLand(id, { parts })}
+          loading={landActionsLoading}
+        />
+      )}
+
       {/* Floating AI Chatbot for Farm Owner */}
       <FloatingChatbot />
     </div>
   );
 }
+
+// Edit Land Modal
+interface EditLandModalProps {
+  land: any;
+  onClose: () => void;
+  onUpdate: (id: string, updates: any) => void;
+  loading: boolean;
+}
+
+const EditLandModal = ({ land, onClose, onUpdate, loading }: EditLandModalProps) => {
+  const { t } = useI18n();
+  const [formData, setFormData] = useState({
+    name: land.name || land.location || '',
+    location: land.location || '',
+    acreage: land.acreage || '',
+    status: land.status || 'growing',
+    soilType: land.soilType || 'loam',
+    irrigationType: land.irrigationType || 'flood',
+    parts: land.parts || [],
+    latitude: land.coordinates?.lat?.toString() || '',
+    longitude: land.coordinates?.lng?.toString() || ''
+  });
+  const [searching, setSearching] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onUpdate(land.id, {
+      ...formData,
+      coordinates: {
+        lat: parseFloat(formData.latitude) || 0,
+        lng: parseFloat(formData.longitude) || 0
+      }
+    });
+  };
+
+  const searchCoordinates = async () => {
+    if (!formData.location) return;
+    try {
+      setSearching(true);
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.location)}&limit=1`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setFormData({
+          ...formData,
+          latitude: data[0].lat,
+          longitude: data[0].lon
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+      <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl elite-border-glow">
+        <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+          <div>
+            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">{t('edit_land_title')}</h3>
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">{t('edit_land_subtitle')}</p>
+          </div>
+          <button onClick={onClose} className="p-3 hover:bg-white rounded-2xl transition-all shadow-sm">
+            <Icon name="X" className="h-6 w-6 text-gray-400" />
+          </button>
+        </div>
+
+        <div className="p-8 space-y-8">
+          <form id="edit-land-form" onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('label_land_name')}</label>
+                <div className="relative">
+                  <Icon name="Fingerprint" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t('label_location_description')}</label>
+                <div className="relative flex gap-2">
+                  <div className="relative flex-1">
+                    <Icon name="MapPin" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />
+                    <input
+                      type="text"
+                      value={formData.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      className="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={searchCoordinates}
+                    disabled={searching}
+                    className="px-4 py-2 bg-emerald-600 text-white rounded-2xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg"
+                  >
+                    {searching ? '...' : 'Get Lat/Lng'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Latitude</label>
+                <input
+                  type="text"
+                  value={formData.latitude}
+                  onChange={e => setFormData({ ...formData, latitude: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Longitude</label>
+                <input
+                  type="text"
+                  value={formData.longitude}
+                  onChange={e => setFormData({ ...formData, longitude: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Acreage</label>
+                <div className="relative">
+                  <Icon name="Maximize" className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />
+                  <input
+                    type="number"
+                    value={formData.acreage}
+                    onChange={(e) => setFormData({ ...formData, acreage: e.target.value })}
+                    className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('label_growth_status')}</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  <option value="sowing">{t('stage_sowing')}</option>
+                  <option value="growing">{t('stage_growing')}</option>
+                  <option value="flowering">{t('stage_flowering')}</option>
+                  <option value="harvest">{t('stage_harvest')}</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('label_soil_composition')}</label>
+                <select
+                  value={formData.soilType}
+                  onChange={(e) => setFormData({ ...formData, soilType: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  <option value="loam">{t('soil_loam')}</option>
+                  <option value="clay">{t('soil_clay')}</option>
+                  <option value="sandy">{t('soil_sandy')}</option>
+                  <option value="silt">Silt</option>
+                </select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('label_irrigation_method')}</label>
+              <select
+                value={formData.irrigationType}
+                onChange={(e) => setFormData({ ...formData, irrigationType: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="flood">{t('irrigation_flood')}</option>
+                <option value="drip">{t('irrigation_drip')}</option>
+                <option value="sprinkler">{t('irrigation_sprinkler')}</option>
+              </select>
+            </div>
+
+          </form>
+        </div>
+
+        <div className="p-8 border-t border-gray-100 bg-gray-50 flex gap-4 mt-auto">
+          <button
+            onClick={onClose}
+            className="flex-1 py-4 px-6 rounded-2xl bg-white border border-slate-200 text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all"
+          >
+            {t('cancel')}
+          </button>
+          <button
+            form="edit-land-form"
+            type="submit"
+            disabled={loading}
+            className="flex-1 py-4 px-6 rounded-2xl bg-emerald-600 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 disabled:opacity-50"
+          >
+            {loading ? t('please_wait') : t('btn_update_land')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- NEW COMPONENT: Sequence Management Modal ---
+interface SequenceManagementModalProps {
+  land: any;
+  onClose: () => void;
+  onSave: (id: string, parts: any[]) => void;
+  loading: boolean;
+}
+
+const SequenceManagementModal = ({ land, onClose, onSave, loading }: SequenceManagementModalProps) => {
+  const [parts, setParts] = useState(land.parts || []);
+  const [newPart, setNewPart] = useState({ crop: '', area: '', stage: 'preparation' });
+
+  const handleAddPart = () => {
+    if (!newPart.crop || !newPart.area) return;
+    setParts([...parts, { ...newPart, area: parseFloat(newPart.area) }]);
+    setNewPart({ crop: '', area: '', stage: 'preparation' });
+  };
+
+  const handleRemovePart = (index: number) => {
+    setParts(parts.filter((_: any, i: number) => i !== index));
+  };
+
+  const handleSave = () => {
+    onSave(land.id, parts);
+    onClose();
+  };
+
+  const totalSegmentedArea = parts.reduce((acc: number, p: any) => acc + (p.area || 0), 0);
+  const remainingArea = (Number(land.acreage) || 0) - totalSegmentedArea;
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
+      <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl elite-border-glow">
+        <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
+              <Icon name="Layers" className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Sequence Method</h3>
+              <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mt-1">
+                Land Segmentation: {land.location} ({land.acreage} Acres)
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-3 hover:bg-white rounded-2xl transition-all shadow-sm">
+            <Icon name="X" className="h-6 w-6 text-gray-400" />
+          </button>
+        </div>
+
+        <div className="p-8 overflow-y-auto flex-1 space-y-8 custom-scrollbar">
+          {/* Summary Stats */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-5 rounded-3xl bg-slate-50 border border-slate-100 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-1 bg-emerald-500 h-full" />
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Segmented</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-black text-emerald-600">{totalSegmentedArea.toFixed(1)}</span>
+                <span className="text-xs font-bold text-slate-400">/ {Number(land.acreage || 0).toFixed(1)} Acres</span>
+              </div>
+              <div className="mt-3 w-full h-1.5 bg-emerald-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-emerald-500 transition-all duration-500 ease-out"
+                  style={{ width: `${Math.min((totalSegmentedArea / (Number(land.acreage) || 1)) * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+            <div className={`p-5 rounded-3xl border relative overflow-hidden ${remainingArea < 0 ? 'bg-red-50 border-red-100' : 'bg-blue-50 border-blue-100'}`}>
+              <div className={`absolute top-0 left-0 w-1 h-full ${remainingArea < 0 ? 'bg-red-500' : 'bg-blue-500'}`} />
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Available Space</p>
+              <div className="flex items-baseline gap-1">
+                <span className={`text-2xl font-black ${remainingArea < 0 ? 'text-red-600' : 'text-blue-600'}`}>{Math.max(0, remainingArea).toFixed(1)}</span>
+                <span className="text-xs font-bold text-slate-400">Acres Left</span>
+              </div>
+              {remainingArea < 0 && (
+                <p className="text-[8px] text-red-500 font-bold uppercase mt-1">Exceeds total area by {Math.abs(remainingArea).toFixed(1)}!</p>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Cultivation Sequence (Segments)</h4>
+            <div className="space-y-3">
+              {parts.length === 0 ? (
+                <div className="py-10 border-2 border-dashed border-slate-100 rounded-[2rem] flex flex-col items-center justify-center text-center opacity-60">
+                  <Icon name="FolderPlus" className="w-10 h-10 text-slate-300 mb-2" />
+                  <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No segments defined yet</p>
+                </div>
+              ) : (
+                parts.map((part: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-between p-5 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-md transition-all group">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 font-bold text-xs">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h5 className="font-black text-slate-900 uppercase tracking-tight">{part.crop}</h5>
+                        <p className="text-[10px] font-bold text-emerald-600">{part.area} Acres • {part.stage}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRemovePart(idx)}
+                      className="p-2 opacity-0 group-hover:opacity-100 text-red-100 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                    >
+                      <Icon name="Trash2" className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100 space-y-5">
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Add Segment to Sequence</h4>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Crop Variety</label>
+                <input
+                  type="text"
+                  value={newPart.crop}
+                  onChange={e => setNewPart({ ...newPart, crop: e.target.value })}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:border-emerald-500 transition-all"
+                  placeholder="e.g., Basmati Rice"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Area (Acres)</label>
+                <input
+                  type="number"
+                  value={newPart.area}
+                  onChange={e => setNewPart({ ...newPart, area: e.target.value })}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:border-emerald-500 transition-all"
+                  placeholder="e.g., 2.5"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Current Stage</label>
+                <select
+                  value={newPart.stage}
+                  onChange={e => setNewPart({ ...newPart, stage: e.target.value })}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-bold outline-none focus:border-emerald-500 transition-all"
+                >
+                  <option value="preparation">Preparation</option>
+                  <option value="sowing">Sowing</option>
+                  <option value="growing">Growing</option>
+                  <option value="flowering">Flowering</option>
+                  <option value="harvest">Harvest</option>
+                </select>
+              </div>
+            </div>
+            <button
+              onClick={handleAddPart}
+              className="w-full py-4 bg-white border-2 border-dashed border-emerald-200 text-emerald-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-50 hover:border-emerald-400 transition-all flex items-center justify-center gap-2"
+            >
+              <Icon name="Plus" className="w-4 h-4" />
+              Add Segment
+            </button>
+          </div>
+        </div>
+
+        <div className="p-8 border-t border-gray-100 bg-gray-50 flex gap-4 mt-auto">
+          <button
+            onClick={onClose}
+            className="flex-1 py-4 px-6 rounded-2xl bg-white border border-slate-200 text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={loading || remainingArea < -0.1}
+            className="flex-1 py-4 px-6 rounded-2xl bg-emerald-600 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 disabled:opacity-50"
+          >
+            {loading ? 'Processing...' : 'Save Sequence'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+

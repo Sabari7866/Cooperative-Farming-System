@@ -33,16 +33,18 @@ export function useWorkers(filters?: {
   maxDistance?: number;
   available?: boolean;
   gender?: string;
+  minWorkHours?: number;
+  landId?: string;
 }) {
-  return useApi(() => api.getWorkers(filters), [filters]);
+  return useApi(() => api.getWorkers(filters), [filters?.available, filters?.gender, filters?.maxDistance, filters?.minWorkHours, JSON.stringify(filters?.skills), filters?.landId]);
 }
 
-export function useJobs(filters?: { skills?: string[]; urgent?: boolean; maxDistance?: number }) {
-  return useApi(() => api.getJobs(filters), [filters]);
+export function useJobs(filters?: { skills?: string[]; urgent?: boolean; maxDistance?: number; userId?: string }) {
+  return useApi(() => api.getJobs(filters), [filters?.userId, filters?.urgent]);
 }
 
-export function useLands() {
-  return useApi(() => api.getLands(), []);
+export function useLands(userId?: string) {
+  return useApi(() => api.getLands(userId), [userId]);
 }
 
 export function useNotifications() {

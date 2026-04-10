@@ -15,6 +15,7 @@ const WorkerApplicationSchema = new mongoose.Schema({
 });
 
 const JobSchema = new mongoose.Schema({
+    userId: { type: String }, // To associate job with specific user
     title: { type: String, required: true },
     description: { type: String, required: true },
     farmOwner: { type: String, required: true },

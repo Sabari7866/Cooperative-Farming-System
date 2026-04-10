@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const LandSchema = new mongoose.Schema({
+    userId: { type: String }, // To associate land with specific user
     name: { type: String, required: true },
     location: { type: String, required: true },
     crop: { type: String, required: true },
@@ -20,6 +21,11 @@ const LandSchema = new mongoose.Schema({
         lat: Number,
         lng: Number
     },
+    parts: [{
+        crop: String,
+        area: Number,
+        stage: String
+    }],
     notes: { type: String }
 }, { timestamps: true });
 

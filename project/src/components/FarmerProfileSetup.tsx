@@ -135,7 +135,7 @@ export default function FarmerProfileSetup() {
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
           {
             headers: {
-              'User-Agent': 'AgriSmart-FarmApp/1.0',
+              'User-Agent': 'UzhavanX-FarmApp/1.0',
             },
           },
         );
@@ -227,8 +227,11 @@ export default function FarmerProfileSetup() {
         const totalAcres = parseFloat(formData.farmAreaAcres);
         const acresPerCrop = parseFloat((totalAcres / formData.currentCrops.length).toFixed(1));
 
+        const localUserId = localStorage.getItem("currentUserId") || session?.id;
+
         for (const cropData of formData.currentCrops) {
           await api.createLand({
+            userId: localUserId,
             name: `${formData.farmLocation} - ${cropData.name}`,
             location: formData.farmLocation,
             crop: cropData.name,

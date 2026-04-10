@@ -11,7 +11,7 @@ interface Activity {
     color: string;
 }
 
-const STORAGE_KEY = 'agrismart_activity';
+const STORAGE_KEY = 'uzhavan_x_activity';
 
 export default function ActivityTimeline() {
     const [activities, setActivities] = useState<Activity[]>([]);

@@ -1,0 +1,86 @@
+{
+  "tomato": [
+    {
+      "id": "tom-001",
+      "disease": "Septoria Leaf Spot",
+      "scientificName": "Septoria lycopersici",
+      "severity": "High",
+      "emoji": "🟡",
+      "fix": "Remove infected leaves. Spray Copper Hydroxide.",
+      "fixTamil": "நோய் இலைகளை அகற்றவும். காப்பர் ஹைட்ராக்சைட் தெளிக்கவும்.",
+      "spray": "Copper Hydroxide (Kocide 2000)",
+      "spread": "Spreads via rain splash and high humidity.",
+      "fertilizerRate": 1.5,
+      "waterRatio": 15
+    },
+    {
+      "id": "tom-002",
+      "disease": "Early Blight",
+      "scientificName": "Alternaria solani",
+      "severity": "Moderate",
+      "emoji": "🟠",
+      "fix": "Mulching + spacing. Spray Chlorothalonil.",
+      "fixTamil": "மண்ணை மூடவும். குளோரோதலோனில் தெளிக்கவும்.",
+      "spray": "Chlorothalonil (Daconil)",
+      "spread": "Soil-borne fungi, thrives in warm temperatures.",
+      "fertilizerRate": 2.0,
+      "waterRatio": 20
+    },
+    {
+      "id": "tom-003",
+      "disease": "Yellow Leaf Curl",
+      "scientificName": "TYLCV (Viral)",
+      "severity": "Severe",
+      "emoji": "🔴",
+      "fix": "Remove plant. Use yellow sticky traps. Net the crop.",
+      "fixTamil": "செடியை அகற்றவும். மஞ்சள் பாசி வலை பயன்படுத்தவும்.",
+      "spray": "Imidacloprid (Confidor)",
+      "spread": "Transmitted by whiteflies (Bemisia tabaci).",
+      "fertilizerRate": 0.5,
+      "waterRatio": 50
+    }
+  ],
+  "rice": [
+    {
+      "id": "rice-001",
+      "disease": "Bacterial Leaf Blight",
+      "scientificName": "Xanthomonas oryzae",
+      "severity": "High",
+      "emoji": "🟡",
+      "fix": "Spray Streptocycline. Add Potash fertilizer.",
+      "fixTamil": "ஸ்ட்ரெப்டோசைக்லின் தெளிக்கவும். பொட்டாஷ் உரம் இடவும்.",
+      "spray": "Streptocycline (Bactrinashak)",
+      "spread": "Spreads through water/wind and high nitrogen levels.",
+      "fertilizerRate": 5.0,
+      "waterRatio": 10
+    },
+    {
+      "id": "rice-002",
+      "disease": "Rice Blast",
+      "scientificName": "Magnaporthe oryzae",
+      "severity": "Severe",
+      "emoji": "🔴",
+      "fix": "Spray Tricyclazole. Irrigate in morning only.",
+      "fixTamil": "ட்ரைசைக்லாசோல் தெளிக்கவும். காலையில் மட்டும் நீர் பாய்ச்சவும்.",
+      "spray": "Tricyclazole (Beam)",
+      "spread": "Airborne spores, dangerous in cool/wet weather.",
+      "fertilizerRate": 4.5,
+      "waterRatio": 12
+    }
+  ],
+  "curry_leaves": [
+    {
+      "id": "curry-001",
+      "disease": "Cercospora Leaf Spot",
+      "scientificName": "Cercospora sp.",
+      "severity": "Moderate",
+      "emoji": "🟠",
+      "fix": "Spray Neem oil 3%. Space plants well.",
+      "fixTamil": "வேப்ப எண்ணெய் 3% தெளிக்கவும். செடிகளுக்கு இடைவெளி விடவும்.",
+      "spray": "Carbendazim (Bavistin)",
+      "spread": "Common in rainy seasons and overcrowded spaces.",
+      "fertilizerRate": 1.0,
+      "waterRatio": 20
+    }
+  ]
+}

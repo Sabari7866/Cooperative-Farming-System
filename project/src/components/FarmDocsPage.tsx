@@ -259,11 +259,10 @@ export default function FarmDocsPage() {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`p-4 rounded-xl transition-all ${
-                selectedCategory === category.id
+              className={`p-4 rounded-xl transition-all ${selectedCategory === category.id
                   ? 'bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-lg scale-105'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-blue-500'
-              }`}
+                }`}
             >
               <div className="text-3xl mb-2">{category.icon}</div>
               <div className="text-sm font-semibold">{category.name}</div>
@@ -423,7 +422,7 @@ export default function FarmDocsPage() {
             onClick={() => navigate('/login')}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
           >
-            Get Started with AgriSmart
+            Get Started with உழவன் X
           </button>
         </div>
       </div>

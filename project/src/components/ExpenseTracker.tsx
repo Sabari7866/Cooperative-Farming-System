@@ -11,7 +11,7 @@ interface Expense {
     type: 'expense' | 'income';
 }
 
-const STORAGE_KEY = 'agrismart_expenses';
+const STORAGE_KEY = 'uzhavan_x_expenses';
 
 export default function ExpenseTracker() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -125,8 +125,8 @@ export default function ExpenseTracker() {
 
                 <div
                     className={`p-4 rounded-lg border ${netProfit >= 0
-                            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
-                            : 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800'
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                        : 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800'
                         }`}
                 >
                     <div className="flex items-center space-x-2 mb-2">

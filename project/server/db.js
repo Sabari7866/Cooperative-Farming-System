@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
     try {
         // Default to local MongoDB if MONGODB_URI is not defined
-        const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/agrismart';
+        const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/uzhavan_x';
 
         await mongoose.connect(uri);
 

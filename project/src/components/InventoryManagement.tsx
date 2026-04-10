@@ -13,7 +13,7 @@ interface InventoryItem {
     lastUpdated: string;
 }
 
-const STORAGE_KEY = 'agrismart_inventory';
+const STORAGE_KEY = 'uzhavan_x_inventory';
 
 export default function InventoryManagement() {
     const [inventory, setInventory] = useState<InventoryItem[]>([]);
@@ -348,8 +348,8 @@ export default function InventoryManagement() {
                         <div
                             key={item.id}
                             className={`p-4 rounded-lg border-2 ${item.quantity <= item.minStock
-                                    ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20'
-                                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700'
+                                ? 'border-orange-300 bg-orange-50 dark:bg-orange-900/20'
+                                : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700'
                                 }`}
                         >
                             <div className="flex items-start justify-between mb-3">

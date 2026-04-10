@@ -189,76 +189,6 @@ const Login: React.FC = () => {
     else setRole('farmer');
   };
 
-  const handleDemoLogin = (targetRole?: string) => {
-    const r = (targetRole || 'farmer') as UserRole;
-    // Generate a unique ID for this session to guarantee fresh login
-    const uniqueId = Date.now().toString().slice(-4);
-
-    let validEmail = '';
-    let validPhone = '';
-    const pass = 'password';
-    let validName = '';
-
-    // Set local variables and State variables
-    setRole(r);
-    setIsNew(true);
-    setError(null);
-
-    // Use unique credentials to bypass any local storage conflicts
-    if (r === 'farmer') {
-      validEmail = `farmer.${uniqueId}@demo.com`;
-      validName = 'Demo Farmer';
-      setEmail(validEmail);
-      setName(validName);
-      setPassword(pass);
-    } else if (r === 'buyer') {
-      validEmail = `buyer.${uniqueId}@demo.com`;
-      validName = 'Demo Buyer';
-      setEmail(validEmail);
-      setName(validName);
-      setPassword(pass);
-    } else if (r === 'worker') {
-      validPhone = `98${uniqueId}5432`;
-      validName = 'Demo Worker';
-      setPhone(validPhone);
-      setName(validName);
-      setPassword(pass);
-    } else {
-      validEmail = `renter.${uniqueId}@demo.com`;
-      validName = 'Demo Renter';
-      setEmail(validEmail);
-      setName(validName);
-      setPassword(pass);
-    }
-
-    // 1. Force Register a NEW user (guaranteed to work)
-    try {
-      const regData: any = {
-        role: r,
-        name: validName,
-        password: pass,
-        email: validEmail || undefined,
-        phone: validPhone || undefined,
-      };
-
-      const session = registerUser(regData);
-
-      if (session) {
-        saveSession(session);
-        // Navigate immediately
-        let path = '/';
-        switch (session.role) {
-          case 'farmer': path = '/farm-owner'; break;
-          case 'worker': path = '/farm-worker'; break;
-          case 'buyer': path = '/buyer'; break;
-          case 'renter': path = '/renter'; break;
-        }
-        navigate(path);
-      }
-    } catch (e: any) {
-      setError('Demo login failed. Please try manual sign up.');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50 flex items-center login-hero-bg">
@@ -320,7 +250,7 @@ const Login: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-5xl leading-tight font-extrabold text-green-800">
-                    {t('welcome_to_agrismart')}
+                    {t('welcome_to_uzhavan_x')}
                   </h2>
                   <p className="text-gray-600 mt-2 max-w-md">{t('connect_manage_grow')}</p>
                 </div>
@@ -331,7 +261,7 @@ const Login: React.FC = () => {
             </div>
 
             <div className="mt-6 bg-white/60 backdrop-blur rounded-xl p-6 shadow-lg w-full">
-              <h3 className="text-lg font-bold text-gray-800">Why AgriSmart?</h3>
+              <h3 className="text-lg font-bold text-gray-800">Why உழவன் X?</h3>
               <ul className="mt-3 space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-3">
                   <span className="text-green-600 font-semibold">•</span> AI crop advice tailored to
@@ -719,7 +649,7 @@ const Login: React.FC = () => {
 
                 {error && <div className="text-sm text-red-600">{error}</div>}
 
-                <div className="mt-4">
+                <div className="mt-6">
                   <button
                     onClick={handleLogin}
                     className="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white py-3 rounded-lg font-semibold shadow-xl transition-transform transform hover:-translate-y-0.5"
@@ -728,55 +658,13 @@ const Login: React.FC = () => {
                   </button>
                   <p className="text-center text-xs text-gray-400 mt-2">{t('hero_trusted')}</p>
                 </div>
-
-                <div className="mt-6">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-200" />
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-white text-gray-500">Instant Demo Access</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('farmer')}
-                      className="flex flex-col items-center justify-center p-2 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-                    >
-                      <span className="font-semibold text-green-700">🌱 Farmer</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('worker')}
-                      className="flex flex-col items-center justify-center p-2 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                    >
-                      <span className="font-semibold text-blue-700">👷 Worker</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('buyer')}
-                      className="flex flex-col items-center justify-center p-2 border border-purple-200 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-                    >
-                      <span className="font-semibold text-purple-700">🛒 Buyer</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDemoLogin('renter')}
-                      className="flex flex-col items-center justify-center p-2 border border-orange-200 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
-                    >
-                      <span className="font-semibold text-orange-700">🚜 Renter</span>
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-  /* AI helper button (floats over the form) */
-      <AIHelper onSuggestRole={suggestRole} onFillDemo={handleDemoLogin} />
+      {/* AI helper button (floats over the form) */}
+      <AIHelper onSuggestRole={suggestRole} />
     </div>
   );
 };

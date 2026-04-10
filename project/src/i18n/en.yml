@@ -1,8 +1,8 @@
 # English (en) - Complete Translations
-# AgriSmart Platform - All Components
+# உழவன் X Platform - All Components
 
 # ===== COMMON =====
-brand_name: AgriSmart
+brand_name: உழவன் X
 tagline: "The best local harvest for your family."
 logout: Logout
 loading: Loading...
@@ -68,6 +68,7 @@ nav_job_offers: Incoming Job Req
 nav_resource_sharing: Resource Sharing
 nav_marketplace: Marketplace
 nav_profile: Profile
+nav_bio: Bio / About
 nav_settings: Settings
 nav_help: Help
 nav_crops: Crops
@@ -76,7 +77,7 @@ nav_support: Support
 nav_login: Login
 
 # ===== AUTHENTICATION =====
-welcome_to_agrismart: Welcome to AgriSmart
+welcome_to_agrismart: "Welcome to உழவன் X"
 connect_manage_grow: "Cultivating Innovation, Feeding the Future."
 create_account: Create account
 sign_in: Sign in
@@ -204,7 +205,16 @@ not_planted: Not planted
 label_expected_harvest: Expected Harvest
 label_last_updated: Last Updated
 view_details: View Details
+btn_add_land: Add Land
 add_another_crop: Add another crop
+edit_land_title: Edit Land Profile
+edit_land_subtitle: Updating global agricultural records
+label_growth_status: Growth Status
+label_soil_composition: Soil Composition
+label_irrigation_method: Irrigation Method
+label_segmentation_sequence: Segmentation Sequence
+btn_update_land: Update Land Profile
+btn_edit_land: Edit Land
 
 # Crops
 aria_select_crop: Select crop
@@ -413,7 +423,7 @@ hero_desc: Connect with skilled agricultural workers, manage your farmland effic
 cta_login: Login to Continue
 
 # Features
-features_why: Why Choose AgriSmart?
+features_why: Why Choose உழவன் X?
 features_why_desc: Experience the future of farming with our comprehensive platform designed for modern agriculture
 feature_verified_title: Verified Workers
 feature_verified_desc: All workers are background-verified with skill assessments and ratings from previous employers.
@@ -426,7 +436,7 @@ feature_ai_desc: "Personalized recommendations for irrigation, fertilization, pe
 feature_ai_badge: 95% Accuracy Rate
 
 # How It Works
-how_title: How AgriSmart Works
+how_title: How உழவன் X Works
 how_desc: Simple steps to connect with skilled workers and optimize your farming operations
 how_step1_title: Post Your Requirements
 how_step1_desc: "Describe your needs: crop, duration, workers, skills, budget, and timeline."
@@ -437,7 +447,7 @@ how_step3_desc: Coordinate work while getting real-time AI crop advice.
 
 # CTA
 cta_title: Ready to Transform Your Farming?
-cta_desc: Join thousands of farmers already improving productivity with AgriSmart.
+cta_desc: Join thousands of farmers already improving productivity with உழவன் X.
 cta_get_started: Get Started
 cta_try_ai: Try AI Advisor
 
@@ -447,20 +457,20 @@ why_bullet_resources: Share resources with neighbors
 why_bullet_verified: Find verified workers fast
 
 # Future Farming
-future_farming_title: Welcome to the future of farming
-future_farming_p1: Harness real-time soil analytics, climate data, and precision recommendations to make smarter decisions every season. Agri Smart Cloud connects your fields, workforce, and buyers in a single digital platform.
+future_farming_title: Welcome to the future of farming with உழவன் X
+future_farming_p1: Harness real-time soil analytics, climate data, and precision recommendations to make smarter decisions every season. உழவன் X connects your fields, workforce, and buyers in a single digital platform.
 future_farming_p2: "From smart irrigation and labor planning to transparent farm-to-market commerce, this portal is your gateway to sustainable, data-driven agriculture."
 future_farming_point1: AI-assisted irrigation and weather-aware planning.
 future_farming_point2: Traceable farm-to-market supply for better pricing.
 
 # ===== HEADER =====
-header_logo_title: AGRI SMART CLOUD
+header_logo_title: உழவன் X
 header_logo_subtitle_line1: Agriportal & Ecofarm
 header_logo_subtitle_line2: Platform
 
 # ===== WELCOME PAGE =====
 welcome_page_title: Welcome Page
-welcome_page_body: Access your Agri Smart Cloud services, monitor crops, manage ecofarm activities, and stay updated with insights – all in one secure platform for farmers, renters, buyers, and workers.
+welcome_page_body: Access your உழவன் X services, monitor crops, manage ecofarm activities, and stay updated with insights – all in one secure platform for farmers, renters, buyers, and workers.
 welcome_point_1: Real-time crop and soil monitoring dashboard.
 welcome_point_2: "Unified access for farmers, workers, buyers, and renters."
 
@@ -505,8 +515,14 @@ benefit_mobile_ready_title: Mobile Ready
 benefit_mobile_ready_desc: Access from anywhere, anytime
 
 # ===== Testimonial =====
-testimonial_quote: "AgriSmart transformed how I manage my farm. The AI recommendations increased my yield by 30%!"
+testimonial_quote: "உழவன் X transformed how I manage my farm. The AI recommendations increased my yield by 30%!"
 testimonial_author: Happy Farmer
+secure_login: Secure Login
+encrypted_data: Encrypted Data
+trusted_platform: Trusted Platform
+live_market_trends: Live Market Trends
+trending_now: Trending Now
+ai_insight_harvest_alert: "AI Insight: Harvest Alert"
 
 # ===== Worker Dashboard Missing =====
 nav_my_shifts: My Shifts
@@ -571,7 +587,7 @@ footer_success_stories: Success Stories
 footer_help_center: Help Center
 footer_contact_info: Contact Info
 footer_address: Rural Development Center, India
-footer_copyright: © 2024 AgriSmart. "The farmer is the only man in our economy who buys everything at retail, sells everything at wholesale, and pays the freight both ways."
+footer_copyright: © 2024 உழவன் X. "The farmer is the only man in our economy who buys everything at retail, sells everything at wholesale, and pays the freight both ways."
 footer_privacy: Privacy Policy
 footer_terms: Terms of Service
 footer_cookies: Cookie Policy
@@ -675,7 +691,7 @@ payment_upi: UPI
 payment_card: Card
 status_paid: PAID
 status_failed: FAILED
-receipt_title: AgriSmart
+receipt_title: உழவன் X
 receipt_subtitle: Your Agricultural Marketplace
 receipt_invoice: INVOICE
 receipt_bill_to: Bill To:
@@ -768,3 +784,15 @@ irrigation_flood: Flood Irrigation
 irrigation_drip: Drip Irrigation
 irrigation_sprinkler: Sprinkler
 irrigation_furrow: Furrow
+
+# ===== PROFILE & BIO =====
+title_profile: My Profile
+label_bio: Bio / About Me
+placeholder_bio: Tell us about your farming journey, experience, or what you produce...
+btn_save_profile: Update Profile Information
+msg_profile_updated: Profile updated successfully!
+label_total_land_owned: Total Land Managed
+label_years_experience: Years of Experience
+label_primary_crops: Primary Crops
+label_account_details: Account Details
+label_profile_header: Customize your presence on உழவன் X

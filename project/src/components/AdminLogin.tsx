@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Icon from './Icon';
-import { saveSession } from '../utils/auth';
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -12,40 +11,16 @@ export default function AdminLogin() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    // Demo credentials
-    const DEMO_ADMIN = {
-        username: 'admin',
-        password: 'admin123'
-    };
-
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
 
-        // Simulate API call
+        // Simulated login failure since demo is disabled
         setTimeout(() => {
-            if (username === DEMO_ADMIN.username && password === DEMO_ADMIN.password) {
-                // Save admin session
-                saveSession({
-                    email: 'admin@agrismart.com',
-                    name: 'System Administrator',
-                    role: 'admin',
-                    phone: '+91 00000 00000'
-                });
-
-                // Navigate to admin dashboard
-                navigate('/admin');
-            } else {
-                setError('Invalid username or password');
-                setIsLoading(false);
-            }
-        }, 800);
-    };
-
-    const handleDemoLogin = () => {
-        setUsername(DEMO_ADMIN.username);
-        setPassword(DEMO_ADMIN.password);
+            setError('Admin login is currently disabled. Please contact system administrator.');
+            setIsLoading(false);
+        }, 1000);
     };
 
     return (
@@ -87,30 +62,6 @@ export default function AdminLogin() {
                     {/* Form */}
                     <div className="p-8">
                         <form onSubmit={handleLogin} className="space-y-6">
-                            {/* Demo Credentials Info */}
-                            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl p-4">
-                                <div className="flex items-start gap-3">
-                                    <Icon name="Info" className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-amber-900 mb-2">Demo Credentials:</p>
-                                        <div className="space-y-1 text-sm text-amber-800">
-                                            <p className="font-mono bg-white/60 px-2 py-1 rounded">
-                                                <span className="font-semibold">Username:</span> admin
-                                            </p>
-                                            <p className="font-mono bg-white/60 px-2 py-1 rounded">
-                                                <span className="font-semibold">Password:</span> admin123
-                                            </p>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={handleDemoLogin}
-                                            className="mt-3 text-xs font-semibold text-amber-700 hover:text-amber-900 underline"
-                                        >
-                                            Click to auto-fill demo credentials
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Error Message */}
                             {error && (
@@ -208,7 +159,7 @@ export default function AdminLogin() {
 
                 {/* Footer */}
                 <p className="text-center text-sm text-gray-600 mt-6">
-                    AgriSmart Admin Portal v1.0 • Secure Access
+                    உழவன் X Admin Portal v12.0 • Secure Access
                 </p>
             </motion.div>
         </div>
