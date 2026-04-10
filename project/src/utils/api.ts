@@ -114,7 +114,8 @@ export const api = {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || `Request failed: ${res.statusText}`);
+        const statusMsg = res.statusText || `Status ${res.status}`;
+        throw new Error(err.error || `Request failed: ${statusMsg}`);
       }
       return res.json();
     } catch (error) {
