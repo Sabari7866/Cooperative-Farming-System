@@ -9,8 +9,9 @@ const connectDB = async () => {
 
         console.log(`✅ MongoDB Connected: ${mongoose.connection.host}`);
     } catch (error) {
-        console.error(`❌ Error: ${error.message}`);
-        process.exit(1);
+        console.error(`❌ MongoDB Connection Error: ${error.message}`);
+        // In serverless/production, we don't want to kill the process
+        // We let the request fail naturally so we can see the error in logs
     }
 };
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Icon from './Icon';
+import { saveSession } from '../utils/auth';
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -16,9 +17,20 @@ export default function AdminLogin() {
         setError('');
         setIsLoading(true);
 
-        // Simulated login failure since demo is disabled
+        // Fixed admin credentials
         setTimeout(() => {
-            setError('Admin login is currently disabled. Please contact system administrator.');
+            if (username === 'admin' && password === 'admin') {
+                const adminSession = {
+                    id: 'admin-001',
+                    role: 'admin',
+                    name: 'System Administrator',
+                    email: 'admin@uzhavanx.com'
+                };
+                saveSession(adminSession as any);
+                navigate('/admin');
+            } else {
+                setError('Invalid admin credentials. Access denied.');
+            }
             setIsLoading(false);
         }, 1000);
     };

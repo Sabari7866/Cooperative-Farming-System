@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true }, // Hashed password
     role: {
         type: String,
-        enum: ['farmer', 'worker', 'buyer', 'renter'],
+        enum: ['farmer', 'worker', 'buyer', 'renter', 'admin'],
         default: 'farmer'
     },
     profileId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile' }

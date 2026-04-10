@@ -20,7 +20,7 @@ import { useFarmStore } from '../store/farmStore';
 import { io } from 'socket.io-client';
 import { useLands } from '../hooks/useApi';
 
-const socket = io("http://localhost:3000");
+const socket = io(window.location.origin);
 
 interface SensorData {
     time: string;

@@ -25,6 +25,27 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
+// Seed Admin User
+(async () => {
+  try {
+    const adminEmail = 'admin';
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    if (!existingAdmin) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('admin', salt);
+      const admin = new User({
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'admin'
+      });
+      await admin.save();
+      console.log('✅ Default admin user created: admin/admin');
+    }
+  } catch (err) {
+    console.error('❌ Admin seeding failed:', err.message);
+  }
+})();
+
 const API_KEY = process.env.GOOGLE_API_KEY;
 const MODEL = process.env.GOOGLE_MODEL_ID || 'gemini-pro';
 
@@ -1279,4 +1300,4 @@ if (process.env.NODE_ENV !== 'production') {
   server.listen(port, () => console.log(`Backend server running on http://localhost:${port} with Socket real-time simulator`));
 }
 
-module.exports = server;
+module.exports = { app, server };

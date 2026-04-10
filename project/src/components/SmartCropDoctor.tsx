@@ -181,7 +181,7 @@ export default function SmartCropDoctor() {
             // Note: In production, we would use the actual file from fileInput
             // formData.append('image', file);
 
-            const response = await fetch('http://localhost:5000/predict', {
+            const response = await fetch('/api/python/predict', {
                 method: 'POST',
                 body: formData
             });

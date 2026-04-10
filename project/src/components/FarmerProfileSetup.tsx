@@ -257,12 +257,12 @@ export default function FarmerProfileSetup() {
         setTimeout(() => {
           navigate('/farm-owner');
         }, 1500);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Setup Error", err);
         addToast({
           type: 'error',
           title: 'Error',
-          message: 'Failed to save profile or create lands. Please check connection.',
+          message: err.message || 'Failed to save profile or create lands. Please check connection.',
         });
       }
     },

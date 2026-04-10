@@ -18,6 +18,7 @@ async function loadYaml(locale: Locale): Promise<Translations> {
     const idx = trimmed.indexOf(':');
     if (idx === -1) continue;
     const key = trimmed.slice(0, idx).trim();
+    // Use the rest of the string as the value to support colons in values
     const value = trimmed
       .slice(idx + 1)
       .trim()
@@ -29,7 +30,7 @@ async function loadYaml(locale: Locale): Promise<Translations> {
 
 export const I18nContext = React.createContext<{
   locale: Locale;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, any>) => string;
   setLocale: (l: Locale) => void;
 }>({ locale: 'en', t: (k) => k, setLocale: () => { } });
 
@@ -51,8 +52,14 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   }, [locale]);
 
   const t = React.useCallback(
-    (key: string) => {
-      return dict[key] || key;
+    (key: string, params?: Record<string, any>) => {
+      let value = dict[key] || key;
+      if (params) {
+        Object.keys(params).forEach((param) => {
+          value = value.replace(new RegExp(`{${param}}`, 'g'), String(params[param]));
+        });
+      }
+      return value;
     },
     [dict],
   );
