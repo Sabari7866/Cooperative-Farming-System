@@ -1,0 +1,782 @@
+# Tamil (ta) - முழுமையான மொழிபெயர்ப்புகள்
+# உழவன் X Platform - அனைத்து கூறுகள்
+
+# ===== பொதுவான =====
+brand_name: உழவன் X
+tagline: ஸ்மார்ட் விவசாய தீர்வுகள்
+logout: வெளியேறு
+loading: ஏற்றுகிறது...
+save: சேமி
+cancel: ரத்து செய்
+submit: சமர்ப்பிக்கவும்
+delete: நீக்கு
+edit: திருத்து
+view: பார்க்க
+close: மூடு
+back: பின்செல்
+next: அடுத்து
+confirm: உறுதிப்படுத்து
+search: தேடு
+filter: வடிகட்டி
+export: ஏற்றுமதி
+download: பதிவிறக்கு
+upload: பதிவேற்று
+yes: ஆம்
+no: இல்லை
+ok: சரி
+error: பிழை
+success: வெற்றி
+warning: எச்சரிக்கை
+info: தகவல்
+
+# ===== மொழி =====
+choose_language: உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்
+label_language: மொழி
+language_english: ஆங்கிலம்
+language_tamil: தமிழ்
+language_hindi: இந்தி
+
+# ===== நேரம் & தேதி =====
+label_date: தேதி
+label_time: நேரம்
+label_today: இன்று
+label_yesterday: நேற்று
+label_tomorrow: நாளை
+label_this_week: இந்த வாரம்
+label_this_month: இந்த மாதம்
+label_this_year: இந்த ஆண்டு
+
+# ===== அலகுகள் =====
+unit_acres: ஏக்கர்
+unit_kg: கிலோ
+unit_quintal: குவிண்டால்
+unit_ton: டன்
+unit_liter: லிட்டர்
+unit_dozen: டஜன்
+unit_km: கிமீ
+unit_rupees: ₹
+
+# ===== வழிசெலுத்தல் =====
+nav_home: முகப்பு
+nav_dashboard: டாஷ்போர்டு
+nav_my_land: எனது நிலம்
+nav_posted_jobs: வெளியிடப்பட்ட வேலைகள்
+nav_ai: AI ஆலோசகர்
+nav_find_workers: தொழிலாளர்களைக் கண்டறியவும்
+nav_find_jobs: வேலைகளைக் கண்டறியவும்
+nav_job_offers: உள்வரும் வேலை கோரிக்கைகள்
+nav_resource_sharing: வளப் பகிர்வு
+nav_marketplace: சந்தை
+nav_profile: சுயவிவரம்
+nav_bio: சுயசரிதை / பற்றி
+nav_settings: அமைப்புகள்
+nav_help: உதவி
+nav_crops: பயிர்கள்
+nav_farm_docs: பண்ணை ஆவணங்கள்
+nav_support: ஆதரவு
+nav_login: உள்நுழைவு
+
+# ===== அங்கீகாரம் =====
+welcome_to_agrismart: உழவன் X-க்கு வரவேற்கிறோம்
+connect_manage_grow: இணைக்கவும். நிர்வகிக்கவும். நவீன விவசாய கருவிகளுடன் வளரவும்.
+create_account: கணக்கை உருவாக்கவும்
+sign_in: உள்நுழைக
+new_user_create_account: புதிய பயனரா? கணக்கை உருவாக்கவும்
+welcome_back: மீண்டும் வருக
+sign_in_to_access_dashboard: உங்கள் டாஷ்போர்டை அணுக உள்நுழைக
+login_subtitle_new: தொடங்க உங்கள் விவரங்களை நிரப்பவும்
+login_subtitle_existing: தொடர உங்கள் நற்சான்றிதழ்களை உள்ளிடவும்
+
+# படிவ லேபிள்கள்
+full_name: முழு பெயர்
+email_or_phone: மின்னஞ்சல் அல்லது தொலைபேசி
+placeholder_email_phone: மின்னஞ்சல் அல்லது +91 தொலைபேசி
+password_label: கடவுச்சொல்
+create_a_strong_password: வலுவான கடவுச்சொல்லை உருவாக்கவும்
+enter_your_password: உங்கள் கடவுச்சொல்லை உள்ளிடவும்
+confirm_password_label: கடவுச்சொல்லை உறுதிப்படுத்தவும்
+confirm_password_placeholder: உங்கள் கடவுச்சொல்லை உறுதிப்படுத்தவும்
+remember_me: என்னை நினைவில் கொள்
+forgot: மறந்துவிட்டதா?
+
+# கடவுச்சொல் வலிமை
+password_strength_label: கடவுச்சொல் வலிமை
+password_strength_weak: பலவீனமான
+password_strength_medium: நடுத்தர
+password_strength_strong: வலுவான
+
+# பாத்திரங்கள்
+choose_role: உங்கள் பாத்திரத்தைத் தேர்ந்தெடுக்கவும்
+role_farmer: விவசாயி
+role_worker: தொழிலாளி
+role_buyer: வாங்குபவர்
+role_renter: வாடகைதாரர்
+
+# பிழைகள்
+error_full_name_required: முழு பெயர் தேவை
+error_email_or_phone_required: மின்னஞ்சல் அல்லது தொலைபேசி எண் தேவை
+error_invalid_email_or_phone: சரியான மின்னஞ்சல் முகவரி அல்லது 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்
+error_password_required: கடவுச்சொல் தேவை
+error_password_too_short: கடவுச்சொல் குறைந்தது 8 எழுத்துகள் நீளமாக இருக்க வேண்டும்
+error_passwords_do_not_match: கடவுச்சொற்கள் பொருந்தவில்லை
+error_enter_email_or_phone: மின்னஞ்சல் அல்லது தொலைபேசியை உள்ளிடவும்
+error_enter_password: உங்கள் கடவுச்சொல்லை உள்ளிடவும்
+
+# வெற்றி செய்திகள்
+registration_success_redirect: கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது! திருப்பிவிடப்படுகிறது...
+login_success_redirect: உள்நுழைவு வெற்றிகரமாக! திருப்பிவிடப்படுகிறது...
+registration_failed: பதிவு தோல்வியடைந்தது
+user_already_exists: பயனர் ஏற்கனவே உள்ளார். உங்கள் நற்சான்றிதழ்களுடன் உள்நுழைக.
+invalid_credentials: தவறான நற்சான்றிதழ்கள்
+generic_error: ஏதோ தவறு நடந்துவிட்டது. மீண்டும் முயற்சிக்கவும்.
+password_reset_flow_placeholder: கடவுச்சொல் மீட்டமைப்பு ஓட்டம் இடமாற்றி
+
+# விரைவு உள்நுழைவு
+quick_login_title: விரைவு உள்நுழைவு - டெமோ கணக்குகள்
+quick_login_subtitle: நற்சான்றிதழ்களை தானாக நிரப்ப எந்த கணக்கையும் கிளிக் செய்க
+quick_login_farmer: விவசாயி டாஷ்போர்டு
+quick_login_worker: தொழிலாளி டாஷ்போர்டு
+quick_login_buyer: வாங்குபவர் டாஷ்போர்டு
+quick_login_renter: வாடகைதாரர் டாஷ்போர்டு
+quick_login_password_label: "கடவுச்சொல்:"
+quick_login_password_value: password
+
+# ===== விவசாயி டாஷ்போர்டு =====
+farm_owner_dashboard_subtitle: பண்ணை உரிமையாளர் டாஷ்போர்டு
+loading_dashboard: டாஷ்போர்டு தரவை ஏற்றுகிறது...
+
+# டாஷ்போர்டு அட்டைகள்
+card_total_land: மொத்த நிலம்
+card_plus_acres: இந்த பருவத்தில் +2 ஏக்கர்
+card_active_jobs: செயலில் உள்ள வேலைகள்
+card_available_workers: கிடைக்கக்கூடிய தொழிலாளர்கள்
+card_within_km: 5 கிமீக்குள்
+card_this_month: பயிர் ஆரோக்கியம்
+card_labor_costs: சுகாதாரக் குறியீடு
+
+# விரைவு செயல்கள்
+quick_actions: விரைவு செயல்கள்
+action_add_new_land: புதிய நிலத்தைச் சேர்க்கவும்
+action_post_work_request: வேலை கோரிக்கையை இடுகையிடவும்
+action_post_new_job: புதிய வேலையை இடுகையிடவும்
+action_get_ai_advice: AI ஆலோசனை பெறுங்கள்
+
+# எச்சரிக்கைகள்
+irrigation_alert: நீர்ப்பாசன எச்சரிக்கை
+rice_fields_north_plot: நெல் வயல்கள் - வடக்கு நிலம்
+view_full_schedule: முழு அட்டவணையைப் பார்க்கவும்
+weather_update: வானிலை புதுப்பிப்பு
+weather_favorable: சாதகமான நிலைமைகள்
+weather_summary: "விதைப்பு செயல்பாடுகளுக்கு சரியான வானிலை. வெப்பநிலை: 25°C, ஈரப்பதம்: 65%"
+view_7day_forecast: 7 நாள் முன்னறிவிப்பு
+
+# சமீபத்திய செயல்பாடு
+recent_activity: சமீபத்திய செயல்பாடு
+msg_no_job_offers: தற்போது எந்த உள்வரும் வேலை கோரிக்கைகளும் இல்லை.
+activity_rice_harvested: ரவி குமார் நெல் அறுவடை வேலையை முடித்தார்
+activity_2_hours_ago: 2 மணி நேரத்திற்கு முன்பு
+activity_new_application: பருத்தி விதைப்புக்கான புதிய தொழிலாளி விண்ணப்பம்
+activity_4_hours_ago: 4 மணி நேரத்திற்கு முன்பு
+activity_weather_alert: "வானிலை எச்சரிக்கை: நாளை லேசான மழை எதிர்பார்க்கப்படுகிறது"
+activity_6_hours_ago: 6 மணி நேரத்திற்கு முன்பு
+
+# ===== எனது நிலம் =====
+my_land_title: எனது நிலம்
+loading_your_lands: உங்கள் நிலங்களை ஏற்றுகிறது...
+add_new_land_title: புதிய நிலத்தைச் சேர்க்கவும்
+
+# நில படிவம்
+label_location: இடம்
+placeholder_enter_field_location: வயல் இடத்தை உள்ளிடவும்
+label_soil: மண்
+label_crops_on_land: இந்த நிலத்தில் பயிர்கள்
+label_planted: நடப்பட்டது
+not_planted: நடப்படவில்லை
+label_expected_harvest: எதிர்பார்க்கப்படும் அறுவடை
+label_last_updated: கடைசியாக புதுப்பிக்கப்பட்டது
+view_details: விவரங்களைப் பார்க்கவும்
+btn_add_land: நிலத்தைச் சேர்
+add_another_crop: மற்றொரு பயிரைச் சேர்க்கவும்
+edit_land_title: நில விவரங்களைத் திருத்து
+edit_land_subtitle: உலகளாவிய விவசாய பதிவுகளை புதுப்பிக்கிறது
+label_growth_status: வளர்ச்சி நிலை
+label_soil_composition: மண் கலவை
+label_irrigation_method: நீர்ப்பாசன முறை
+label_segmentation_sequence: நிலப் பிரிவு வரிசை
+btn_update_land: நில விவரங்களைப் புதுப்பி
+btn_edit_land: திருத்து
+
+# பயிர்கள்
+aria_select_crop: பயிரைத் தேர்ந்தெடுக்கவும்
+crop_rice: நெல்
+crop_cotton: பருத்தி
+crop_wheat: கோதுமை
+crop_corn: சோளம்
+crop_sugarcane: கரும்பு
+crop_soybean: சோயாபீன்
+crop_vegetables: காய்கறிகள்
+crop_fruits: பழங்கள்
+
+# பயிர் நிலைகள்
+aria_select_crop_stage: வளர்ச்சி நிலையைத் தேர்ந்தெடுக்கவும்
+stage_sowing: விதைத்தல்
+stage_growing: வளர்ச்சி
+stage_flowering: பூக்கும்
+stage_harvest: அறுவடை
+
+# ===== வேலைகள் =====
+posted_jobs_title: வெளியிடப்பட்ட வேலைகள்
+loading_your_jobs: உங்கள் வேலைகளை ஏற்றுகிறது...
+available_jobs_near_you: உங்களுக்கு அருகில் கிடைக்கும் வேலைகள்
+view_applications: விண்ணப்பங்களைப் பார்க்கவும்
+workers_count: தொழிலாளர்கள்
+pay_label: ஊதியம்
+apply: விண்ணப்பிக்கவும்
+contact: தொடர்பு கொள்ளவும்
+
+# ===== தொழிலாளர்கள் =====
+nav_find_workers: தொழிலாளர்களைக் கண்டறியவும்
+nearby_workers: அருகிலுள்ள தொழிலாளர்கள்
+label_name: பெயர்
+label_skills: திறன்கள்
+label_about: பற்றி
+label_about_placeholder: உங்கள் அனுபவத்தையும் திறன்களையும் சுருக்கமாக விவரிக்கவும்
+
+# திறன்கள்
+skill_harvesting: அறுவடை
+skill_irrigation: நீர்ப்பாசனம்
+skill_equipment_operation: உபகரண இயக்கம்
+skill_sowing: விதைத்தல்/நடவு
+skill_pest_control: பூச்சி கட்டுப்பாடு
+skill_fertilizer: உர பயன்பாடு
+skill_pruning: கத்தரித்தல்/ட்ரிம்மிங்
+skill_weeding: களை எடுத்தல்
+skill_land_prep: நில தயாரிப்பு
+skill_post_harvest: அறுவடைக்குப் பின் செயலாக்கம்
+
+# ===== சந்தை =====
+marketplace_title: சந்தை
+marketplace_subtitle: விவசாய பொருட்களை நேரடியாக வாங்கவும் விற்கவும்
+marketplace_buy_tab: பொருட்களை வாங்கவும்
+marketplace_sell_tab: எனது பொருட்கள்
+marketplace_sell_button: பொருளை விற்கவும்
+marketplace_search_placeholder: பொருட்கள் அல்லது விற்பனையாளர்களைத் தேடுங்கள்...
+marketplace_no_products: பொருட்கள் கிடைக்கவில்லை
+marketplace_no_my_products: நீங்கள் இன்னும் எந்த பொருட்களையும் பட்டியலிடவில்லை
+marketplace_add_first_product: உங்கள் முதல் பொருளைச் சேர்க்கவும்
+
+# பொருள் படிவம்
+product_name: பொருளின் பெயர்
+product_name_placeholder: "எ.கா., ஆர்கானிக் தக்காளி"
+product_category: வகை
+product_unit: அலகு
+product_price: ஒரு அலகுக்கு விலை (₹)
+product_price_placeholder: "எ.கா., 40"
+product_quantity: கிடைக்கும் அளவு
+product_quantity_placeholder: "எ.கா., 500"
+product_phone: தொடர்பு தொலைபேசி
+product_description: விளக்கம்
+product_description_placeholder: உங்கள் பொருளை விவரிக்கவும்...
+product_list_button: பொருளைப் பட்டியலிடவும்
+
+# வகைகள்
+category_all: அனைத்து பொருட்கள்
+category_vegetables: காய்கறிகள்
+category_fruits: பழங்கள்
+category_grains: தானியங்கள்
+category_dairy: பால் பொருட்கள்
+category_seeds: விதைகள்
+
+# பொருள் அட்டை
+product_your_product: உங்கள் பொருள்
+product_contact_seller: தொடர்பு கொள்ளவும்
+product_edit: திருத்து
+product_location: இடம்
+product_distance: தூரம்
+
+# ===== வள பகிர்வு =====
+resource_sharing_title: வள பகிர்வு
+resource_sharing_subtitle: விவசாய உபகரணங்களை வாடகைக்கு எடுக்கவும் பகிரவும்
+tab_browse_resources: வளங்களை உலாவவும்
+tab_my_requests: எனது கோரிக்கைகள்
+tab_incoming_requests: உள்வரும் வேலை கோரிக்கைகள்
+tab_resource_alerts: வள எச்சரிக்கைகள்
+tab_analytics: பகுப்பாய்வு
+
+# வளங்கள்
+no_resources: வளங்கள் இல்லை
+no_resources_export: ஏற்றுமதி செய்ய வளங்கள் இல்லை.
+exported: ஏற்றுமதி செய்யப்பட்டது
+resources_exported_csv: வளங்கள் CSV ஆக ஏற்றுமதி செய்யப்பட்டன
+placeholder_search_resources: வளங்களைத் தேடுங்கள்...
+aria_open_filters: வடிகட்டிகளைத் திறக்கவும்
+filters: வடிகட்டிகள்
+aria_export_csv: வளங்களை CSV ஆக ஏற்றுமதி செய்யவும்
+export_csv: CSV ஏற்றுமதி
+all_categories: அனைத்து வகைகள்
+loading_resources: வளங்களை ஏற்றுகிறது...
+delivery_available: "டெலிவரி கிடைக்கும் (₹{charge})"
+action_request: கோரிக்கை
+call: அழைக்கவும்
+
+# ===== AI பயிர் ஆலோசகர் =====
+ai_crop_advisor_title: AI பயிர் ஆலோசகர்
+ai_crop_advisor_subtitle: அறிவார்ந்த விவசாய வழிகாட்டுதல்
+download_report: அறிக்கையைப் பதிவிறக்கவும்
+select_crop: உங்கள் பயிரைத் தேர்ந்தெடுக்கவும்
+select_stage: வளர்ச்சி நிலையைத் தேர்ந்தெடுக்கவும்
+next_7_days_rain: அடுத்த 7 நாட்கள் மழை கருதப்படுகிறது
+fertilizer_application: உர பயன்பாடு
+optimal_timing: பயன்பாட்டிற்கான உகந்த நேரம்
+pest_control: பூச்சி & நோய் கட்டுப்பாடு
+monitor_regularly: ஆரம்ப கண்டறிதலுக்கு தொடர்ந்து கண்காணிக்கவும்
+best_practices: சிறந்த நடைமுறைகள்
+follow_optimal_yield: உகந்த விளைச்சலுக்கு பின்பற்றவும்
+weather_recommendations: வானிலை அடிப்படையிலான பரிந்துரைகள்
+ask_ai: AI யிடம் கேளுங்கள்
+chat_placeholder: நீர்ப்பாசனம், உரம், பூச்சிகள் அல்லது தளவாடம் பற்றி கேளுங்கள்...
+
+# ===== தொழிலாளி டாஷ்போர்டு =====
+worker_dashboard_title: தொழிலாளி டாஷ்போர்டு
+worker_dashboard_subtitle: அருகிலுள்ள வேலைகளைக் கண்டறிந்து உங்கள் சுயவிவரத்தை நிர்வகிக்கவும்
+my_profile: எனது சுயவிவரம்
+
+# ===== வாங்குபவர் டாஷ்போர்டு =====
+buyer_dashboard_title: வாங்குபவர் டாஷ்போர்டு
+buyer_dashboard_subtitle: விவசாய பொருட்களை உலாவவும் வாங்கவும்
+
+# ===== வாடகைதாரர் டாஷ்போர்டு =====
+renter_dashboard_title: வாடகைதாரர் டாஷ்போர்டு
+renter_dashboard_subtitle: உங்கள் உபகரண வாடகைகளை நிர்வகிக்கவும்
+
+# ===== சுயவிவர நிறைவு =====
+profile_completion_title: உங்கள் சுயவிவரத்தை முடிக்கவும்
+profile_completion_worker_subtitle: உங்கள் திறன்கள் மற்றும் கிடைக்கும் தன்மை பற்றி எங்களிடம் கூறுங்கள்
+profile_completion_buyer_subtitle: உங்கள் தொடர்பு மற்றும் டெலிவரி விவரங்களை வழங்கவும்
+profile_completion_renter_subtitle: வாடகைக்கு உங்கள் உபகரணங்கள் பற்றி எங்களிடம் கூறுங்கள்
+profile_completion_back: உள்நுழைவுக்குத் திரும்பு
+profile_completion_submit: சுயவிவரத்தை முடித்து தொடரவும்
+
+# தொழிலாளி சுயவிவரம்
+worker_phone: தொலைபேசி எண்
+worker_phone_placeholder: உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்
+worker_alternate_phone: மாற்று தொலைபேசி எண் (விருப்பமானது)
+worker_alternate_phone_placeholder: மாற்று தொடர்பு எண்
+worker_max_travel: அதிகபட்ச பயண தூரம் (கிமீயில்)
+worker_max_travel_placeholder: நீங்கள் வேலைக்கு எவ்வளவு தூரம் பயணிக்க முடியும்?
+worker_max_travel_help: இது விவசாயிகள் தங்கள் பகுதியில் தொழிலாளர்களைக் கண்டறிய உதவுகிறது
+worker_skills_title: உங்கள் விவசாய திறன்களைத் தேர்ந்தெடுக்கவும்
+worker_skills_subtitle: (பொருந்தும் அனைத்தையும் தேர்வு செய்க)
+worker_skills_error: குறைந்தது ஒரு திறனைத் தேர்ந்தெடுக்கவும்
+worker_skills_selected: "தேர்ந்தெடுக்கப்பட்டது: {count} திறன்(கள்)"
+
+# வாங்குபவர் சுயவிவரம்
+buyer_name: முழு பெயர்
+buyer_name_placeholder: உங்கள் முழு பெயரை உள்ளிடவும்
+buyer_phone: தொலைபேசி எண்
+buyer_phone_placeholder: உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்
+buyer_address: டெலிவரி முகவரி
+buyer_address_placeholder: "வீடு/பிளாட் எண், தெரு, அடையாளம்"
+buyer_city: நகரம்
+buyer_city_placeholder: நகரம்
+buyer_state: மாநிலம்
+buyer_state_placeholder: மாநிலம்
+buyer_pincode: பின்கோடு
+buyer_pincode_placeholder: பின்கோடு
+
+# வாடகைதாரர் சுயவிவரம்
+renter_phone: தொலைபேசி எண்
+renter_phone_placeholder: உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்
+renter_equipment_title: வாடகைக்கு கிடைக்கும் உபகரணங்கள்
+renter_equipment_subtitle: (பொருந்தும் அனைத்தையும் தேர்வு செய்க)
+renter_equipment_error: குறைந்தது ஒரு உபகரணத்தைத் தேர்ந்தெடுக்கவும்
+renter_equipment_selected: "தேர்ந்தெடுக்கப்பட்டது: {count} உபகரணம்(கள்)"
+
+# உபகரண வகைகள்
+equipment_tractor: டிராக்டர்
+equipment_harvester: அறுவடை இயந்திரம்
+equipment_plough: கலப்பை
+equipment_seed_drill: விதை துளை
+equipment_sprayer: தெளிப்பான்
+equipment_cultivator: உழவு இயந்திரம்
+equipment_rotavator: ரோட்டவேட்டர்
+equipment_thresher: கதிர் அடிக்கும் இயந்திரம்
+equipment_water_pump: நீர் பம்ப்
+equipment_trailer: டிரெய்லர்
+
+# ===== இறங்கும் பக்கம் =====
+hero_trusted: இந்தியா முழுவதும் 10,000+ விவசாயிகளால் நம்பப்படுகிறது
+hero_title_1: இடைவெளியைக் குறைத்தல்
+hero_title_2: விவசாயிகள் & விவசாய தொழிலாளர்கள்
+hero_desc: திறமையான விவசாய தொழிலாளர்களுடன் இணைக்கவும், உங்கள் விவசாய நிலத்தை திறமையாக நிர்வகிக்கவும், உங்கள் அறுவடையை அதிகரிக்க AI-இயங்கும் பயிர் ஆலோசனையைப் பெறவும்.
+cta_login: தொடர உள்நுழைக
+
+# அம்சங்கள்
+features_why: உழவன் X ஏன் தேர்வு செய்ய வேண்டும்?
+features_why_desc: நவீன விவசாயத்திற்காக வடிவமைக்கப்பட்ட எங்கள் விரிவான தளத்துடன் விவசாயத்தின் எதிர்காலத்தை அனுபவிக்கவும்
+feature_verified_title: சரிபார்க்கப்பட்ட தொழிலாளர்கள்
+feature_verified_desc: அனைத்து தொழிலாளர்களும் திறன் மதிப்பீடுகள் மற்றும் முந்தைய முதலாளிகளின் மதிப்பீடுகளுடன் பின்னணி சரிபார்க்கப்பட்டவர்கள்.
+feature_verified_badge: 100% சரிபார்க்கப்பட்ட சுயவிவரங்கள்
+feature_match_title: விரைவு பொருத்தம்
+feature_match_desc: எங்கள் ஸ்மார்ட் அல்காரிதம் இடம் மற்றும் திறன்களின் அடிப்படையில் சரியான தொழிலாளர்களுடன் உங்களைப் பொருத்துகிறது.
+feature_match_badge: "சராசரி பொருத்த நேரம்: 15 நிமிடங்கள்"
+feature_ai_title: AI பயிர் ஆலோசகர்
+feature_ai_desc: "நீர்ப்பாசனம், உரமிடுதல், பூச்சி கட்டுப்பாடு மற்றும் அறுவடைக்கான தனிப்பயனாக்கப்பட்ட பரிந்துரைகள்."
+feature_ai_badge: 95% துல்லியம் விகிதம்
+
+# எப்படி வேலை செய்கிறது
+how_title: உழவன் X எவ்வாறு செயல்படுகிறது
+how_desc: திறமையான தொழிலாளர்களுடன் இணைக்கவும் உங்கள் விவசாய செயல்பாடுகளை மேம்படுத்தவும் எளிய படிகள்
+how_step1_title: உங்கள் தேவைகளை இடுகையிடவும்
+how_step1_desc: "உங்கள் தேவைகளை விவரிக்கவும்: பயிர், காலம், தொழிலாளர்கள், திறன்கள், பட்ஜெட் மற்றும் காலவரிசை."
+how_step2_title: உடனடியாக பொருத்தப்படுங்கள்
+how_step2_desc: சிறந்த அருகிலுள்ள தொழிலாளர்களை மதிப்பாய்வு செய்து நேரடியாக தொடர்பு கொள்ளுங்கள்.
+how_step3_title: வேலை & ஆலோசனை பெறுங்கள்
+how_step3_desc: நிகழ்நேர AI பயிர் ஆலோசனையைப் பெறும்போது வேலையை ஒருங்கிணைக்கவும்.
+
+# CTA
+cta_title: உங்கள் விவசாயத்தை மாற்ற தயாரா?
+cta_desc: உழவன் X மூலம் ஏற்கனவே உற்பத்தித்திறனை மேம்படுத்தும் ஆயிரக்கணக்கான விவசாயிகளுடன் சேரவும்.
+cta_get_started: தொடங்குங்கள்
+cta_try_ai: AI ஆலோசகரை முயற்சிக்கவும்
+
+# ஏன் புல்லட்கள்
+why_bullet_ai: உங்கள் பண்ணைக்கு ஏற்ற AI பயிர் ஆலோசனை
+why_bullet_resources: அண்டை நாடுகளுடன் வளங்களைப் பகிரவும்
+why_bullet_verified: சரிபார்க்கப்பட்ட தொழிலாளர்களை விரைவாகக் கண்டறியவும்
+
+# எதிர்கால விவசாயம்
+future_farming_title: விவசாயத்தின் எதிர்காலத்திற்கு வரவேற்கிறோம்
+future_farming_p1: ஒவ்வொரு பருவத்திலும் ஸ்மார்ட் முடிவுகளை எடுக்க நிகழ்நேர மண் பகுப்பாய்வு, காலநிலை தரவு மற்றும் துல்லியமான பரிந்துரைகளைப் பயன்படுத்தவும். Agri Smart Cloud உங்கள் வயல்களை, பணியாளர்களை மற்றும் வாங்குபவர்களை ஒரே டிஜிட்டல் தளத்தில் இணைக்கிறது.
+future_farming_p2: "ஸ்மார்ட் நீர்ப்பாசனம் மற்றும் தொழிலாளர் திட்டமிடல் முதல் வெளிப்படையான பண்ணை-சந்தை வர்த்தகம் வரை, இந்த போர்ட்டல் நிலையான, தரவு-உந்துதல் விவசாயத்திற்கான உங்கள் நுழைவாயில்."
+future_farming_point1: AI-உதவி நீர்ப்பாசனம் மற்றும் வானிலை-விழிப்புணர்வு திட்டமிடல்.
+future_farming_point2: சிறந்த விலைக்கு கண்காணிக்கக்கூடிய பண்ணை-சந்தை விநியோகம்.
+
+# ===== தலைப்பு =====
+header_logo_title: AGRI SMART CLOUD
+header_logo_subtitle_line1: Agriportal & Ecofarm
+header_logo_subtitle_line2: Platform
+
+# ===== வரவேற்பு பக்கம் =====
+welcome_page_title: வரவேற்பு பக்கம்
+welcome_page_body: உங்கள் Agri Smart Cloud சேவைகளை அணுகவும், பயிர்களைக் கண்காணிக்கவும், ecofarm செயல்பாடுகளை நிர்வகிக்கவும், மற்றும் நுண்ணறிவுகளுடன் புதுப்பித்த நிலையில் இருக்கவும் – விவசாயிகள், வாடகைதாரர்கள், வாங்குபவர்கள் மற்றும் தொழிலாளர்களுக்கான ஒரே பாதுகாப்பான தளத்தில்.
+welcome_point_1: நிகழ்நேர பயிர் மற்றும் மண் கண்காணிப்பு டாஷ்போர்டு.
+welcome_point_2: "விவசாயிகள், தொழிலாளர்கள், வாங்குபவர்கள் மற்றும் வாடகைதாரர்களுக்கான ஒருங்கிணைந்த அணுகல்."
+
+# ===== தீம் =====
+video_theme_on: "வீடியோ தீம்: ஆன்"
+video_theme_off: "வீடியோ தீம்: ஆஃப்"
+
+# ===== பலவிதமான =====
+please_wait: தயவுசெய்து காத்திருக்கவும்...
+or_continue_with: அல்லது தொடரவும்
+google: Google
+phone_otp: தொலைபேசி OTP
+
+# ===== உள்நுழைவு பக்கம் அம்சங்கள் =====
+feature_smart_analytics_title: ஸ்மார்ட் பகுப்பாய்வு
+feature_smart_analytics_desc: AI நுண்ணறிவுகளுடன் உங்கள் பண்ணை செயல்திறனைக் கண்காணிக்கவும்
+feature_weather_alerts_title: வானிலை எச்சரிக்கைகள்
+feature_weather_alerts_desc: உங்கள் பிராந்தியத்திற்கான நேரடி வானிலை முன்னறிவிப்புகள்
+feature_marketplace_title: சந்தை
+feature_marketplace_desc: பொருட்களை எளிதாக வாங்கவும் மற்றும் விற்கவும்
+feature_job_board_title: வேலை பலகை
+feature_job_board_desc: தொழிலாளர்களைக் கண்டறியவும் அல்லது வேலை வாய்ப்புகளை இடுகையிடவும்
+
+# ===== புள்ளிவிவரங்கள் =====
+stats_platform_stats: இயங்குதள புள்ளிவிவரங்கள்
+stats_farmers: விவசாயிகள்
+stats_products: பொருட்கள்
+stats_jobs: வேலைகள்
+
+# ===== விளம்பரம் / புதிய அம்சங்கள் =====
+promo_new_feature: புதிய அம்சம்
+promo_ai_doctor_live: AI பயிர் மருத்துவர் இப்போது நேரலையில்!
+
+# ===== நன்மைகள் =====
+benefit_secure_title: பாதுகாப்பான
+benefit_secure_desc: உங்கள் தரவு குறியாக்கத்துடன் பாதுகாக்கப்படுகிறது
+benefit_fast_title: வேகமான
+benefit_fast_desc: அனைத்து விவசாய கருவிகளுக்கும் விரைவான அணுகல்
+benefit_ai_powered_title: AI மூலம் இயங்குகிறது
+benefit_ai_powered_desc: அறிவார்ந்த விவசாய பரிந்துரைகளைப் பெறுங்கள்
+benefit_mobile_ready_title: மொபைல் தயார்
+benefit_mobile_ready_desc: எங்கிருந்தும், எந்த நேரத்திலும் அணுகலாம்
+
+# ===== சான்று =====
+testimonial_quote: "உழவன் X நான் என் பண்ணையை நிர்வகிக்கும் முறையை மாற்றியது. AI பரிந்துரைகள் என் விளைச்சலை 30% அதிகரித்தன!"
+testimonial_author: மகிழ்ச்சியான விவசாயி
+secure_login: பாதுகாப்பான உள்நுழைவு
+encrypted_data: மறைக்கப்பட்ட தரவு
+trusted_platform: நம்பகமான தளம்
+live_market_trends: நேரடி சந்தை நிலவரம்
+trending_now: இப்போது பிரபலமானது
+ai_insight_harvest_alert: "AI நுண்ணறிவு: அறுவடை எச்சரிக்கை"
+
+# ===== தொழிலாளி டாஷ்போர்டு விடுபட்டவை =====
+nav_my_shifts: எனது ஷிப்டுகள்
+nav_community: சமூகம்
+status_label: "நிலை: "
+status_available: கிடைக்கும்
+status_busy: வேலையில்
+worker_welcome_msg_part1: மற்றொரு உற்பத்தி நாளுக்கு தயாரா? உங்களிடம் 
+worker_welcome_msg_part2: வரவிருக்கும் ஷிப்டுகள் உள்ளன
+stats_shifts_confirmed: ஷிப்டுகள் உறுதி
+stats_pending: நிலுவையில்
+stats_verified_skills: சரிபார்க்கப்பட்ட திறன்கள்
+stats_add_skill: திறனைச் சேர்க்கவும்
+stats_avg_rating: சராசரி மதிப்பீடு
+stats_top_workers: சிறந்த 10%
+stats_earnings: வருவாய்
+stats_this_week: இந்த வாரம்
+label_todays_focus: இன்றைய கவனம்
+label_rhythm_board: ரிதம் பலகை
+label_daily_schedule: தினசரி அட்டவணை
+action_view_all: அனைத்தையும் காண்க
+label_ready: தயார்
+label_busy: வேலையில்
+filter_all_jobs: அனைத்து வேலைகள்
+label_urgent: அவசரம்
+label_payment: கட்டணம்
+badge_verified: சரிபார்க்கப்பட்டது
+badge_top_rated: சிறந்த மதிப்பீடு
+action_add_skill: + திறனைச் சேர்க்கவும்
+feature_coming_soon: அம்சம் விரைவில் வரும்
+feature_coming_soon_desc: இதற்கான சிறந்த அனுபவத்தை உங்களுக்கு வழங்க நாங்கள் கடுமையாக உழைத்து வருகிறோம். காத்திருங்கள்!
+status_applying: விண்ணப்பிக்கிறது...
+status_request_sent: கோரிக்கை அனுப்பப்பட்டது
+
+# ===== பண்ணை உரிமையாளர் டாஷ்போர்டு விடுபட்டவை =====
+nav_smart_farm: ஸ்மார்ட் பண்ணை (IoT)
+badge_live: நேரலை
+nav_crop_doctor: பயிர் மருத்துவர்
+badge_new: புதியது
+status_active: செயலில்
+welcome_back_owner: மீண்டும் வருக!
+welcome_owner_desc_part1: இன்று உங்கள் பண்ணையில் நடப்பது இங்கே. உங்களிடம்
+welcome_owner_desc_part2: நிலுவையில் உள்ள எச்சரிக்கைகள் உள்ளன
+label_total: மொத்தம்
+label_active_positions: செயலில் உள்ள பதவிகள்
+label_nearby: அருகில்
+label_get_started_quickly: விரைவாக தொடங்கவும்
+
+# ===== லேண்டிங் பக்கம் கூடுதல் =====
+hero_stat_workers: 15,000+ தொழிலாளர்கள்
+hero_stat_workers_desc: திறமையான & சரிபார்க்கப்பட்ட
+hero_stat_villages: 500+ கிராமங்கள்
+hero_stat_villages_desc: இந்தியா முழுவதும்
+hero_stat_ai: AI-ஆற்றல்
+hero_stat_ai_desc: ஸ்மார்ட் பரிந்துரைகள்
+footer_desc: திறமையான தொழிலாளர்களுடன் இணைவதற்கும் AI-ஆற்றல் நுண்ணறிவுகள் மூலம் பயிர் நிர்வாகத்தை மேம்படுத்துவதற்கும் தொழில்நுட்பத்துடன் விவசாயிகளுக்கு அதிகாரம் அளித்தல்.
+footer_rating: 4.9/5 மதிப்பீடு
+footer_reviews: 5,000+ விமர்சனங்களிலிருந்து
+footer_quick_links: விரைவான இணைப்புகள்
+footer_about_us: எங்களை பற்றி
+footer_success_stories: வெற்றி கதைகள்
+footer_help_center: உதவி மையம்
+footer_contact_info: தொடர்புத் தகவல்
+footer_address: கிராமப்புற மேம்பாட்டு மையம், இந்தியா
+footer_copyright: © 2026 உழவன் X. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.
+footer_privacy: தனியுரிமை கொள்கை
+footer_terms: சேவை விதிமுறைகள்
+footer_cookies: குக்கீ கொள்கை
+
+# ===== வாங்குபவர் டாஷ்போர்டு =====
+buyer_nav_products: தயாரிப்புகள்
+buyer_nav_cart: கூடை
+buyer_nav_orders: எனது ஆர்டர்கள்
+buyer_nav_wishlist: விருப்பப்பட்டியல்
+cat_grains: 🌾 தானியங்கள்
+cat_vegetables: 🥬 காய்கறிகள்
+cat_fruits: 🍎 பழங்கள்
+cat_dairy: 🥛 பால் பொருட்கள்
+cat_other: 🌿 மற்றவை
+msg_address_saved: முகவரி வெற்றிகரமாக சேமிக்கப்பட்டது!
+msg_invoice_downloaded: ரசீது வெற்றிகரமாக பதிவிறக்கம் செய்யப்பட்டது
+btn_checkout: செக் அவுட்
+title_order_history: ஆர்டர் வரலாறு
+status_shipped: அனுப்பப்பட்டது
+status_delivered: டெலிவரி செய்யப்பட்டது
+status_cancelled: ரத்து செய்யப்பட்டது
+status_processing: செயலாக்கத்தில்
+filter_all_categories: அனைத்து வகைகள்
+label_search_products: தயாரிப்புகளைத் தேடுங்கள்...
+label_cart_empty: உங்கள் கூடை காலியாக உள்ளது
+label_total_amount: மொத்த தொகை
+label_payment_method: கட்டண முறை
+label_delivery_address: டெலிவரி முகவரி
+
+# ===== வாடகைதாரர் டாஷ்போர்டு =====
+renter_nav_dashboard: டாஷ்போர்டு
+renter_nav_listings: எனது பட்டியல்கள்
+renter_nav_rentals: செயலில் உள்ள வாடகைகள்
+renter_nav_settings: அமைப்புகள்
+col_equipment: உபகரணங்கள்
+col_renter: வாடகைதாரர்
+col_dates: தேதிகள்
+col_amount: தொகை
+col_status: நிலை
+col_actions: நடவடிக்கைகள்
+btn_invoice: ரசீது
+status_maintenance: பராமரிப்பு
+status_rented: வாடகைக்கு விடப்பட்டது
+chart_revenue: வருவாய்
+invoice_title: அக்ரி-ரென்ட் ரசீது
+invoice_thank_you: உங்கள் வணிகத்திற்கு நன்றி!
+label_total_revenue: மொத்த வருவாய்
+label_active_rentals: செயலில் உள்ள வாடகைகள்
+label_total_equipment: மொத்த உபகரணங்கள்
+label_utilization: பயன்பாடு
+month_jan: ஜனவரி
+month_feb: பிப்ரவரி
+month_mar: மார்ச்
+month_apr: ஏப்ரல்
+month_may: மே
+month_jun: ஜூன்
+verified_partner: சரிபார்க்கப்பட்ட பங்குதாரர்
+label_pending_requests: நிலுவையில் உள்ள கோரிக்கைகள்
+label_requester: கோரிக்கையாளர்
+label_last_30_days: கடந்த 30 நாட்கள்
+title_recent_activity: சமீபத்திய செயல்பாடு
+placeholder_search_equipment: உபகரணங்களைத் தேடுங்கள்...
+btn_add_equipment: உபகரணத்தைச் சேர்க்கவும்
+btn_view_all_history: அனைத்து வரலாற்றையும் காண்க
+col_order_id: ஆர்டர் ஐடி
+col_duration: காலம்
+title_payment_settings: கட்டண அமைப்புகள்
+msg_auto_payments: நாங்கள் தானாகவே கட்டணங்களை ஏற்றுக்கொள்கிறோம்
+msg_payouts_scheduled: உங்கள் கொடுப்பனவுகள் ஒவ்வொரு புதன்கிழமையும் திட்டமிடப்பட்டுள்ளன.
+label_bank_account: இணைக்கப்பட்ட வங்கிக் கணக்கு
+label_upi_id: உடனடி தீர்வுக்கான UPI ஐடி
+btn_save_changes: மாற்றங்களைச் சேமி
+label_days: நாட்கள்
+label_day: நாள்
+rented_verb: வாடகைக்கு எடுத்தார்
+title_setup_delivery: டெலிவரியை அமைத்தல்
+msg_add_address: ஆர்டர் செய்ய உங்கள் முகவரியைச் சேர்க்கவும்.
+btn_add_address: + முகவரியைச் சேர்க்கவும்
+title_market_trends: சந்தை நிலவரம்
+label_market_price: சந்தை விலை
+btn_add_to_cart: கூடையில் சேர்க்கவும்
+btn_make_offer: விலை பேசவும்
+btn_move_to_cart: கூடைக்கு மாற்றவும்
+btn_remove: அகற்று
+msg_no_products: தயாரிப்புகள் எதுவும் இல்லை
+msg_adjust_search: உங்கள் தேடல் அல்லது வடிகட்டிகளை மாற்றவும்
+title_shopping_cart: ஷாப்பிங் கூடை
+title_order_summary: ஆர்டர் சுருக்கம்
+label_subtotal: துணை மொத்தம்
+label_tax: வரி (5%)
+label_delivery_fee: டெலிவரி கட்டணம்
+label_total: மொத்தம்
+label_deliver_to: டெலிவரி செய்ய வேண்டிய இடம்:
+btn_proceed_checkout: செக் அவுட் தொடரவும்
+btn_start_shopping: ஷாப்பிங் தொடங்கவும்
+msg_no_orders: ஆர்டர்கள் இல்லை
+label_order_sharp: ஆர்டர் #
+label_items: பொருட்கள்
+payment_cod: பண பட்டுவாடா
+payment_upi: UPI
+payment_card: அட்டை
+status_paid: செலுத்தப்பட்டது
+status_failed: தோல்வியடைந்தது
+receipt_title: அக்ரிஸ்மார்ட்
+receipt_subtitle: உங்கள் விவசாய சந்தை
+receipt_invoice: ரசீது
+receipt_bill_to: பில் செய்ய:
+title_payment_details: கட்டண விவரங்கள்
+label_upi_payment: UPI கட்டணம்
+label_card_payment: டெபிட்/கிரெடிட் கார்டு
+label_cod_payment: பொருட்களைப் பெற்றுக்கொண்ட பிறகு பணம் செலுத்துதல்
+label_card_number: அட்டை எண்
+label_cardholder_name: அட்டைதாரர் பெயர்
+label_month: மாதம்
+label_year: ஆண்டு
+label_cvv: CVV
+btn_cancel: ரத்துசெய்
+btn_confirm_order: ஆர்டரை உறுதிப்படுத்தவும்
+btn_pay_now: இப்போது பணம் செலுத்துங்கள்
+title_add_address: டெலிவரி முகவரியைச் சேர்க்கவும்
+label_phone_number: தொலைபேசி எண்
+label_city: நகரம்
+label_pincode: அஞ்சல் குறியீடு
+label_state: மாநிலம்
+label_full_address: முழு முகவரி
+btn_save_address: முகவரியைச் சேமி
+title_make_offer: விலை பேசவும்
+label_your_price: உங்கள் விலை (₹/கிலோ)
+btn_send_offer: சலுகையை அனுப்பு
+msg_proposed_price: முன்மொழியப்பட்ட விலை
+label_order_history: ஆர்டர் வரலாறு
+btn_download_receipt: ரசீது பதிவிறக்கவும்
+invoice_no: விலைப்பட்டியல் எண்:
+invoice_date: தேதி:
+invoice_from: அனுப்புநர்:
+invoice_to: பெறுநர்:
+invoice_grand_total: மொத்தத் தொகை:
+table_item: பொருள்
+table_duration: காலம்
+table_rate_day: விலை/நாள்
+table_total: மொத்தம்
+status_maintenance: பராமரிப்பில்
+status_rented: வாடகைக்கு விடப்பட்டது
+label_bookings: முன்பதிவுகள்
+skill_all: அனைத்து
+skill_harvesting: அறுவடை
+skill_irrigation: நீர்ப்பாசனம்
+skill_pest_control: பூச்சி கட்டுப்பாடு
+skill_equipment: உபகரணங்கள்
+block_sunrise_title: சூர்ய உதய அறுவடை
+block_sunrise_task: நெல் வயல் தொகுதி A
+block_sunrise_mood: அதிக தேவை
+block_irrigation_title: நீர்ப்பாசன டியூன்
+block_irrigation_task: கால்வாய் பராமரிப்பு
+block_irrigation_mood: சீரான
+block_skill_title: திறன் மேம்பாடு
+block_skill_task: இயற்கை பூச்சி பயிற்சிகள்
+block_skill_mood: கற்றல்
+label_crop_type: பயிர் வகை
+label_acreage: ஏக்கர்
+label_soil_type: மண் வகை
+label_irrigation_type: நீர்ப்பாசன வகை
+label_land_preparation: நிலத் தயாரிப்பு
+label_notes: குறிப்புகள்
+placeholder_land_notes: இந்த நிலம் பற்றிய கூடுதல் குறிப்புகள்...
+btn_add_land: நிலத்தைச் சேர்
+btn_edit_job: வேலையைத் திருத்து
+title_post_work_request: வேலை கோரிக்கையைப் பதிவுசெய்க
+label_job_title: வேலை தலைப்பு
+label_job_date: தேதி
+label_num_workers: தொழிலாளர்களின் எண்ணிக்கை
+label_duration: காலம்
+label_payment_per_day: கட்டணம் (ஒரு நாளைக்கு)
+label_posted_by: இடுகையிட்டவர்
+label_phone: தொலைபேசி
+label_time: நேரம்
+placeholder_job_title: எ.கா., நெல் அறுவடை
+placeholder_job_location: வயல் இருப்பிடம்
+placeholder_num_workers: 5
+placeholder_duration: 8 மணிநேரம்
+placeholder_payment: ₹500
+placeholder_time: காலை 6:00 - மதியம் 2:00
+soil_clay: களிமண்
+soil_loam: வண்டல் மண்
+soil_sandy: மணல் மண்
+soil_clay_loam: களிமண் கலந்த வண்டல்
+soil_sandy_loam: மணல் கலந்த வண்டல்
+irrigation_flood: வெள்ளப் பாசனம்
+irrigation_drip: சொட்டு நீர் பாசனம்
+irrigation_sprinkler: தெளிப்பு நீர் பாசனம்
+irrigation_furrow: வாய்க்கால் பாசனம்
+
+# ===== PROFILE & BIO =====
+title_profile: எனது சுயவிவரம்
+label_bio: சுயசரிதை / என்னைப் பற்றி
+placeholder_bio: உங்கள் விவசாய பயணம், அனுபவம் அல்லது நீங்கள் எதை உற்பத்தி செய்கிறீர்கள் என்பதைப் பற்றி எங்களிடம் கூறுங்கள்...
+btn_save_profile: சுயவிவரத் தகவலைப் புதுப்பிக்கவும்
+msg_profile_updated: சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
+label_total_land_owned: நிர்வகிக்கப்படும் மொத்த நிலம்
+label_years_experience: அனுபவ ஆண்டுகள்
+label_primary_crops: முதன்மை பயிர்கள்
+label_account_details: கணக்கு விவரங்கள்
+label_profile_header: உழவன் X இல் உங்கள் இருப்பைத் தனிப்பயனாக்கவும்

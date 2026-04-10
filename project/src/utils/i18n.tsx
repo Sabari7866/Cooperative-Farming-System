@@ -4,8 +4,8 @@ type Translations = Record<string, string>;
 type Locale = 'en' | 'ta' | 'hi';
 
 async function loadYaml(locale: Locale): Promise<Translations> {
-  // Load from src/i18n for dev build; Vite will serve assets
-  const path = `/src/i18n/${locale}.yml?v=${Math.random()}`;
+  // Load from public/i18n; accessible in both dev and production bundles
+  const path = `/i18n/${locale}.yml?v=${Math.random()}`;
   const res = await fetch(path);
   if (!res.ok) return {};
   const text = await res.text();
