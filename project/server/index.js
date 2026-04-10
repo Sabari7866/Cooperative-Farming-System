@@ -22,8 +22,23 @@ const JWT_SECRET = process.env.JWT_SECRET || 'uzhavan-x-secret-key-change-this';
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB();
+const mongoose = require('mongoose');
+
+// Connect to MongoDB (Initial attempt)
+connectDB().catch(err => console.error("Initial DB connection failed:", err.message));
+
+// Middleware to ensure DB is connected before processing requests (Essential for Vercel)
+app.use(async (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    try {
+      console.log("Re-attempting DB connection in middleware...");
+      await connectDB();
+    } catch (err) {
+      return res.status(500).json({ error: "Database connection failed. Ensure MONGODB_URI is set in Vercel. Error: " + err.message });
+    }
+  }
+  next();
+});
 
 // Seed Admin User
 (async () => {
