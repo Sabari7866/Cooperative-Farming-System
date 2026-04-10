@@ -171,7 +171,7 @@ export default function AdminLogin() {
 
                 {/* Footer */}
                 <p className="text-center text-sm text-gray-600 mt-6">
-                    உழவன் X Admin Portal v12.0 • Secure Access
+                    உழவன் X Admin Portal v12.1 • [Live Verification] • Secure Access
                 </p>
             </motion.div>
         </div>
