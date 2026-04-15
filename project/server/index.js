@@ -646,7 +646,7 @@ const seedData = async () => {
   }
 };
 // Run seed logic after connection
-// setTimeout(seedData, 3000);
+setTimeout(seedData, 3000);
 
 // ----------------------------------------------------------------------
 // API ROUTES FOR DATABASE (MongoDB)
@@ -1311,7 +1311,7 @@ setInterval(async () => {
   }
 }, 3000);
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   server.listen(port, () => console.log(`Backend server running on http://localhost:${port} with Socket real-time simulator`));
 }
 
